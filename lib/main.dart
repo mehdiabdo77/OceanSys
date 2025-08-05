@@ -39,6 +39,18 @@ class MyApp extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             fontFamily: "dona",
           ),
+          bodySmall: TextStyle(
+            color: Colors.black,
+            fontSize: 12,
+            overflow: TextOverflow.ellipsis,
+            fontFamily: "dona",
+          ),
+          labelMedium: TextStyle(
+            color: Colors.black,
+            fontSize: 13,
+            overflow: TextOverflow.ellipsis,
+            fontFamily: "dona",
+          ),
           labelSmall: TextStyle(color: Colors.black87, fontSize: 10),
           // رنگ لیست مشتری
         ),

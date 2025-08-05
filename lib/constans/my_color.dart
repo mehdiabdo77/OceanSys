@@ -8,6 +8,9 @@ class SolidColors {
   static const Color bottomNav = Color.fromARGB(255, 255, 235, 206);
   static const Color appBorColor = Color.fromARGB(255, 255, 235, 206);
   static const Color listCustomerColor = Color(0xFF004D40);
+  static const Color bootomColor = Color(0xFF004D40);
+  static const Color iconmain = Color(0xFF004D40);
+
   static const Color pointVisitColor = Color.fromARGB(255, 35, 164, 143);
   static const Color pointNoVisitColor = Color.fromARGB(255, 79, 38, 38);
 }
