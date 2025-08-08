@@ -3,6 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:ocean_sys/constans/my_color.dart';
+import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/controller/customer_info_controller.dart';
 
 class MapPage extends StatefulWidget {
@@ -75,7 +76,7 @@ class _MapPageState extends State<MapPage> {
                           ),
                         ],
                       ),
-                      child: Text(point['name'], style: textTheme.labelSmall),
+                      child: Text(point['name'], style: MyTextStyle.lebelMap),
                     ),
                   ],
                 ),

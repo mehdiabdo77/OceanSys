@@ -26,7 +26,7 @@ class CustomerListPage extends StatelessWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: GestureDetector(
                   onTap: () {
-                    Get.toNamed(NamedRoute.customerPage);
+                    Get.toNamed(NamedRoute.customerPage, arguments: index);
                   },
                   child: Container(
                     height: 80,
@@ -49,21 +49,21 @@ class CustomerListPage extends StatelessWidget {
                                       .custmerinfolist[index]
                                       .customerBoard
                                       .toString(),
-                                  style: textTheme.bodyMedium,
+                                  style: textTheme.bodyLarge,
                                 ),
                                 Text(
                                   customerInfoController
                                       .custmerinfolist[index]
                                       .customerCode
                                       .toString(),
-                                  style: textTheme.bodyMedium,
+                                  style: textTheme.bodyLarge,
                                 ),
                                 Text(
                                   customerInfoController
                                       .custmerinfolist[index]
                                       .address
                                       .toString(),
-                                  style: textTheme.bodyMedium,
+                                  style: textTheme.bodySmall,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),

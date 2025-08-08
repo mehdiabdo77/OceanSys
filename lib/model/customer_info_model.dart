@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class CustomerInfoModel {
   dynamic customerCode; // int
   dynamic customerName; // str

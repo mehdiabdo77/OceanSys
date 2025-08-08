@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:blobs/blobs.dart';
 import 'package:get/get.dart';
 import 'package:ocean_sys/constans/my_color.dart';
+import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/controller/register_controller.dart';
 
 class LoginPage extends StatelessWidget {
@@ -81,6 +82,7 @@ class LoginPage extends StatelessWidget {
                           hintText: 'UserName',
                           border: UnderlineInputBorder(),
                         ),
+                        style: MyTextStyle.textBlack16,
                       ),
                       const SizedBox(height: 20),
                       TextField(
@@ -90,6 +92,7 @@ class LoginPage extends StatelessWidget {
                           hintText: 'Password',
                           border: UnderlineInputBorder(),
                         ),
+                        style: MyTextStyle.textBlak12,
                       ),
                       const SizedBox(height: 30),
                       Row(

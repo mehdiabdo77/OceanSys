@@ -33,14 +33,20 @@ class MyApp extends StatelessWidget {
         fontFamily: "dona",
         textTheme: TextTheme(
           titleLarge: TextStyle(color: Colors.black87, fontSize: 18),
-          bodyMedium: TextStyle(
+          bodyLarge: TextStyle(
             color: Colors.white,
             fontSize: 15,
             overflow: TextOverflow.ellipsis,
             fontFamily: "dona",
           ),
-          bodySmall: TextStyle(
+          bodyMedium: TextStyle(
             color: Colors.black,
+            fontSize: 12,
+            overflow: TextOverflow.ellipsis,
+            fontFamily: "dona",
+          ),
+          bodySmall: TextStyle(
+            color: Colors.white,
             fontSize: 12,
             overflow: TextOverflow.ellipsis,
             fontFamily: "dona",

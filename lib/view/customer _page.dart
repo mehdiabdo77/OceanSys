@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
+import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/controller/customer_info_controller.dart';
 import 'package:ocean_sys/gen/assets.gen.dart';
 
@@ -13,7 +14,7 @@ class CustomerPage extends StatelessWidget {
   );
   @override
   Widget build(BuildContext context) {
-    var textTheme = Theme.of(context).textTheme;
+    final int index = Get.arguments ?? 0;
     return Scaffold(
       backgroundColor: SolidColors.homepage,
       appBar: AppBar(
@@ -43,17 +44,17 @@ class CustomerPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'نام مشتری : ${customerInfoController.custmerinfolist[1].customerBoard} ',
-                        style: textTheme.titleLarge,
+                        'نام مشتری : ${customerInfoController.custmerinfolist[index].customerBoard} ',
+                        style: MyTextStyle.textBlack16,
                       ),
                       SizedBox(height: 4),
                       Text(
-                        'کد مشتری : ${customerInfoController.custmerinfolist[1].customerCode}',
-                        style: textTheme.bodySmall,
+                        ' نام مالک : ${customerInfoController.custmerinfolist[index].customerName}',
+                        style: MyTextStyle.textSmall12,
                       ),
                       Text(
-                        'محدوده  : ${customerInfoController.custmerinfolist[1].area}',
-                        style: textTheme.bodySmall,
+                        'وضعیت  : ${customerInfoController.custmerinfolist[index].status}',
+                        style: MyTextStyle.textSmall12,
                       ),
                     ],
                   ),
@@ -65,23 +66,24 @@ class CustomerPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'شماره همراه : ${customerInfoController.custmerinfolist[1].mobile}',
-                    style: textTheme.bodySmall,
+                    'شماره همراه : ${customerInfoController.custmerinfolist[index].mobile}',
+                    style: MyTextStyle.textSmall12,
                   ),
                   Text(
-                    'شماره همراه : ${customerInfoController.custmerinfolist[1].phone}',
-                    style: textTheme.bodySmall,
+                    'شماره همراه : ${customerInfoController.custmerinfolist[index].phone}',
+                    style: MyTextStyle.textSmall12,
                   ),
                   Text(
-                    ' نام مالک : ${customerInfoController.custmerinfolist[1].customerName}',
-                    style: textTheme.bodySmall,
+                    ' محدوده  : ${customerInfoController.custmerinfolist[index].area}',
+                    style: MyTextStyle.textSmall12,
                   ),
                 ],
               ),
               SizedBox(height: 8),
               Text(
-                'آدرس  : ${customerInfoController.custmerinfolist[1].address}',
-                style: textTheme.labelMedium,
+                'آدرس  : ${customerInfoController.custmerinfolist[index].address}',
+                style: MyTextStyle.textSmall12,
+                maxLines: 2,
               ),
               SizedBox(height: 12),
               Row(
@@ -89,12 +91,12 @@ class CustomerPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    ' کد ملی : ${customerInfoController.custmerinfolist[1].nationalCode}',
-                    style: textTheme.bodySmall,
+                    ' کد ملی : ${customerInfoController.custmerinfolist[index].nationalCode}',
+                    style: MyTextStyle.textSmall12,
                   ),
                   Text(
-                    ' کد پستی : ${customerInfoController.custmerinfolist[1].postalCode}',
-                    style: textTheme.bodySmall,
+                    ' کد پستی : ${customerInfoController.custmerinfolist[index].postalCode}',
+                    style: MyTextStyle.textSmall12,
                   ),
                 ],
               ),
@@ -111,10 +113,12 @@ class CustomerPage extends StatelessWidget {
                     width: 160,
                     child: ElevatedButton(
                       style: MyDecorations.mainButtom,
-                      onPressed: () {},
+                      onPressed: () {
+                        sendDisActive();
+                      },
                       child: Text(
                         "غیر فعال کردن مشتری",
-                        style: textTheme.bodySmall,
+                        style: MyTextStyle.bottomstyle,
                       ),
                     ),
                   ),
@@ -124,7 +128,10 @@ class CustomerPage extends StatelessWidget {
                       style: MyDecorations.mainButtom,
 
                       onPressed: () {},
-                      child: Text("اصلاح اطلاعات", style: textTheme.bodySmall),
+                      child: Text(
+                        "اصلاح اطلاعات",
+                        style: MyTextStyle.bottomstyle,
+                      ),
                     ),
                   ),
                 ],
@@ -139,7 +146,10 @@ class CustomerPage extends StatelessWidget {
                     child: ElevatedButton(
                       style: MyDecorations.mainButtom,
                       onPressed: () {},
-                      child: Text("شکایت مشتری", style: textTheme.bodySmall),
+                      child: Text(
+                        "شکایت مشتری",
+                        style: MyTextStyle.bottomstyle,
+                      ),
                     ),
                   ),
                   SizedBox(
@@ -150,7 +160,7 @@ class CustomerPage extends StatelessWidget {
                       onPressed: () {},
                       child: Text(
                         "ماهیت خرید مشتری",
-                        style: textTheme.bodySmall,
+                        style: MyTextStyle.bottomstyle,
                       ),
                     ),
                   ),
@@ -159,6 +169,57 @@ class CustomerPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // غیر فعال سازی مشتری
+  void sendDisActive() {
+    String? selectedReason;
+    List<String> reasons = [
+      'عدم همکاری مشتری',
+      'تغییر مالکیت',
+      'تغییر آدرس',
+      'سایر',
+    ];
+    Get.defaultDialog(
+      title: "دلیل غیر فعال سازی",
+      titleStyle: MyTextStyle.textBlack16,
+      content: Column(
+        children: [
+          DropdownButtonFormField<String>(
+            value: selectedReason,
+            hint: Text("یک دلیل را انتخاب کنید", style: MyTextStyle.textBlak12),
+            items: reasons.map((reason) {
+              return DropdownMenuItem(
+                child: Text(reason, style: TextStyle(fontSize: 12)),
+                value: reason,
+              );
+            }).toList(),
+            onChanged: (value) {
+              selectedReason = value;
+            },
+          ),
+          SizedBox(height: 10),
+          TextField(
+            decoration: InputDecoration(
+              labelText: "توضیحات بیشتر",
+              labelStyle: MyTextStyle.textBlak12,
+              border: OutlineInputBorder(),
+              focusColor: SolidColors.listCustomerColor,
+            ),
+            style: MyTextStyle.textBlak12,
+            maxLines: 4,
+          ),
+        ],
+      ),
+      confirm: ElevatedButton(
+        onPressed: () {
+          // TODO باید دلیل غیر فعال سازی اینجا ارسال بسه
+        },
+
+        style: MyDecorations.mainButtom,
+        child: Text("تایید", style: MyTextStyle.bottomstyle),
       ),
     );
   }
