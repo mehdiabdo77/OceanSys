@@ -4,4 +4,5 @@ class ApiUrlConstant {
   static const baseUrl = "http://127.0.0.1:5000/";
   static const login = "${baseUrl}token";
   static const coustmoerinfo = "${baseUrl}getCustomerData";
+  static const disactiveCode = "${baseUrl}disActiveCustomer";
 }

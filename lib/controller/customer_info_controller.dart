@@ -59,11 +59,6 @@ class CustomerInfoController extends GetxController {
 
         debugPrint(" le ${custmerinfolist.length}");
         debugPrint(custmerinfolist.isEmpty.toString());
-
-        // for (var item in data) {
-        //   print(item);
-        //   custmerinfomodel.add(CustomerInfoModel.fromJson(item));
-        // }
       } else {
         errorMessage.value = 'خطا در دریافت اطلاعات: ${response.statusCode}';
       }

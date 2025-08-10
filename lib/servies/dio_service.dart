@@ -10,7 +10,9 @@ class DioService {
     return await dio
         .get(
           url,
-          options: options ?? Options(responseType: ResponseType.json, method: 'GET'),
+          options:
+              options ??
+              Options(responseType: ResponseType.json, method: 'GET'),
         )
         .then((response) {
           // log(response.toString());
@@ -23,12 +25,51 @@ class DioService {
         });
   }
 
-  Future<dynamic> postMetode(Map<String, dynamic> map, String url) async {
+  Future<dynamic> postMetode(
+    Map<String, dynamic> map,
+    String url, {
+    Options? options,
+  }) async {
     return await dio
         .post(
           url,
-          options: Options(responseType: ResponseType.json, method: "POST"),
+          options:
+              options ??
+              Options(
+                responseType: ResponseType.json,
+                method: "POST",
+                // headers: {'Content-Type': 'application/json'},
+              ),
           data: dio_service.FormData.fromMap(map),
+        )
+        .then((value) {
+          debugPrint(value.toString());
+          return value;
+        })
+        .catchError((err) {
+          if (err is DioError) {
+            return err.response!;
+          }
+        });
+  }
+
+  /// ارسال به صورت JSON
+  Future<dynamic> postJson(
+    Map<String, dynamic> map,
+    String url, {
+    Options? options,
+  }) async {
+    return await dio
+        .post(
+          url,
+          options:
+              options ??
+              Options(
+                responseType: ResponseType.json,
+                method: "POST",
+                // headers: {'Content-Type': 'application/json'},
+              ),
+          data: map,
         )
         .then((value) {
           debugPrint(value.toString());

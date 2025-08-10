@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/login_page.dart';
 import 'package:ocean_sys/splash_screen.dart';
 import 'package:ocean_sys/view/customer%20_page.dart';
+import 'package:ocean_sys/view/customer_page_idit.dart';
 import 'package:ocean_sys/view/main_screen.dart';
 import 'package:ocean_sys/view/map_page.dart';
 
@@ -27,6 +28,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: NamedRoute.mapPage, page: () => MapPage()),
         GetPage(name: NamedRoute.homepage, page: () => MainScreen()),
         GetPage(name: NamedRoute.customerPage, page: () => CustomerPage()),
+        GetPage(
+          name: NamedRoute.customerPageIdit,
+          page: () => CustomerPageIdit(),
+        ),
       ],
 
       theme: ThemeData(
@@ -66,9 +71,11 @@ class MyApp extends StatelessWidget {
 }
 
 class NamedRoute {
+  NamedRoute._();
   static String splashScreen = "/";
   static String loginPage = "/loginPage";
   static String customerPage = "/customerPage";
   static String homepage = "/homePage";
   static String mapPage = "/mapPage";
+  static String customerPageIdit = "/customerPageIdit";
 }

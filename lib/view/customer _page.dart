@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
+import 'package:ocean_sys/controller/customer_edit_controller.dart';
 import 'package:ocean_sys/controller/customer_info_controller.dart';
 import 'package:ocean_sys/gen/assets.gen.dart';
+import 'package:ocean_sys/main.dart';
 
 class CustomerPage extends StatelessWidget {
   CustomerPage({super.key});
@@ -12,6 +14,11 @@ class CustomerPage extends StatelessWidget {
   CustomerInfoController customerInfoController = Get.put(
     CustomerInfoController(),
   );
+
+  CustomerEditController customerEditController = Get.put(
+    CustomerEditController(),
+  );
+
   @override
   Widget build(BuildContext context) {
     final int index = Get.arguments ?? 0;
@@ -101,7 +108,6 @@ class CustomerPage extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 15),
-              // ... existing code ...
               SizedBox(height: 15),
               Divider(thickness: 1, color: Colors.black),
               SizedBox(height: 10),
@@ -114,7 +120,7 @@ class CustomerPage extends StatelessWidget {
                     child: ElevatedButton(
                       style: MyDecorations.mainButtom,
                       onPressed: () {
-                        sendDisActive();
+                        sendDisActive(index);
                       },
                       child: Text(
                         "غیر فعال کردن مشتری",
@@ -127,7 +133,12 @@ class CustomerPage extends StatelessWidget {
                     child: ElevatedButton(
                       style: MyDecorations.mainButtom,
 
-                      onPressed: () {},
+                      onPressed: () {
+                        Get.toNamed(
+                          NamedRoute.customerPageIdit,
+                          arguments: index,
+                        );
+                      },
                       child: Text(
                         "اصلاح اطلاعات",
                         style: MyTextStyle.bottomstyle,
@@ -174,7 +185,7 @@ class CustomerPage extends StatelessWidget {
   }
 
   // غیر فعال سازی مشتری
-  void sendDisActive() {
+  void sendDisActive(index) {
     String? selectedReason;
     List<String> reasons = [
       'عدم همکاری مشتری',
@@ -192,16 +203,18 @@ class CustomerPage extends StatelessWidget {
             hint: Text("یک دلیل را انتخاب کنید", style: MyTextStyle.textBlak12),
             items: reasons.map((reason) {
               return DropdownMenuItem(
-                child: Text(reason, style: TextStyle(fontSize: 12)),
                 value: reason,
+                child: Text(reason, style: TextStyle(fontSize: 12)),
               );
             }).toList(),
             onChanged: (value) {
               selectedReason = value;
+              customerEditController.selected.value = value ?? '';
             },
           ),
           SizedBox(height: 10),
           TextField(
+            controller: customerEditController.disActiveDescription,
             decoration: InputDecoration(
               labelText: "توضیحات بیشتر",
               labelStyle: MyTextStyle.textBlak12,
@@ -214,10 +227,38 @@ class CustomerPage extends StatelessWidget {
         ],
       ),
       confirm: ElevatedButton(
-        onPressed: () {
-          // TODO باید دلیل غیر فعال سازی اینجا ارسال بسه
-        },
+        onPressed: () async {
+          if (customerEditController.selected.value.isEmpty) {
+            Get.snackbar("لطفا یک دلیل انتخاب کنید", "خطا");
+            return;
+          }
 
+          final status = await customerEditController.sendDisActiveDescription(
+            customerInfoController.custmerinfolist[index].customerCode,
+          );
+
+          Get.back(); // ابتدا دیالوگ را ببندیم
+
+          if (status == 200) {
+            Get.snackbar(
+              "دلیل غیر فعال سازی با موفقیت ارسال شد",
+              "موفقیت",
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          } else if (status == 400) {
+            Get.snackbar(
+              "مشتری قبلا غیر فعال شده است",
+              "عملیات تکراری",
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          } else {
+            Get.snackbar(
+              "خطا",
+              "خطا در ارسال دلیل غیرفعال سازی",
+              snackPosition: SnackPosition.BOTTOM,
+            );
+          }
+        },
         style: MyDecorations.mainButtom,
         child: Text("تایید", style: MyTextStyle.bottomstyle),
       ),
