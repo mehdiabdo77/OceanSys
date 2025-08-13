@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/my_color.dart';
+import 'package:ocean_sys/constans/storage_const.dart';
+import 'package:ocean_sys/controller/register_controller.dart';
 import 'package:ocean_sys/main.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -11,14 +14,19 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
+final storage = GetStorage();
+
 class _SplashScreenState extends State<SplashScreen> {
+  RegisterController registerController = Get.put(RegisterController());
   @override
   void initState() {
     super.initState();
-    // TODO: implement initState
     Future.delayed(Duration(seconds: 3)).then((value) {
-      // TODO کنترل این که کاربر ثبت نام کرده یا نه
-      Get.offAndToNamed(NamedRoute.loginPage);
+      if (storage.read(StorageKey.username) == null) {
+        Get.offAndToNamed(NamedRoute.loginPage);
+      } else {
+        registerController.veryfy();
+      }
     });
   }
 

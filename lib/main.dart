@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       locale: Locale("fa"),
-      initialRoute: NamedRoute.loginPage,
+      initialRoute: NamedRoute.splashScreen,
       debugShowCheckedModeBanner: false,
       getPages: [
         GetPage(name: '/', page: () => SplashScreen()),

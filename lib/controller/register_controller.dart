@@ -17,6 +17,13 @@ class RegisterController extends GetxController {
   var user = '';
   var password = '';
 
+  @override
+  void onInit() {
+    super.onInit();
+    usercontroler.text = storage.read(StorageKey.username) ?? '';
+    passwordcontroler.text = storage.read(StorageKey.password) ?? '';
+  }
+
   veryfy() async {
     user = usercontroler.text;
     password = passwordcontroler.text;
@@ -39,6 +46,10 @@ class RegisterController extends GetxController {
         });
 
     storage.write(StorageKey.token, response);
+    if (response != null) {
+      storage.write(StorageKey.username, user);
+      storage.write(StorageKey.password, password);
+    }
 
     if (storage.read(StorageKey.token) != null) {
       Get.toNamed(NamedRoute.homepage);

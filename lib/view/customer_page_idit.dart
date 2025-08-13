@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
@@ -8,6 +9,19 @@ import 'package:ocean_sys/controller/customer_info_controller.dart';
 
 class CustomerPageIdit extends StatelessWidget {
   CustomerPageIdit({super.key});
+  final _formKey = GlobalKey<FormState>();
+
+  final RegExp _mobileReg = RegExp(r'^09\d{9}$'); // موبایل
+  final RegExp _phoneReg = RegExp(r'^(021|026)\d{8}$'); // تلفن ثابت
+  final RegExp _tenDigits = RegExp(r'^\d{10}$'); // عدد ها
+
+  String? _validator(RegExp pattern, String label, String v) {
+    if (!pattern.hasMatch(v)) {
+      return "$label فرمت صحیح ندارد";
+    } else {
+      return null;
+    }
+  }
 
   CustomerEditController customerEditController = Get.put(
     CustomerEditController(),
@@ -30,60 +44,113 @@ class CustomerPageIdit extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(10.0),
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              myTextField(
-                "کد ملی",
-                customerEditController.nationalCode,
-                customerInfoController.custmerinfolist[index].nationalCode,
-              ),
-              SizedBox(height: 10),
-              myTextField("کد نقش", customerEditController.roleCode, ''),
-              SizedBox(height: 10),
-              myTextField(
-                "کد پستی",
-                customerEditController.postalCode,
-                customerInfoController.custmerinfolist[index].postalCode,
-              ),
-              SizedBox(height: 10),
-              myTextField(
-                "نام مالک",
-                customerEditController.ownerName,
-                customerInfoController.custmerinfolist[index].customerName,
-              ),
-              SizedBox(height: 10),
-              myTextField(
-                "نام تابلو مغازه",
-                customerEditController.storeName,
-                customerInfoController.custmerinfolist[index].customerBoard,
-              ),
-              SizedBox(height: 10),
-              myTextField(
-                "شماره همراه",
-                customerEditController.mobileNumber,
-                customerInfoController.custmerinfolist[index].mobile,
-              ),
-              SizedBox(height: 10),
-              myTextField(
-                "شماره همراه 2",
-                customerEditController.mobileNumber2,
-                '',
-              ),
-              SizedBox(height: 10),
-              myTextField(
-                "شماره ثابت",
-                customerEditController.phoneNumber,
-                customerInfoController.custmerinfolist[index].phone,
-              ),
-              SizedBox(height: 10),
-              myTextField("متراژ مغازه", customerEditController.storeArea, ''),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                style: MyDecorations.mainButtom,
-                child: Text("ذخیره تغییرات", style: MyTextStyle.bottomstyle),
-              ),
-            ],
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                myTextField(
+                  "کد ملی",
+                  customerEditController.nationalCode,
+                  customerInfoController.custmerinfolist[index].nationalCode,
+
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return null;
+                    return _validator(_tenDigits, "کد ملی", v);
+                  },
+                  inputFormatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                ),
+                SizedBox(height: 10),
+                myTextField("کد نقش", customerEditController.roleCode, ''),
+                SizedBox(height: 10),
+                myTextField(
+                  "کد پستی",
+                  customerEditController.postalCode,
+                  customerInfoController.custmerinfolist[index].postalCode,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return null;
+                    return _validator(_tenDigits, "کد پستی", v);
+                  },
+                  inputFormatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(10),
+                  ],
+                ),
+                SizedBox(height: 10),
+                myTextField(
+                  "نام مالک",
+                  customerEditController.ownerName,
+                  customerInfoController.custmerinfolist[index].customerName,
+                ),
+                SizedBox(height: 10),
+                myTextField(
+                  "نام تابلو مغازه",
+                  customerEditController.storeName,
+                  customerInfoController.custmerinfolist[index].customerBoard,
+                ),
+                SizedBox(height: 10),
+                myTextField(
+                  "شماره همراه",
+                  customerEditController.mobileNumber,
+                  customerInfoController.custmerinfolist[index].mobile,
+
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return null;
+                    return _validator(_mobileReg, "شماره همراه", v);
+                  },
+                  inputFormatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(11),
+                  ],
+                ),
+                SizedBox(height: 10),
+                myTextField(
+                  "شماره همراه 2",
+                  customerEditController.mobileNumber2,
+                  '',
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return null;
+                    return _validator(_mobileReg, "شماره همراه", v);
+                  },
+                  inputFormatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(11),
+                  ],
+                ),
+                SizedBox(height: 10),
+                myTextField(
+                  "شماره ثابت",
+                  customerEditController.phoneNumber,
+                  customerInfoController.custmerinfolist[index].phone,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return null;
+                    return _validator(_phoneReg, "شماره ثابت", v);
+                  },
+                  inputFormatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(11),
+                  ],
+                ),
+                SizedBox(height: 10),
+                myTextField(
+                  "متراژ مغازه",
+                  customerEditController.storeArea,
+                  '',
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // همه فیلدها معتبرند؛ عملیات ذخیره را انجام بدهید
+                    }
+                  },
+                  style: MyDecorations.mainButtom,
+                  child: Text("ذخیره تغییرات", style: MyTextStyle.bottomstyle),
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -93,8 +160,10 @@ class CustomerPageIdit extends StatelessWidget {
   Widget myTextField(
     String labelText,
     TextEditingController controller,
-    String title,
-  ) {
+    String title, {
+    String? Function(String?)? validator,
+    List<TextInputFormatter>? inputFormatter, // به احتمال زیاد نیاز نباشه
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -106,8 +175,11 @@ class CustomerPageIdit extends StatelessWidget {
           ],
         ),
         SizedBox(height: 8),
-        TextField(
+        TextFormField(
           controller: controller,
+          inputFormatters: inputFormatter,
+          validator: validator,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
           decoration: InputDecoration(
             labelText: labelText,
             labelStyle: MyTextStyle.textBlak12,
