@@ -16,12 +16,26 @@ class RegisterController extends GetxController {
 
   var user = '';
   var password = '';
+  var server = '';
 
   @override
   void onInit() {
     super.onInit();
     usercontroler.text = storage.read(StorageKey.username) ?? '';
     passwordcontroler.text = storage.read(StorageKey.password) ?? '';
+    serverAddressController.text = storage.read(StorageKey.serverAddress) ?? '';
+  }
+
+  saveBaseUrl() async {
+    server = serverAddressController.text;
+
+    if (server.isEmpty) {
+      Get.snackbar("خطا", "لطفا ادرس سرور وارد کنید");
+      return Null;
+    } else {
+      storage.write(StorageKey.serverAddress, server);
+    }
+    ;
   }
 
   veryfy() async {

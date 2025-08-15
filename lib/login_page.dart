@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:blobs/blobs.dart';
 import 'package:get/get.dart';
+import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/controller/register_controller.dart';
@@ -127,7 +128,9 @@ class LoginPage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              getserveraddress();
+                            },
                             child: Text("Adress Server"), //TODO استایل و فونت
                           ),
                         ],
@@ -143,24 +146,26 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
-}
 
-getserveraddress() {
-  Get.defaultDialog(
-    title: "Server Address",
-    content: TextField(
-      controller: Get.find<RegisterController>().serverAddressController,
-      decoration: InputDecoration(
-        hintText: 'Enter server address',
-        border: UnderlineInputBorder(),
+  getserveraddress() {
+    Get.defaultDialog(
+      title: "Server Address",
+      content: TextField(
+        controller: registerController.serverAddressController,
+        style: MyTextStyle.textBlak12,
+        decoration: InputDecoration(
+          hintText: 'لطفا ادرس سرور را وارد کنید',
+          border: UnderlineInputBorder(),
+        ),
       ),
-    ),
-    confirm: ElevatedButton(
-      onPressed: () {
-        // Handle server address submission
-        Get.back();
-      },
-      child: Text("Submit"),
-    ),
-  );
+      confirm: ElevatedButton(
+        style: MyDecorations.mainButtom,
+        onPressed: () {
+          registerController.saveBaseUrl();
+          Get.back();
+        },
+        child: Text("ذخیره", style: MyTextStyle.bottomstyle),
+      ),
+    );
+  }
 }

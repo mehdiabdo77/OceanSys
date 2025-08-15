@@ -63,7 +63,15 @@ class CustomerPageIdit extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 10),
-                myTextField("کد نقش", customerEditController.roleCode, ''),
+                myTextField(
+                  "کد نقش",
+                  customerEditController.roleCode,
+                  '',
+                  inputFormatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(13),
+                  ],
+                ),
                 SizedBox(height: 10),
                 myTextField(
                   "کد پستی",
@@ -81,14 +89,20 @@ class CustomerPageIdit extends StatelessWidget {
                 SizedBox(height: 10),
                 myTextField(
                   "نام مالک",
-                  customerEditController.ownerName,
+                  customerEditController.customername,
                   customerInfoController.custmerinfolist[index].customerName,
                 ),
                 SizedBox(height: 10),
                 myTextField(
                   "نام تابلو مغازه",
-                  customerEditController.storeName,
+                  customerEditController.customerboard,
                   customerInfoController.custmerinfolist[index].customerBoard,
+                ),
+                SizedBox(height: 10),
+                myTextField(
+                  "آدرس مغازه",
+                  customerEditController.address,
+                  customerInfoController.custmerinfolist[index].address,
                 ),
                 SizedBox(height: 10),
                 myTextField(
@@ -135,15 +149,36 @@ class CustomerPageIdit extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 myTextField(
-                  "متراژ مغازه",
+                  "(متر بربع) متراژ مغازه",
                   customerEditController.storeArea,
                   '',
+
+                  inputFormatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    LengthLimitingTextInputFormatter(5),
+                  ],
                 ),
                 SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      // همه فیلدها معتبرند؛ عملیات ذخیره را انجام بدهید
+                      int? result = await customerEditController
+                          .sendIditCustomer(
+                            customerInfoController
+                                .custmerinfolist[index]
+                                .customerCode,
+                          );
+
+                      if (result == 200) {
+                        Get.snackbar("موفقیت", "اطلاعات با موفقیت ارسال شد");
+                      } else {
+                        Get.snackbar("خطا", "مشکل در اسال اطلاعات");
+                      }
+                    } else {
+                      Get.snackbar(
+                        "خطا",
+                        "مقادیر اشتباه وارد شده فرم را لطفا چک کنید",
+                      );
                     }
                   },
                   style: MyDecorations.mainButtom,

@@ -14,12 +14,6 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  final List<Map<String, dynamic>> fakePoints = const [
-    {'name': 'فروشگاه رضا', 'location': LatLng(35.6892, 51.3890)},
-    {'name': 'عمده  تهران', 'location': LatLng(35.6935, 51.4020)},
-    {'name': 'سوپر امید', 'location': LatLng(35.6870, 51.3815)},
-  ];
-
   CustomerInfoController customerInfoController = Get.put(
     CustomerInfoController(),
   );
@@ -56,8 +50,9 @@ class _MapPageState extends State<MapPage> {
 
                       color: point['isvusit'] == 1
                           ? SolidColors.pointVisitColor
+                          : point['isvusit'] == 2
+                          ? SolidColors.pointNoSendEndJab
                           : SolidColors.pointNoVisitColor,
-                      size: 24,
                     ),
                     const SizedBox(height: 5),
                     Container(

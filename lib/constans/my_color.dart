@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class SolidColors {
+  SolidColors._();
   static const Color homepage = Color(0xFFF1EDE3);
   static const Color posterTitel = Color.fromARGB(255, 255, 255, 255);
   static const Color primaryColor = Color.fromARGB(255, 68, 4, 87);
@@ -13,6 +14,7 @@ class SolidColors {
 
   static const Color pointVisitColor = Color.fromARGB(255, 35, 164, 143);
   static const Color pointNoVisitColor = Color.fromARGB(255, 79, 38, 38);
+  static const Color pointNoSendEndJab = Color.fromARGB(255, 174, 163, 14);
 }
 
 class GradientColors {
