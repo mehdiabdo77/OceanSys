@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ocean_sys/controller/location_sync_controller.dart';
 import 'package:ocean_sys/login_page.dart';
 import 'package:ocean_sys/splash_screen.dart';
-import 'package:ocean_sys/view/customer_page.dart';
-import 'package:ocean_sys/view/customer_page_idit.dart';
+import 'package:ocean_sys/view/CustomerPages/customer_page.dart';
+import 'package:ocean_sys/view/CustomerPages/customer_page_idit.dart';
 import 'package:ocean_sys/view/main_screen.dart';
 import 'package:ocean_sys/view/map_page.dart';
 
 void main() async {
   await GetStorage.init();
+  WidgetsFlutterBinding.ensureInitialized();
+  Get.put(LocationSyncController());
   runApp(const MyApp());
 }
 

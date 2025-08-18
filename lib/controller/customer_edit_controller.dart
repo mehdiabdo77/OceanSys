@@ -1,5 +1,4 @@
-import 'dart:ffi';
-
+import 'dart:async';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,14 +7,14 @@ import 'package:ocean_sys/constans/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
 import 'package:ocean_sys/model/customer_edit_model.dart';
 import 'package:ocean_sys/model/disactive_customer_request.dart';
+import 'package:ocean_sys/model/point_model.dart';
 import 'package:ocean_sys/model/product_category_customer.dart';
 import 'package:ocean_sys/servies/dio_service.dart';
 
 import '../model/CRM_customer_description.dart';
-import '../model/edti_lat&long.dart';
 
 class CustomerEditController extends GetxController {
-  TextEditingController disActiveDescription = TextEditingController();
+  // اطلاعات فرم اصلاحیه
   TextEditingController nationalCode = TextEditingController();
   TextEditingController roleCode = TextEditingController();
   TextEditingController postalCode = TextEditingController();
@@ -26,10 +25,15 @@ class CustomerEditController extends GetxController {
   TextEditingController mobileNumber2 = TextEditingController();
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController storeArea = TextEditingController();
-  TextEditingController crmCustomerDescription = TextEditingController();
 
+  // مشتری غیر فعال سازی و شکایت
+  TextEditingController crmCustomerDescription = TextEditingController();
+  TextEditingController disActiveDescription = TextEditingController();
+
+  // موارد انتخاب شده توسط کاربر
+  var isCustomerVisit = false.obs; // آیا مشتری خودش سرکشی می‌کند؟
+  var isOwnerInShop = false.obs; // آیا صاحب مغازه در مغازه هست؟
   var selectedDisActive = "".obs;
-  // var crmCustomerDescription = "".obs;
 
   RxList<String> selectedProducts = <String>[].obs;
 
@@ -46,10 +50,13 @@ class CustomerEditController extends GetxController {
     return _postWithAuth(ApiUrlConstant.disactiveCode, payload.toJson());
   }
 
+  // شکایت مشتری
   Future<int?> sendCRMCustomerDescription(var customerCode) async {
     final payload = CRMCustomerDescriptionRequest(
       customerCode: customerCode.toString(),
-      description: crmCustomerDescription.text, // اصلاح استفاده از کنترلر درست
+      description: crmCustomerDescription.text,
+      customerVisit: isCustomerVisit.value,
+      ownerInShop: isOwnerInShop.value,
     );
 
     return _postWithAuth(
@@ -58,6 +65,7 @@ class CustomerEditController extends GetxController {
     );
   }
 
+  // علاقه مندی های مشتری
   Future<int?> sendProductCategoryCustomer(var customerCode) async {
     final payload = ProductCategoryCustomer(
       customerCode: customerCode.toString(),
@@ -67,7 +75,7 @@ class CustomerEditController extends GetxController {
     return _postWithAuth(ApiUrlConstant.productCategory, payload.toJson());
   }
 
-
+  // ادیت مشتری
   Future<int?> sendIditCustomer(var customerCode) async {
     final payload = CustomerEditModel(
       customerCode: customerCode,

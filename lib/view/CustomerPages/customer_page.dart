@@ -6,6 +6,7 @@ import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/controller/customer_edit_controller.dart';
 import 'package:ocean_sys/controller/customer_info_controller.dart';
+import 'package:ocean_sys/controller/location_sync_controller.dart';
 import 'package:ocean_sys/gen/assets.gen.dart';
 import 'package:ocean_sys/main.dart';
 
@@ -20,6 +21,8 @@ class CustomerPage extends StatelessWidget {
     CustomerEditController(),
   );
 
+  LocationSyncController controller_loc = Get.find<LocationSyncController>();
+
   @override
   Widget build(BuildContext context) {
     final int index = Get.arguments ?? 0;
@@ -30,7 +33,18 @@ class CustomerPage extends StatelessWidget {
         backgroundColor: SolidColors.appBorColor,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [Icon(Icons.location_on_sharp)],
+          children: [
+            GestureDetector(
+              onTap: () {
+                var result = controller_loc.changeLoction(
+                  customerInfoController.custmerinfolist[index].customerCode
+                      .toString(),
+                );
+                //TODO باید یه کاری بکنم اگر اصلاح بشه توی نقشه هم اصلاح بشخ و پیام موفقیت امیز هم ارسال بشه
+              },
+              child: Icon(Icons.location_on_sharp),
+            ),
+          ],
         ),
       ),
       body: Padding(
@@ -393,17 +407,45 @@ class CustomerPage extends StatelessWidget {
       titleStyle: MyTextStyle.textBlack16,
       content: SizedBox(
         height: Get.height * 0.3,
-        width: Get.width * 0.5,
-        child: TextField(
-          controller: customerEditController.crmCustomerDescription,
-          maxLines: 6,
-          style: MyTextStyle.textBlak12,
-          decoration: InputDecoration(
-            labelText: "توضیحات",
-            labelStyle: MyTextStyle.textBlak12,
-            border: OutlineInputBorder(),
-            focusColor: SolidColors.listCustomerColor,
-          ),
+        width: Get.width * 0.6,
+        child: Column(
+          children: [
+            TextField(
+              controller: customerEditController.crmCustomerDescription,
+              maxLines: 6,
+              style: MyTextStyle.textBlak12,
+              decoration: InputDecoration(
+                labelText: "توضیحات",
+                labelStyle: MyTextStyle.textBlak12,
+                border: OutlineInputBorder(),
+                focusColor: SolidColors.listCustomerColor,
+              ),
+            ),
+            Obx(
+              () => CheckboxListTile(
+                title: Text(
+                  "آیا مشتری خودش سرکشی می‌کند؟",
+                  style: MyTextStyle.textBlack16,
+                  maxLines: 2,
+                ),
+                value: customerEditController.isCustomerVisit.value,
+                onChanged: (val) =>
+                    customerEditController.isCustomerVisit.value = val ?? false,
+              ),
+            ),
+            Obx(
+              () => CheckboxListTile(
+                title: Text(
+                  "آیا صاحب مغازه در مغازه هست؟",
+                  style: MyTextStyle.textBlack16,
+                  maxLines: 2,
+                ),
+                value: customerEditController.isOwnerInShop.value,
+                onChanged: (val) =>
+                    customerEditController.isOwnerInShop.value = val ?? false,
+              ),
+            ),
+          ],
         ),
       ),
       confirm: ElevatedButton(

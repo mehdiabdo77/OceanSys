@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/controller/main_controler.dart';
-import 'package:ocean_sys/view/customer_list_page.dart';
+import 'package:ocean_sys/view/CustomerPages/customer_list_page.dart';
 import 'package:ocean_sys/view/map_page.dart';
 
 class MainScreen extends StatelessWidget {
