@@ -67,15 +67,6 @@ class CustomerEditController extends GetxController {
     return _postWithAuth(ApiUrlConstant.productCategory, payload.toJson());
   }
 
-  Future<int?> sendEditLatAndLong(var customerCode) async {
-    final payload = EdtiLatAndlong(
-      customerCode: customerCode.toString(),
-      lat: 12.22222,
-      long: 12.33333,
-    );
-
-    return _postWithAuth(ApiUrlConstant.latAndLong, payload.toJson());
-  }
 
   Future<int?> sendIditCustomer(var customerCode) async {
     final payload = CustomerEditModel(
