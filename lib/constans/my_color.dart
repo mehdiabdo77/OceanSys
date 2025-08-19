@@ -13,8 +13,13 @@ class SolidColors {
   static const Color iconmain = Color(0xFF004D40);
 
   static const Color pointVisitColor = Color.fromARGB(255, 35, 164, 143);
+  static const Color listVisitColor = Color.fromARGB(255, 35, 164, 143);
+
   static const Color pointNoVisitColor = Color.fromARGB(255, 79, 38, 38);
+  static const Color listNoVisitColor = Color.fromARGB(255, 79, 38, 38);
+
   static const Color pointNoSendEndJab = Color.fromARGB(255, 174, 163, 14);
+  static const Color listNoSendEndJab = Color.fromARGB(255, 174, 163, 14);
 }
 
 class GradientColors {

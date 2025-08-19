@@ -16,6 +16,13 @@ class LocationSyncController extends GetxController {
   final _long = 0.0.obs;
   Timer? _syncTimer;
 
+  // مختص استریم سریع در صفحه نقشه
+  StreamSubscription<Position>? _positionSub;
+
+  // دسترسی خواندنی برای استفاده در UI
+  double get lat => _lat.value;
+  double get long => _long.value;
+
   @override
   void onInit() {
     super.onInit();
@@ -24,10 +31,52 @@ class LocationSyncController extends GetxController {
 
   void startLocationSync() {
     _syncTimer?.cancel();
-    _syncTimer = Timer.periodic(const Duration(seconds: 60), (_) async {
+    _syncTimer = Timer.periodic(const Duration(minutes: 10), (_) async {
       await _updateCurrentLocation();
       await sendUserLocation();
     });
+  }
+
+  // استریم سریع: فقط وقتی MapPage باز است صدا بزن
+  void startFastUpdates({
+    Duration androidInterval = const Duration(seconds: 5),
+    int distanceFilter = 0,
+  }) {
+    // اگر قبلا فعال است، چیزی انجام نده
+    if (_positionSub != null) return;
+
+    LocationSettings settings = const LocationSettings(
+      accuracy: LocationAccuracy.best,
+      distanceFilter: 0, // هر تغییر کوچکی را دریافت کن
+    );
+
+    // برای اندروید، فرکانس را دقیق‌تر کنترل می‌کنیم
+    if (GetPlatform.isAndroid) {
+      settings = AndroidSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: distanceFilter,
+        intervalDuration: androidInterval, // هر n ثانیه
+        forceLocationManager: false,
+      );
+    } else if (GetPlatform.isIOS) {
+      settings = AppleSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 0,
+        pauseLocationUpdatesAutomatically: true,
+        // allowBackgroundLocationUpdates: false, // اگر لازم شد
+      );
+    }
+
+    _positionSub = Geolocator.getPositionStream(locationSettings: settings)
+        .listen((pos) {
+          _lat.value = pos.latitude;
+          _long.value = pos.longitude;
+        });
+  }
+
+  void stopFastUpdates() {
+    _positionSub?.cancel();
+    _positionSub = null;
   }
 
   changeLoction(String code) async {
@@ -37,6 +86,7 @@ class LocationSyncController extends GetxController {
 
   Future<void> _updateCurrentLocation() async {
     final position = await _getCurrentPosition();
+    print("postion ${position}");
     if (position != null) {
       _lat.value = position.latitude;
       _long.value = position.longitude;
@@ -70,6 +120,7 @@ class LocationSyncController extends GetxController {
   @override
   void onClose() {
     _syncTimer?.cancel();
+    _positionSub?.cancel();
     super.onClose();
   }
 
@@ -95,5 +146,13 @@ class LocationSyncController extends GetxController {
     );
 
     return Geolocator.getCurrentPosition(locationSettings: locationSettings);
+  }
+
+  // برای منوی لیست مشتریان
+  double getDistanceInKm(double endLat, double endLng) {
+    final distance =
+        Geolocator.distanceBetween(endLat, endLng, _lat.value, _long.value) /
+        1000;
+    return double.parse(distance.toStringAsFixed(3));
   }
 }

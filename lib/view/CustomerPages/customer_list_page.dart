@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/controller/customer_info_controller.dart';
+import 'package:ocean_sys/controller/location_sync_controller.dart';
 import 'package:ocean_sys/main.dart';
 
 class CustomerListPage extends StatelessWidget {
@@ -10,6 +11,8 @@ class CustomerListPage extends StatelessWidget {
   CustomerInfoController customerInfoController = Get.put(
     CustomerInfoController(),
   );
+
+  LocationSyncController controllerLoc = Get.find<LocationSyncController>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,32 @@ class CustomerListPage extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: SolidColors.listCustomerColor,
                       borderRadius: BorderRadius.circular(8),
+                      border: BoxBorder.fromLTRB(
+                        right: BorderSide(
+                          style: BorderStyle.solid,
+                          width: 5,
+                          color:
+                              customerInfoController
+                                      .custmerinfolist[index]
+                                      .visited ==
+                                  1
+                              ? SolidColors.pointVisitColor
+                              : customerInfoController
+                                        .custmerinfolist[index]
+                                        .visited ==
+                                    2
+                              ? SolidColors.pointNoSendEndJab
+                              : SolidColors.pointNoVisitColor,
+                        ),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black87, // رنگ سایه
+                          spreadRadius: 1, // پخش‌شدگی
+                          blurRadius: 6, // محوی
+                          offset: const Offset(2, 3), // جابجایی سایه (x,y)
+                        ), // جابجایی سایه (x,y)
+                      ],
                     ),
                     child: Row(
                       children: [
@@ -71,7 +100,10 @@ class CustomerListPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text("20 km", style: TextStyle(color: Colors.yellow)),
+                        Text(
+                          "${controllerLoc.getDistanceInKm(customerInfoController.custmerinfolist[index].latitude, customerInfoController.custmerinfolist[index].longitude)} km",
+                          style: TextStyle(color: Colors.yellow),
+                        ),
                         Icon(
                           Icons.arrow_forward_ios_sharp,
                           color: Colors.white,
