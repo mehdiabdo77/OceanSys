@@ -38,7 +38,7 @@ class RegisterController extends GetxController {
     ;
   }
 
-  veryfy() async {
+  Future<bool> veryfy() async {
     user = usercontroler.text;
     password = passwordcontroler.text;
 
@@ -55,18 +55,18 @@ class RegisterController extends GetxController {
           if (response.statusCode == 200) {
             return response.data["access_token"];
           } else {
-            Get.snackbar("خطا", "یوزر پسورد استباه است لطفا مجدد امتحان کنید ");
+            Get.snackbar("خطا", "${response.statusMessage}");
+            return false;
           }
         });
 
-    storage.write(StorageKey.token, response);
-    if (response != null) {
+    if (response is String) {
+      storage.write(StorageKey.token, response);
       storage.write(StorageKey.username, user);
       storage.write(StorageKey.password, password);
+      // Get.offAllNamed(NamedRoute.homepage);
+      return true;
     }
-
-    if (storage.read(StorageKey.token) != null) {
-      Get.toNamed(NamedRoute.homepage);
-    }
+    return false;
   }
 }

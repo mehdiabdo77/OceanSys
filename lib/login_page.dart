@@ -5,6 +5,7 @@ import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/controller/register_controller.dart';
+import 'package:ocean_sys/main.dart';
 
 class LoginPage extends StatelessWidget {
   var registerController = Get.put<RegisterController>(RegisterController());
@@ -107,8 +108,11 @@ class LoginPage extends StatelessWidget {
                           ),
                           Spacer(),
                           ElevatedButton(
-                            onPressed: () {
-                              registerController.veryfy();
+                            onPressed: () async {
+                              bool ok = await registerController.veryfy();
+                              if (ok) {
+                                Get.offAllNamed(NamedRoute.homepage);
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xFF8E5D9F),

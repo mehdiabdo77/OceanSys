@@ -18,14 +18,24 @@ final storage = GetStorage();
 
 class _SplashScreenState extends State<SplashScreen> {
   RegisterController registerController = Get.put(RegisterController());
+  bool _loading = true;
+  bool _error = false;
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3)).then((value) {
+    Future.delayed(Duration(seconds: 3)).then((value) async {
       if (storage.read(StorageKey.username) == null) {
         Get.offAndToNamed(NamedRoute.loginPage);
       } else {
-        registerController.veryfy();
+        bool ok = await registerController.veryfy();
+        if (ok) {
+          Get.offAllNamed(NamedRoute.homepage);
+        } else {
+          setState(() {
+            _error = true;
+            _loading = false;
+          });
+        }
       }
     });
   }
@@ -34,18 +44,49 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Image(image: Assets.images.logo.provider(), height: 64),
-            Text(
-              "لطفا صبر کنید ...",
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            SizedBox(height: 20),
-            loading(),
-          ],
-        ),
+        child: _loading
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "لطفا صبر کنید ...",
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  SizedBox(height: 20),
+                  loading(),
+                ],
+              )
+            : _error
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'خطا در ارتباط با سرور',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _loading = true;
+                        _error = false;
+                      });
+                      registerController.veryfy().then((ok) {
+                        if (ok) {
+                          Get.offAllNamed(NamedRoute.homepage);
+                        } else {
+                          setState(() {
+                            _loading = false;
+                            _error = true;
+                          });
+                        }
+                      });
+                    },
+                    child: Text('تلاش مجدد'),
+                  ),
+                ],
+              )
+            : SizedBox.shrink(),
       ),
     );
   }
@@ -53,10 +94,4 @@ class _SplashScreenState extends State<SplashScreen> {
 
 loading() {
   return Center(child: SpinKitRing(color: SolidColors.primaryColor));
-  // return Center(
-  //   child: CircularProgressIndicator(
-  //     color: Colors.deepOrange,
-  //     strokeWidth: 5.0,
-  //   ),
-  // );
 }

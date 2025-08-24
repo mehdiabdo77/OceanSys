@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:geolocator/geolocator.dart';
@@ -149,10 +150,19 @@ class LocationSyncController extends GetxController {
   }
 
   // برای منوی لیست مشتریان
-  double getDistanceInKm(double endLat, double endLng) {
+  String getDistanceInKm(var endLat, var endLng) {
+    _updateCurrentLocation();
+
+    print("lat is ${_lat.value}");
+    if (endLat == " " || endLng == " ") {
+      return "فاقد لت و لانگ";
+    }
+
     final distance =
         Geolocator.distanceBetween(endLat, endLng, _lat.value, _long.value) /
         1000;
-    return double.parse(distance.toStringAsFixed(3));
+    print(distance);
+
+    return " KM ${distance.toStringAsFixed(3)}";
   }
 }

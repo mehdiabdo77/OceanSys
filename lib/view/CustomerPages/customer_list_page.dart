@@ -100,9 +100,18 @@ class CustomerListPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Text(
-                          "${controllerLoc.getDistanceInKm(customerInfoController.custmerinfolist[index].latitude, customerInfoController.custmerinfolist[index].longitude)} km",
-                          style: TextStyle(color: Colors.yellow),
+                        Obx(
+                          () => Text(
+                            controllerLoc.getDistanceInKm(
+                              customerInfoController
+                                  .custmerinfolist[index]
+                                  .latitude,
+                              customerInfoController
+                                  .custmerinfolist[index]
+                                  .longitude,
+                            ),
+                            style: TextStyle(color: Colors.yellow),
+                          ),
                         ),
                         Icon(
                           Icons.arrow_forward_ios_sharp,
