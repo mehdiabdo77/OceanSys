@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -107,14 +108,33 @@ class LocationSyncController extends GetxController {
     final token = storage.read(StorageKey.token);
     print(map);
     try {
-      final response = await DioService().postJson(
-        map,
-        url,
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
-      );
-      return response.statusCode as int?;
+      final response = await DioService()
+          .postJson(
+            map,
+            url,
+            options: Options(headers: {'Authorization': 'Bearer $token'}),
+          )
+          .catchError((error) {
+            print(error);
+          });
+      print(response.data);
+      if (response.statusCode == 200) {
+        Get.snackbar("موفقیت", "اطلاعات با موفقیت ارسال شد");
+      }
+      // BUG کاری کن وقتی مشتری غیر فعالی میفرسته این بیاد
+      if (response.statusCode == 400) {
+        Get.snackbar("خطا", "مشتری قبلا غیر فعال شده است");
+      } else {
+        Get.snackbar(
+          "خطا",
+          "${response.statusMessage}",
+          borderColor: Colors.red,
+          borderWidth: 3,
+        );
+      }
     } catch (e) {
-      return null;
+      Get.snackbar("خطا", "${e.toString()}");
+      return null; // خطای شبکه یا استثناء دیگر
     }
   }
 

@@ -58,6 +58,10 @@ class RegisterController extends GetxController {
             Get.snackbar("خطا", "${response.statusMessage}");
             return false;
           }
+        })
+        .catchError((err) {
+          Get.snackbar("خطا", "${err.message}");
+          return false;
         });
 
     if (response is String) {

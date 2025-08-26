@@ -122,9 +122,9 @@ class DioService {
                 statusMessage: 'No Internet Connection',
               );
             }
-            if (err.response != null) {
-              return err.response;
-            }
+            // if (err.response != null) {
+            //   return err.response;
+            // }
             return Response(
               requestOptions: err.requestOptions,
               statusCode: err.response?.statusCode ?? -1,

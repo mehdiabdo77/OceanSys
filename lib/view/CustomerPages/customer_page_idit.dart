@@ -162,24 +162,13 @@ class CustomerPageIdit extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      int? result = await customerEditController
-                          .sendIditCustomer(
-                            customerInfoController
-                                .custmerinfolist[index]
-                                .customerCode,
-                          );
-
-                      if (result == 200) {
-                        Get.snackbar("موفقیت", "اطلاعات با موفقیت ارسال شد");
-                      } else {
-                        Get.snackbar("خطا", "مشکل در اسال اطلاعات");
-                      }
-                    } else {
-                      Get.snackbar(
-                        "خطا",
-                        "مقادیر اشتباه وارد شده فرم را لطفا چک کنید",
+                      await customerEditController.sendIditCustomer(
+                        customerInfoController
+                            .custmerinfolist[index]
+                            .customerCode,
                       );
                     }
+                    return null;
                   },
                   style: MyDecorations.mainButtom,
                   child: Text("ذخیره تغییرات", style: MyTextStyle.bottomstyle),

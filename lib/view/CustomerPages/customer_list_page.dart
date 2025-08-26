@@ -20,109 +20,116 @@ class CustomerListPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: SolidColors.homepage,
-      body: Obx(
-        () => SizedBox(
-          child: ListView.builder(
-            itemCount: customerInfoController.custmerinfolist.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Get.toNamed(NamedRoute.customerPage, arguments: index);
-                  },
-                  child: Container(
-                    height: 80,
-                    width: Get.width,
-                    decoration: BoxDecoration(
-                      color: SolidColors.listCustomerColor,
-                      borderRadius: BorderRadius.circular(8),
-                      border: BoxBorder.fromLTRB(
-                        right: BorderSide(
-                          style: BorderStyle.solid,
-                          width: 5,
-                          color:
-                              customerInfoController
-                                      .custmerinfolist[index]
-                                      .visited ==
-                                  1
-                              ? SolidColors.pointVisitColor
-                              : customerInfoController
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await customerInfoController.getCustumerInfo();
+        },
+        child: Obx(
+          () => SizedBox(
+            child: ListView.builder(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: customerInfoController.custmerinfolist.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed(NamedRoute.customerPage, arguments: index);
+                    },
+                    child: Container(
+                      height: 80,
+                      width: Get.width,
+                      decoration: BoxDecoration(
+                        color: SolidColors.listCustomerColor,
+                        borderRadius: BorderRadius.circular(8),
+                        border: BoxBorder.fromLTRB(
+                          right: BorderSide(
+                            style: BorderStyle.solid,
+                            width: 5,
+                            color:
+                                customerInfoController
                                         .custmerinfolist[index]
                                         .visited ==
-                                    2
-                              ? SolidColors.pointNoSendEndJab
-                              : SolidColors.pointNoVisitColor,
+                                    1
+                                ? SolidColors.pointVisitColor
+                                : customerInfoController
+                                          .custmerinfolist[index]
+                                          .visited ==
+                                      2
+                                ? SolidColors.pointNoSendEndJab
+                                : SolidColors.pointNoVisitColor,
+                          ),
                         ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black87, // رنگ سایه
+                            spreadRadius: 1, // پخش‌شدگی
+                            blurRadius: 6, // محوی
+                            offset: const Offset(2, 3), // جابجایی سایه (x,y)
+                          ), // جابجایی سایه (x,y)
+                        ],
                       ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black87, // رنگ سایه
-                          spreadRadius: 1, // پخش‌شدگی
-                          blurRadius: 6, // محوی
-                          offset: const Offset(2, 3), // جابجایی سایه (x,y)
-                        ), // جابجایی سایه (x,y)
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsetsGeometry.all(8),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  customerInfoController
-                                      .custmerinfolist[index]
-                                      .customerBoard
-                                      .toString(),
-                                  style: textTheme.bodyLarge,
-                                ),
-                                Text(
-                                  customerInfoController
-                                      .custmerinfolist[index]
-                                      .customerCode
-                                      .toString(),
-                                  style: textTheme.bodyLarge,
-                                ),
-                                Text(
-                                  customerInfoController
-                                      .custmerinfolist[index]
-                                      .address
-                                      .toString(),
-                                  style: textTheme.bodySmall,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsetsGeometry.all(8),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    customerInfoController
+                                        .custmerinfolist[index]
+                                        .customerBoard
+                                        .toString(),
+                                    style: textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    customerInfoController
+                                        .custmerinfolist[index]
+                                        .customerCode
+                                        .toString(),
+                                    style: textTheme.bodyLarge,
+                                  ),
+                                  Text(
+                                    customerInfoController
+                                        .custmerinfolist[index]
+                                        .address
+                                        .toString(),
+                                    style: textTheme.bodySmall,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Obx(
-                          () => Text(
-                            controllerLoc.getDistanceInKm(
-                              customerInfoController
-                                  .custmerinfolist[index]
-                                  .latitude,
-                              customerInfoController
-                                  .custmerinfolist[index]
-                                  .longitude,
+                          Obx(
+                            () => Text(
+                              controllerLoc.getDistanceInKm(
+                                customerInfoController
+                                    .custmerinfolist[index]
+                                    .latitude,
+                                customerInfoController
+                                    .custmerinfolist[index]
+                                    .longitude,
+                              ),
+                              style: TextStyle(color: Colors.yellow),
                             ),
-                            style: TextStyle(color: Colors.yellow),
                           ),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios_sharp,
-                          color: Colors.white,
-                        ),
-                      ],
+                          Icon(
+                            Icons.arrow_forward_ios_sharp,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ),
       ),

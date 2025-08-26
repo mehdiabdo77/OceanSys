@@ -13,4 +13,5 @@ class ApiUrlConstant {
   static String crmCustomerDescription = "${baseUrl}CRMCustomerDescription";
   static String editCoustomerInfo = "${baseUrl}editcoustomerinfo";
   static String latAndLong = "${baseUrl}point";
+  static String taskComplete = "${baseUrl}task_complete";
 }

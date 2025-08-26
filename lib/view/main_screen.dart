@@ -12,7 +12,10 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => Scaffold(
-        appBar: AppBar(backgroundColor: SolidColors.appBorColor),
+        appBar: AppBar(
+          backgroundColor: SolidColors.appBorColor,
+          toolbarHeight: 40,
+        ),
         body: pages[mainControler.currentIndex.value],
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: mainControler.currentIndex.value,

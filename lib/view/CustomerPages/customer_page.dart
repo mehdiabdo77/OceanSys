@@ -35,12 +35,21 @@ class CustomerPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             GestureDetector(
+              onTap: () async {
+                var result = await customerEditController.taskComplete(
+                  customerInfoController.custmerinfolist[index].customerCode
+                      .toString(),
+                );
+              },
+              child: Icon(Icons.check),
+            ),
+            SizedBox(width: 20),
+            GestureDetector(
               onTap: () {
                 var result = controller_loc.changeLoction(
                   customerInfoController.custmerinfolist[index].customerCode
                       .toString(),
                 );
-                //TODO باید یه کاری بکنم اگر اصلاح بشه توی نقشه هم اصلاح بشخ و پیام موفقیت امیز هم ارسال بشه
               },
               child: Icon(Icons.location_on_sharp),
             ),
@@ -138,7 +147,7 @@ class CustomerPage extends StatelessWidget {
                         sendDisActive(index);
                       },
                       child: Text(
-                        "غیر فعال کردن مشتری",
+                        "غیر فعال / فعال",
                         style: MyTextStyle.bottomstyle,
                       ),
                     ),
@@ -211,6 +220,7 @@ class CustomerPage extends StatelessWidget {
       'تغییر مالکیت',
       'تغییر آدرس',
       'سایر',
+      'مشتری فعال',
     ];
     Get.defaultDialog(
       title: "دلیل غیر فعال سازی",
@@ -251,32 +261,9 @@ class CustomerPage extends StatelessWidget {
             Get.snackbar("لطفا یک دلیل انتخاب کنید", "خطا");
             return;
           }
-
-          final status = await customerEditController.sendDisActiveDescription(
+          await customerEditController.sendDisActiveDescription(
             customerInfoController.custmerinfolist[index].customerCode,
           );
-
-          Get.back(); // ابتدا دیالوگ را ببندیم
-
-          if (status == 200) {
-            Get.snackbar(
-              "دلیل غیر فعال سازی با موفقیت ارسال شد",
-              "موفقیت",
-              snackPosition: SnackPosition.BOTTOM,
-            );
-          } else if (status == 400) {
-            Get.snackbar(
-              "مشتری قبلا غیر فعال شده است",
-              "عملیات تکراری",
-              snackPosition: SnackPosition.BOTTOM,
-            );
-          } else {
-            Get.snackbar(
-              "خطا",
-              "خطا در ارسال دلیل غیرفعال سازی",
-              snackPosition: SnackPosition.BOTTOM,
-            );
-          }
         },
         style: MyDecorations.mainButtom,
         child: Text("تایید", style: MyTextStyle.bottomstyle),
@@ -373,17 +360,10 @@ class CustomerPage extends StatelessWidget {
         children: [
           ElevatedButton(
             onPressed: () async {
+              Get.back();
               if (customerEditController.selectedProducts.isNotEmpty) {
-                int? result = await customerEditController
-                    .sendProductCategoryCustomer(
-                      customerInfoController
-                          .custmerinfolist[index]
-                          .customerCode,
-                    );
-                Get.back();
-                Get.snackbar(
-                  "عملیات موفق",
-                  "انتخاب شده: ${customerEditController.selectedProducts.join(', ')}",
+                await customerEditController.sendProductCategoryCustomer(
+                  customerInfoController.custmerinfolist[index].customerCode,
                 );
               } else {
                 Get.snackbar(
@@ -450,15 +430,11 @@ class CustomerPage extends StatelessWidget {
       ),
       confirm: ElevatedButton(
         onPressed: () async {
-          int? status = await customerEditController.sendCRMCustomerDescription(
+          Get.back();
+
+          await customerEditController.sendCRMCustomerDescription(
             customerInfoController.custmerinfolist[index].customerCode,
           );
-          Get.back();
-          if (status == 200) {
-            Get.snackbar("موفقیت", "توضیحات ارسال شد");
-          } else {
-            Get.snackbar("خطا", "عدم ارسال اطاعات ");
-          }
         },
         style: MyDecorations.mainButtom,
         child: Text("ذخیره", style: MyTextStyle.bottomstyle),

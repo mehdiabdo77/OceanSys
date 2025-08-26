@@ -9,6 +9,7 @@ import 'package:ocean_sys/model/customer_edit_model.dart';
 import 'package:ocean_sys/model/disactive_customer_request.dart';
 import 'package:ocean_sys/model/point_model.dart';
 import 'package:ocean_sys/model/product_category_customer.dart';
+import 'package:ocean_sys/model/task_complete.dart';
 import 'package:ocean_sys/servies/dio_service.dart';
 
 import '../model/CRM_customer_description.dart';
@@ -48,6 +49,12 @@ class CustomerEditController extends GetxController {
     );
 
     return _postWithAuth(ApiUrlConstant.disactiveCode, payload.toJson());
+  }
+
+  Future<int?> taskComplete(var customerCode) async {
+    final payload = TaskComplete(customerCode: customerCode.toString());
+
+    return _postWithAuth(ApiUrlConstant.taskComplete, payload.toJson());
   }
 
   // شکایت مشتری
@@ -99,13 +106,30 @@ class CustomerEditController extends GetxController {
     final token = storage.read(StorageKey.token);
     print(map);
     try {
-      final response = await DioService().postJson(
-        map,
-        url,
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
-      );
-      return response.statusCode as int?; // 200، 400، ...
+      final response = await DioService()
+          .postJson(
+            map,
+            url,
+            options: Options(headers: {'Authorization': 'Bearer $token'}),
+          )
+          .catchError((error) {
+            print(error);
+          });
+      print(response.statusCode);
+      if (response.statusCode == 200) {
+        Get.snackbar("موفقیت", "اطلاعات با موفقیت ارسال شد");
+      } else if (response.statusCode == 400) {
+        Get.snackbar("خطا", "مشتری قبلا غیر فعال شده است");
+      } else {
+        Get.snackbar(
+          "خطا",
+          "${response.statusMessage}",
+          borderColor: Colors.red,
+          borderWidth: 3,
+        );
+      }
     } catch (e) {
+      Get.snackbar("خطا", "${e.toString()}");
       return null; // خطای شبکه یا استثناء دیگر
     }
   }
