@@ -385,7 +385,7 @@ class CustomerPage extends StatelessWidget {
       title: "توضیحات مشتری",
       titleStyle: MyTextStyle.textBlack16,
       content: SizedBox(
-        height: Get.height * 0.3,
+        height: Get.height * 0.35,
         width: Get.width * 0.6,
         child: Column(
           children: [
@@ -400,28 +400,47 @@ class CustomerPage extends StatelessWidget {
                 focusColor: SolidColors.listCustomerColor,
               ),
             ),
-            Obx(
-              () => CheckboxListTile(
-                title: Text(
-                  "آیا مشتری خودش سرکشی می‌کند؟",
-                  style: MyTextStyle.textBlack16,
-                  maxLines: 2,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Obx(
+                  () => Column(
+                    children: [
+                      CheckboxListTile(
+                        title: Text(
+                          "آیا به مشتری  سر زده میشود ",
+                          style: MyTextStyle.checkboxFont,
+                          maxLines: 2,
+                        ),
+                        value: customerEditController.isCustomerVisit.value,
+                        onChanged: (val) =>
+                            customerEditController.isCustomerVisit.value =
+                                val ?? false,
+                      ),
+                      CheckboxListTile(
+                        title: Text(
+                          "آیا صاحب مغازه در مغازه هست؟",
+                          style: MyTextStyle.checkboxFont,
+                          maxLines: 2,
+                        ),
+                        value: customerEditController.isOwnerInShop.value,
+                        onChanged: (val) =>
+                            customerEditController.isOwnerInShop.value =
+                                val ?? false,
+                      ),
+                      CheckboxListTile(
+                        title: Text(
+                          "آیا مشتری همکاری میکند ؟",
+                          style: MyTextStyle.checkboxFont,
+                          maxLines: 2,
+                        ),
+                        value: customerEditController.isCooperation.value,
+                        onChanged: (val) =>
+                            customerEditController.isCooperation.value =
+                                val ?? false,
+                      ),
+                    ],
+                  ),
                 ),
-                value: customerEditController.isCustomerVisit.value,
-                onChanged: (val) =>
-                    customerEditController.isCustomerVisit.value = val ?? false,
-              ),
-            ),
-            Obx(
-              () => CheckboxListTile(
-                title: Text(
-                  "آیا صاحب مغازه در مغازه هست؟",
-                  style: MyTextStyle.textBlack16,
-                  maxLines: 2,
-                ),
-                value: customerEditController.isOwnerInShop.value,
-                onChanged: (val) =>
-                    customerEditController.isOwnerInShop.value = val ?? false,
               ),
             ),
           ],

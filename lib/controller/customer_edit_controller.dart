@@ -33,6 +33,8 @@ class CustomerEditController extends GetxController {
   // موارد انتخاب شده توسط کاربر
   var isCustomerVisit = false.obs; // آیا مشتری خودش سرکشی می‌کند؟
   var isOwnerInShop = false.obs; // آیا صاحب مغازه در مغازه هست؟
+  var isCooperation = false.obs; // آیا مشتری همکاری میکند؟
+
   var selectedDisActive = "".obs;
 
   RxList<String> selectedProducts = <String>[].obs;
@@ -63,6 +65,7 @@ class CustomerEditController extends GetxController {
       description: crmCustomerDescription.text,
       customerVisit: isCustomerVisit.value,
       ownerInShop: isOwnerInShop.value,
+      cooperation: isCooperation.value,
     );
 
     return _postWithAuth(
