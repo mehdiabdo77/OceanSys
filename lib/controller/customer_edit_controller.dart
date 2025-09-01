@@ -7,7 +7,6 @@ import 'package:ocean_sys/constans/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
 import 'package:ocean_sys/model/customer_edit_model.dart';
 import 'package:ocean_sys/model/disactive_customer_request.dart';
-import 'package:ocean_sys/model/point_model.dart';
 import 'package:ocean_sys/model/product_category_customer.dart';
 import 'package:ocean_sys/model/task_complete.dart';
 import 'package:ocean_sys/servies/dio_service.dart';

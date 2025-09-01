@@ -5,7 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
 import 'package:ocean_sys/controller/register_controller.dart';
-import 'package:ocean_sys/main.dart';
+import 'package:ocean_sys/route_manager/names.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/controller/location_sync_controller.dart';
-import 'package:ocean_sys/login_page.dart';
-import 'package:ocean_sys/splash_screen.dart';
-import 'package:ocean_sys/view/CustomerPages/customer_page.dart';
-import 'package:ocean_sys/view/CustomerPages/customer_page_idit.dart';
-import 'package:ocean_sys/view/main_screen.dart';
-import 'package:ocean_sys/view/map_page.dart';
+import 'package:ocean_sys/route_manager/names.dart';
+import 'package:ocean_sys/route_manager/pages.dart';
 
 void main() async {
   await GetStorage.init();
@@ -25,17 +21,7 @@ class MyApp extends StatelessWidget {
       locale: Locale("fa"),
       initialRoute: NamedRoute.splashScreen,
       debugShowCheckedModeBanner: false,
-      getPages: [
-        GetPage(name: '/', page: () => SplashScreen()),
-        GetPage(name: NamedRoute.loginPage, page: () => LoginPage()),
-        GetPage(name: NamedRoute.mapPage, page: () => MapPage()),
-        GetPage(name: NamedRoute.homepage, page: () => MainScreen()),
-        GetPage(name: NamedRoute.customerPage, page: () => CustomerPage()),
-        GetPage(
-          name: NamedRoute.customerPageIdit,
-          page: () => CustomerPageIdit(),
-        ),
-      ],
+      getPages: Pages.pages,
 
       theme: ThemeData(
         fontFamily: "dona",
@@ -71,14 +57,4 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
-}
-
-class NamedRoute {
-  NamedRoute._();
-  static String splashScreen = "/";
-  static String loginPage = "/loginPage";
-  static String customerPage = "/customerPage";
-  static String homepage = "/homePage";
-  static String mapPage = "/mapPage";
-  static String customerPageIdit = "/customerPageIdit";
 }

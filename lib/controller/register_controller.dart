@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
-import 'package:ocean_sys/main.dart';
 import 'package:ocean_sys/servies/dio_service.dart';
-import 'package:ocean_sys/view/map_page.dart';
 
 class RegisterController extends GetxController {
   TextEditingController usercontroler = TextEditingController();

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/controller/customer_info_controller.dart';
 import 'package:ocean_sys/controller/location_sync_controller.dart';
-import 'package:ocean_sys/main.dart';
+import 'package:ocean_sys/route_manager/names.dart';
 
 class CustomerListPage extends StatelessWidget {
   CustomerListPage({super.key});

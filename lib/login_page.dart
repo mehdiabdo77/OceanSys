@@ -5,7 +5,7 @@ import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/controller/register_controller.dart';
-import 'package:ocean_sys/main.dart';
+import 'package:ocean_sys/route_manager/names.dart';
 
 class LoginPage extends StatelessWidget {
   var registerController = Get.put<RegisterController>(RegisterController());

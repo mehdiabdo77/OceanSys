@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
@@ -8,7 +7,7 @@ import 'package:ocean_sys/controller/customer_edit_controller.dart';
 import 'package:ocean_sys/controller/customer_info_controller.dart';
 import 'package:ocean_sys/controller/location_sync_controller.dart';
 import 'package:ocean_sys/gen/assets.gen.dart';
-import 'package:ocean_sys/main.dart';
+import 'package:ocean_sys/route_manager/names.dart';
 
 class CustomerPage extends StatelessWidget {
   CustomerPage({super.key});
