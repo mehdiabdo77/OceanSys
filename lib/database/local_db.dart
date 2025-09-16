@@ -23,8 +23,8 @@ class LocalDb {
       version: 1,
       onCreate: (db, version) async {
         await db.execute('''
-                        CRWATE TABEL pending_requests(
-                          id INTEGER PRIMARY KEY AUTOINCREMENT
+                        CREATE TABLE pending_requests(
+                          id INTEGER PRIMARY KEY AUTOINCREMENT,
                           url TEXT,
                           payload TEXT
                         )''');
