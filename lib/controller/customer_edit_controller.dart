@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
+import 'package:ocean_sys/database/local_db.dart';
 import 'package:ocean_sys/model/customer_edit_model.dart';
 import 'package:ocean_sys/model/disactive_customer_request.dart';
 import 'package:ocean_sys/model/product_category_customer.dart';
@@ -106,7 +108,6 @@ class CustomerEditController extends GetxController {
   /// هلسپر مشترک برای ارسال درخواست JSON با هدر Authorization
   Future<int?> _postWithAuth(String url, Map<String, dynamic> map) async {
     final token = storage.read(StorageKey.token);
-    print(map);
     try {
       final response = await DioService()
           .postJson(
@@ -117,11 +118,13 @@ class CustomerEditController extends GetxController {
           .catchError((error) {
             print(error);
           });
-      print(response.statusCode);
       if (response.statusCode == 200) {
         Get.snackbar("موفقیت", "اطلاعات با موفقیت ارسال شد");
       } else if (response.statusCode == 400) {
         Get.snackbar("خطا", "مشتری قبلا غیر فعال شده است");
+      } else if (response.statusCode == 0 || response.statusCode == 1) {
+        Get.snackbar("خطا", "اینترنت یا سرور قطع است بعد اطلاعات ذخیره میشود");
+        await LocalDb.insertRequest(url, jsonEncode(map));
       } else {
         Get.snackbar(
           "خطا",
@@ -131,8 +134,37 @@ class CustomerEditController extends GetxController {
         );
       }
     } catch (e) {
-      Get.snackbar("خطا", "${e.toString()}");
-      return null; // خطای شبکه یا استثناء دیگر
+      await LocalDb.insertRequest(url, jsonEncode(map));
+      Get.snackbar("خطا", "${e.toString()} اطلاعات ذخیره شد بعد ارسال کنید");
+    }
+  }
+
+  Future<void> sendOfflineRequest() async {
+    final token = storage.read(StorageKey.token);
+    final requests = await LocalDb.getPendingRequests();
+
+    for (var req in requests) {
+      final url = req['url'];
+      final payload = jsonDecode(req['payload']);
+      final id = req['id'];
+
+      try {
+        final response = await DioService().postJson(
+          payload,
+          url,
+          options: Options(headers: {'Authorization': 'Bearer $token'}),
+        );
+        if (response.statusCode) {
+          await LocalDb.deletePendingRequest(id);
+        }
+      } catch (e) {
+        Get.snackbar(
+          "خطا",
+          "مشکل در ارسال",
+          borderColor: Colors.red,
+          borderWidth: 3,
+        );
+      }
     }
   }
 }

@@ -8,10 +8,8 @@ import 'package:ocean_sys/route_manager/names.dart';
 class CustomerListPage extends StatelessWidget {
   CustomerListPage({super.key});
 
-  CustomerInfoController customerInfoController = Get.put(
-    CustomerInfoController(),
-  );
-
+  CustomerInfoController customerInfoController =
+      Get.find<CustomerInfoController>();
   LocationSyncController controllerLoc = Get.find<LocationSyncController>();
 
   @override

@@ -1,16 +1,33 @@
 # ocean_sys
 
-A new Flutter project.
+A Flutter application for distribution sales management.
+
+## Project Overview
+
+This app is designed for mobile devices to help manage and streamline distribution (route-to-market) sales processes.  
+Key features include:
+
+- Customer information management
+- Displaying customer and sales agent locations on the map
+- Order management and visit tracking
+- Sales reporting and analytics
+- Simple and user-friendly interface
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+To run the project, make sure you have Flutter installed and then use:
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+flutter pub get
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Resources
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Flutter Documentation](https://docs.flutter.dev/)
+- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Flutter Cookbook](https://docs.flutter.dev/cookbook)
+
+---
+
+**This project is under development and has not been officially released
