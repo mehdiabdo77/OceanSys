@@ -8,6 +8,26 @@ class DioService {
     BaseOptions(connectTimeout: 5000, receiveTimeout: 5000, sendTimeout: 5000),
   );
 
+  Response _handleError(DioError err) {
+    // وقتی اینترنتم قطع است
+    if (err.type == DioErrorType.other && err.error is SocketException) {
+      return Response(
+        requestOptions: err.requestOptions,
+        statusCode: 0,
+        statusMessage: 'No Internet Connection',
+      );
+    }
+
+    // مشکلات ارور سرور
+    return Response(
+      requestOptions: err.requestOptions,
+      statusCode: err.response?.statusCode ?? -1,
+      statusMessage: err.response == null
+          ? "سرور در دسترس نیست"
+          : _getErrorMessage(err.response?.statusCode),
+    );
+  }
+
   Future<dynamic> getMetode(String url, {Options? options}) async {
     debugPrint(url);
     return await dio
@@ -18,30 +38,18 @@ class DioService {
               Options(responseType: ResponseType.json, method: 'GET'),
         )
         .then((response) {
-          // log(response.toString());
           return response;
         })
         .catchError((err) {
           if (err is DioError) {
-            if (err.type == DioErrorType.other &&
-                err.error is SocketException) {
-              return Response(
-                requestOptions: err.requestOptions,
-                statusCode: 0,
-                statusMessage: 'No Internet Connection',
-              );
-            }
-            // if (err.response != null) {
-            //   return err.response;
-            // }
-            return Response(
-              requestOptions: err.requestOptions,
-              statusCode: err.response?.statusCode ?? -1,
-              statusMessage: err.response == null
-                  ? "سرور در دسترس نیست"
-                  : _getErrorMessage(err.response?.statusCode),
-            );
+            return _handleError(err);
           }
+          // خطای که ناشناخته است و تو لیستم نیست
+          return Response(
+            requestOptions: RequestOptions(path: url),
+            statusCode: -1,
+            statusMessage: 'خطای غیرمنتظره: ${err.toString()}',
+          );
         });
   }
 
@@ -55,11 +63,7 @@ class DioService {
           url,
           options:
               options ??
-              Options(
-                responseType: ResponseType.json,
-                method: "POST",
-                // headers: {'Content-Type': 'application/json'},
-              ),
+              Options(responseType: ResponseType.json, method: "POST"),
           data: dio_service.FormData.fromMap(map),
         )
         .then((value) {
@@ -68,25 +72,14 @@ class DioService {
         })
         .catchError((err) {
           if (err is DioError) {
-            if (err.type == DioErrorType.other &&
-                err.error is SocketException) {
-              return Response(
-                requestOptions: err.requestOptions,
-                statusCode: 0,
-                statusMessage: 'No Internet Connection',
-              );
-            }
-            // if (err.response != null) {
-            //   return err.response;
-            // }
-            return Response(
-              requestOptions: err.requestOptions,
-              statusCode: err.response?.statusCode ?? -1,
-              statusMessage: err.response == null
-                  ? "سرور در دسترس نیست"
-                  : _getErrorMessage(err.response?.statusCode),
-            );
+            return _handleError(err);
           }
+          // خطای که ناشناخته است و تو لیستم نیست
+          return Response(
+            requestOptions: RequestOptions(path: url),
+            statusCode: -1,
+            statusMessage: 'خطای غیرمنتظره: ${err.toString()}',
+          );
         });
   }
 
@@ -101,11 +94,7 @@ class DioService {
           url,
           options:
               options ??
-              Options(
-                responseType: ResponseType.json,
-                method: "POST",
-                // headers: {'Content-Type': 'application/json'},
-              ),
+              Options(responseType: ResponseType.json, method: "POST"),
           data: map,
         )
         .then((value) {
@@ -114,25 +103,14 @@ class DioService {
         })
         .catchError((err) {
           if (err is DioError) {
-            if (err.type == DioErrorType.other &&
-                err.error is SocketException) {
-              return Response(
-                requestOptions: err.requestOptions,
-                statusCode: 0,
-                statusMessage: 'No Internet Connection',
-              );
-            }
-            // if (err.response != null) {
-            //   return err.response;
-            // }
-            return Response(
-              requestOptions: err.requestOptions,
-              statusCode: err.response?.statusCode ?? -1,
-              statusMessage: err.response == null
-                  ? "سرور در دسترس نیست"
-                  : _getErrorMessage(err.response?.statusCode),
-            );
+            return _handleError(err);
           }
+          // خطای که ناشناخته است و تو لیستم نیست
+          return Response(
+            requestOptions: RequestOptions(path: url),
+            statusCode: -1,
+            statusMessage: 'خطای غیرمنتظره: ${err.toString()}',
+          );
         });
   }
 }

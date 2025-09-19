@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -17,11 +15,11 @@ class LocalDb {
   static Future<Database> _initDB(String filePaath) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePaath);
-
     return await openDatabase(
       path,
       version: 1,
       onCreate: (db, version) async {
+        print('[LocalDb] Creating table pending_requests');
         await db.execute('''
                         CREATE TABLE pending_requests(
                           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,6 +31,7 @@ class LocalDb {
   }
 
   static Future<int> insertRequest(String url, String payload) async {
+    print('[LocalDb] insertRequest: url=$url, payload=$payload');
     final db = await database;
     return await db.insert("pending_requests", {
       "url": url,
@@ -46,6 +45,7 @@ class LocalDb {
   }
 
   static Future<int> deletePendingRequest(int id) async {
+    print('[LocalDb] deletePendingRequest: id=$id');
     final db = await database;
     return await db.delete(
       "pending_requests",
