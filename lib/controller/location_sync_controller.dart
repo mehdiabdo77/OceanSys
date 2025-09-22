@@ -10,18 +10,17 @@ import 'package:ocean_sys/constans/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
 import 'package:ocean_sys/model/point_model.dart';
 import 'package:ocean_sys/servies/dio_service.dart';
+import 'package:ocean_sys/servies/location_service.dart';
 
 class LocationSyncController extends GetxController {
-  final storage = GetStorage();
-
   final _lat = 0.0.obs;
   final _long = 0.0.obs;
   Timer? _syncTimer;
+  final _service = LocationService();
 
   // مختص استریم سریع در صفحه نقشه
   StreamSubscription<Position>? _positionSub;
 
-  // دسترسی خواندنی برای استفاده در UI
   double get lat => _lat.value;
   double get long => _long.value;
 
@@ -57,7 +56,7 @@ class LocationSyncController extends GetxController {
       settings = AndroidSettings(
         accuracy: LocationAccuracy.best,
         distanceFilter: distanceFilter,
-        intervalDuration: androidInterval, // هر n ثانیه
+        intervalDuration: androidInterval,
         forceLocationManager: false,
       );
     } else if (GetPlatform.isIOS) {
@@ -65,7 +64,6 @@ class LocationSyncController extends GetxController {
         accuracy: LocationAccuracy.best,
         distanceFilter: 0,
         pauseLocationUpdatesAutomatically: true,
-        // allowBackgroundLocationUpdates: false, // اگر لازم شد
       );
     }
 
@@ -101,41 +99,7 @@ class LocationSyncController extends GetxController {
       long: _long.value,
       customerCode: customercode,
     );
-    await _postWithAuth(ApiUrlConstant.latAndLong, payload.toJson());
-  }
-
-  Future<int?> _postWithAuth(String url, Map<String, dynamic> map) async {
-    final token = storage.read(StorageKey.token);
-    print(map);
-    try {
-      final response = await DioService()
-          .postJson(
-            map,
-            url,
-            options: Options(headers: {'Authorization': 'Bearer $token'}),
-          )
-          .catchError((error) {
-            print(error);
-          });
-      print(response.data);
-      if (response.statusCode == 200) {
-        Get.snackbar("موفقیت", "اطلاعات با موفقیت ارسال شد");
-      }
-      // BUG کاری کن وقتی مشتری غیر فعالی میفرسته این بیاد
-      if (response.statusCode == 400) {
-        Get.snackbar("خطا", "مشتری قبلا غیر فعال شده است");
-      } else {
-        Get.snackbar(
-          "خطا",
-          "${response.statusMessage}",
-          borderColor: Colors.red,
-          borderWidth: 3,
-        );
-      }
-    } catch (e) {
-      Get.snackbar("خطا", "${e.toString()}");
-      return null; // خطای شبکه یا استثناء دیگر
-    }
+    await _service.sendUserLocation(payload);
   }
 
   @override
@@ -163,7 +127,7 @@ class LocationSyncController extends GetxController {
       distanceFilter: 5, // فقط بعد از حداقل ۵ متر جابجایی
       timeLimit: Duration(
         seconds: 20,
-      ), // در صورت عدم دریافت، پس از ۱۰ ثانیه تایم‌اوت
+      ), // در صورت عدم دریافت، پس از 20 ثانیه تایم‌اوت
     );
 
     return Geolocator.getCurrentPosition(locationSettings: locationSettings);
