@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ocean_sys/constans/my_color.dart';
-import 'package:ocean_sys/controller/customer_info_controller.dart';
-import 'package:ocean_sys/controller/customer_edit_controller.dart';
+import 'package:ocean_sys/controller/RouteScannerController/customer_info_controller.dart';
+import 'package:ocean_sys/controller/RouteScannerController/customer_edit_controller.dart';
 import 'package:ocean_sys/controller/main_controler.dart';
 import 'package:ocean_sys/servies/customer_service.dart';
-import 'package:ocean_sys/view/CustomerPages/customer_list_page.dart';
-import 'package:ocean_sys/view/map_page.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_list_page.dart';
+import 'package:ocean_sys/view/RouteScanner/map_page.dart';
 
 class MainScreen extends StatelessWidget {
   CustomerInfoController customerInfoController = Get.put(

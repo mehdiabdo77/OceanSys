@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ocean_sys/constans/my_color.dart';
-import 'package:ocean_sys/controller/customer_info_controller.dart';
+import 'package:ocean_sys/controller/RouteScannerController/customer_info_controller.dart';
 import 'package:ocean_sys/controller/location_sync_controller.dart';
 import 'package:ocean_sys/route_manager/names.dart';
 

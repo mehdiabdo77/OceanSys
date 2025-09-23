@@ -7,11 +7,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
 import 'package:ocean_sys/database/local_db.dart';
-import 'package:ocean_sys/model/CRM_customer_description.dart';
-import 'package:ocean_sys/model/customer_edit_model.dart';
-import 'package:ocean_sys/model/disactive_customer_request.dart';
-import 'package:ocean_sys/model/product_category_customer.dart';
-import 'package:ocean_sys/model/task_complete.dart';
+import 'package:ocean_sys/model/RouteScannerModel/CRM_customer_description.dart';
+import 'package:ocean_sys/model/RouteScannerModel/customer_edit_model.dart';
+import 'package:ocean_sys/model/RouteScannerModel/disactive_customer_request.dart';
+import 'package:ocean_sys/model/RouteScannerModel/product_category_customer.dart';
+import 'package:ocean_sys/model/RouteScannerModel/task_complete.dart';
 import 'package:ocean_sys/servies/dio_service.dart';
 
 class CustomerService {

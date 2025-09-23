@@ -6,7 +6,7 @@ import 'package:latlong2/latlong.dart';
 
 import 'package:ocean_sys/constans/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
-import 'package:ocean_sys/model/customer_info_model.dart';
+import 'package:ocean_sys/model/RouteScannerModel/customer_info_model.dart';
 import 'package:ocean_sys/servies/dio_service.dart';
 
 class CustomerInfoController extends GetxController {

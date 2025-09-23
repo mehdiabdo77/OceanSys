@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
-import 'package:ocean_sys/controller/customer_edit_controller.dart';
-import 'package:ocean_sys/controller/customer_info_controller.dart';
+import 'package:ocean_sys/controller/RouteScannerController/customer_edit_controller.dart';
+import 'package:ocean_sys/controller/RouteScannerController/customer_info_controller.dart';
 
 class CustomerPageIdit extends StatelessWidget {
   CustomerPageIdit({super.key});

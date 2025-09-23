@@ -1,11 +1,11 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
-import 'package:ocean_sys/login_page.dart';
+import 'package:ocean_sys/view/login_page.dart';
 import 'package:ocean_sys/route_manager/names.dart';
-import 'package:ocean_sys/splash_screen.dart';
-import 'package:ocean_sys/view/CustomerPages/customer_page.dart';
-import 'package:ocean_sys/view/CustomerPages/customer_page_idit.dart';
-import 'package:ocean_sys/view/main_screen.dart';
-import 'package:ocean_sys/view/map_page.dart';
+import 'package:ocean_sys/view/splash_screen.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page_idit.dart';
+import 'package:ocean_sys/view/RouteScanner/route_scanner.dart';
+import 'package:ocean_sys/view/RouteScanner/map_page.dart';
 
 class Pages {
   Pages._();

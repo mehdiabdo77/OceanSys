@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
-import 'package:ocean_sys/controller/customer_info_controller.dart';
+import 'package:ocean_sys/controller/RouteScannerController/customer_info_controller.dart';
 import 'package:ocean_sys/controller/location_sync_controller.dart';
 
 class MapPage extends StatefulWidget {
