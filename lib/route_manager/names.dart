@@ -1,6 +1,7 @@
 class NamedRoute {
   NamedRoute._();
   static String splashScreen = "/";
+  static String menuPage = "/menuPage";
   static String loginPage = "/loginPage";
   static String customerPage = "/customerPage";
   static String homepage = "/homePage";

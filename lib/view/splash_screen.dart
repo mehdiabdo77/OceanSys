@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
       } else {
         bool ok = await registerController.veryfy();
         if (ok) {
-          Get.offAllNamed(NamedRoute.homepage);
+          Get.offAllNamed(NamedRoute.menuPage);
         } else {
           setState(() {
             _error = true;
@@ -73,7 +73,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       });
                       registerController.veryfy().then((ok) {
                         if (ok) {
-                          Get.offAllNamed(NamedRoute.homepage);
+                          Get.offAllNamed(NamedRoute.menuPage);
                         } else {
                           setState(() {
                             _loading = false;

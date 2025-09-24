@@ -22,14 +22,6 @@ class MainScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: AppBar(
-          actions: [
-            GestureDetector(
-              onTap: () {
-                CustomerService().sendOfflineRequest();
-              },
-              child: Icon(Icons.refresh_sharp),
-            ),
-          ],
           backgroundColor: SolidColors.appBorColor,
           toolbarHeight: 40,
         ),

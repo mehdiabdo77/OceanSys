@@ -111,7 +111,7 @@ class LoginPage extends StatelessWidget {
                             onPressed: () async {
                               bool ok = await registerController.veryfy();
                               if (ok) {
-                                Get.offAllNamed(NamedRoute.homepage);
+                                Get.offAllNamed(NamedRoute.menuPage);
                               }
                             },
                             style: ElevatedButton.styleFrom(

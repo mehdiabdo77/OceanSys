@@ -45,4 +45,11 @@ class MyTextStyle {
     fontWeight: FontWeight.w400,
     color: Colors.black,
   );
+
+  static TextStyle appBarStyle = TextStyle(
+    fontFamily: 'dona',
+    fontSize: 25,
+    fontWeight: FontWeight.w400,
+    color: Colors.black,
+  );
 }
