@@ -1,15 +1,7 @@
 import 'dart:async';
-import 'dart:ffi';
-
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:ocean_sys/constans/api_constant.dart';
-import 'package:ocean_sys/constans/storage_const.dart';
 import 'package:ocean_sys/model/point_model.dart';
-import 'package:ocean_sys/servies/dio_service.dart';
 import 'package:ocean_sys/servies/location_service.dart';
 
 class LocationSyncController extends GetxController {

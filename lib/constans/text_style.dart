@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'my_color.dart';
-
 class MyTextStyle {
   MyTextStyle._();
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
@@ -64,10 +65,10 @@ class CustomerPage extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  ImageIcon(
-                    Image.asset(Assets.icons.store.path).image,
-                    color: SolidColors.iconmain,
-                    size: 60,
+                  SvgPicture.asset(
+                    Assets.icons.store.path,
+                    height: 50,
+                    width: 50,
                   ),
                   SizedBox(width: 4),
                   Column(

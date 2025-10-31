@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/servies/customer_service.dart';
 
 class CustomerEditController extends GetxController {
