@@ -10,7 +10,7 @@ class UserModel {
   UserModel();
 
   UserModel.fromjeson(Map<String, dynamic> element) {
-    user = element['user'];
+    user = element['username'];
     firstName = element['first_name'];
     lastName = element['last_name'];
     isActive = element['is_active'];

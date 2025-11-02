@@ -13,6 +13,12 @@ class UserController extends GetxController {
   RxList<UserModel> userList = RxList();
   RxString errorMessage = ''.obs;
 
+  @override
+  void onInit() {
+    super.onInit();
+    getUserData();
+  }
+
   getUserData() async {
     try {
       isLoading.value = true;
@@ -34,22 +40,18 @@ class UserController extends GetxController {
       );
 
       if (response.statusCode == 200) {
-        debugPrint("API response received");
+        debugPrint("API response received user data");
         userList.clear();
-
-        final List<dynamic> data = response.data;
-
-        data.forEach((val) {
-          userList.add(UserModel.fromjeson(val));
-        });
-
+        final dynamic data = response.data;
+        userList.add(UserModel.fromjeson(data));
         debugPrint(" le ${userList.length}");
-        debugPrint(userList.isEmpty.toString());
       } else {
         errorMessage.value = 'خطا در دریافت اطلاعات: ${response.statusCode}';
+        debugPrint(errorMessage.value);
       }
-
       isLoading.value = false;
-    } catch (e) {}
+    } catch (e) {
+      debugPrint("error $e");
+    }
   }
 }
