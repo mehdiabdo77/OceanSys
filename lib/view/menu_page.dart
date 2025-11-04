@@ -7,6 +7,7 @@ import 'package:ocean_sys/route_manager/names.dart';
 import 'package:ocean_sys/servies/customer_service.dart';
 import 'package:ocean_sys/view/widgets/menuWidget.dart';
 
+// TODO باید اسم دسترسی هارو بیارم توی یه کلاس
 class MenuPage extends StatelessWidget {
   var userController = Get.put<UserController>(UserController());
 
@@ -14,48 +15,57 @@ class MenuPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Menu", style: MyTextStyle.appBarStyle)),
-      body: GridView.count(
-        crossAxisCount: 2,
-        children: [
-          MenuItem(
-            svgPath: Assets.icons.customerScan.path,
-            title: "scan customer",
-            subtitle: "بازرسی مشتریان مسیر",
-            onTap: () {
-              Get.toNamed(NamedRoute.homepage);
-            },
-          ),
-          MenuItem(
-            svgPath: Assets.icons.upload.path,
-            title: "upload data",
-            subtitle: "ارسال اطلاعات ارسال نشده",
+      body: Obx(() {
+        final user = userController.user.value;
+        if (user == null) {
+          return Center(child: CircularProgressIndicator());
+        }
+        return GridView.count(
+          crossAxisCount: 2,
+          children: [
+            if (userController.checkPermission("CUSTOMER_SCAN"))
+              MenuItem(
+                svgPath: Assets.icons.customerScan.path,
+                title: "scan customer",
+                subtitle: "بازرسی مشتریان مسیر",
+                onTap: () {
+                  Get.toNamed(NamedRoute.homepage);
+                },
+              ),
+            if (userController.checkPermission("UPLOAD_DATA"))
+              MenuItem(
+                svgPath: Assets.icons.upload.path,
+                title: "upload data",
+                subtitle: "ارسال اطلاعات ارسال نشده",
 
-            onTap: () {
-              CustomerService().sendOfflineRequest();
-            },
-          ),
-          MenuItem(
-            svgPath: Assets.icons.userManager.path,
-            title: "USER",
-            subtitle: "مدیریت کاربران",
-            onTap: () {},
-          ),
-          MenuItem(
-            svgPath: Assets.icons.storeAdd.path,
-            title: "New Customer",
-            subtitle: "اضافه کردن کاربران جدید",
+                onTap: () {
+                  CustomerService().sendOfflineRequest();
+                },
+              ),
+            if (userController.checkPermission("USER_MANAGE"))
+              MenuItem(
+                svgPath: Assets.icons.userManager.path,
+                title: "USER",
+                subtitle: "مدیریت کاربران",
+                onTap: () {},
+              ),
+            MenuItem(
+              svgPath: Assets.icons.storeAdd.path,
+              title: "New Customer",
+              subtitle: "اضافه کردن کاربران جدید",
 
-            onTap: () {},
-          ),
-          MenuItem(
-            svgPath: Assets.icons.competitorPrices.path,
-            title: "Competitor Prices",
-            subtitle: "استعلام قیمت رقبا",
+              onTap: () {},
+            ),
+            MenuItem(
+              svgPath: Assets.icons.competitorPrices.path,
+              title: "Competitor Prices",
+              subtitle: "استعلام قیمت رقبا",
 
-            onTap: () {},
-          ),
-        ],
-      ),
+              onTap: () {},
+            ),
+          ],
+        );
+      }),
     );
   }
 }

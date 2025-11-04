@@ -10,7 +10,7 @@ import 'package:ocean_sys/servies/dio_service.dart';
 class UserController extends GetxController {
   final storage = GetStorage();
   RxBool isLoading = false.obs;
-  RxList<UserModel> userList = RxList();
+  Rxn<UserModel> user = Rxn();
   RxString errorMessage = ''.obs;
 
   @override
@@ -41,10 +41,8 @@ class UserController extends GetxController {
 
       if (response.statusCode == 200) {
         debugPrint("API response received user data");
-        userList.clear();
         final dynamic data = response.data;
-        userList.add(UserModel.fromjeson(data));
-        debugPrint(" le ${userList.length}");
+        user.value = UserModel.fromjeson(data);
       } else {
         errorMessage.value = 'خطا در دریافت اطلاعات: ${response.statusCode}';
         debugPrint(errorMessage.value);
@@ -53,5 +51,24 @@ class UserController extends GetxController {
     } catch (e) {
       debugPrint("error $e");
     }
+  }
+
+  bool checkPermission(String value) {
+    if (user.value == null || user.value?.permission == null) {
+      debugPrint("User or permission is null");
+      return false;
+    }
+
+    if (user.value!.permission!.data == null) {
+      debugPrint("Permission data is null");
+      return false;
+    }
+
+    bool hasPermission = user.value!.permission!.data!.any(
+      (element) => element.name == value && element.hasAccess == 1,
+    );
+
+    debugPrint("Checking permission for $value: $hasPermission");
+    return hasPermission;
   }
 }
