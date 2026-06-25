@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocean_sys/constans/my_color.dart';
-import 'package:ocean_sys/controller/RouteScannerController/customer_info_controller.dart';
-import 'package:ocean_sys/controller/location_sync_controller.dart';
-import 'package:ocean_sys/route_manager/names.dart';
+import 'package:ocean_sys/cubit/customer_info/customer_info_bloc.dart';
+import 'package:ocean_sys/cubit/customer_info/customer_info_state.dart';
+import 'package:ocean_sys/cubit/location_sync/location_sync_bloc.dart';
+import 'package:ocean_sys/cubit/location_sync/location_sync_state.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page.dart';
 
-class CustomerListPage extends StatelessWidget {
-  CustomerListPage({super.key});
+class CustomerListPage extends StatefulWidget {
+  const CustomerListPage({super.key});
 
-  CustomerInfoController customerInfoController =
-      Get.find<CustomerInfoController>();
-  LocationSyncController controllerLoc = Get.find<LocationSyncController>();
+  @override
+  State<CustomerListPage> createState() => _CustomerListPageState();
+}
+
+class _CustomerListPageState extends State<CustomerListPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<CustomerInfoBloc>().add(CustomerInfoFetchData());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,115 +29,110 @@ class CustomerListPage extends StatelessWidget {
       backgroundColor: SolidColors.homepage,
       body: RefreshIndicator(
         onRefresh: () async {
-          await customerInfoController.getCustumerInfo();
+          context.read<CustomerInfoBloc>().add(CustomerInfoFetchData());
         },
-        child: Obx(
-          () => SizedBox(
-            child: ListView.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              itemCount: customerInfoController.custmerinfolist.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      Get.toNamed(NamedRoute.customerPage, arguments: index);
-                    },
-                    child: Container(
-                      height: 80,
-                      width: Get.width,
-                      decoration: BoxDecoration(
-                        color: SolidColors.listCustomerColor,
-                        borderRadius: BorderRadius.circular(8),
-                        border: BoxBorder.fromLTRB(
-                          right: BorderSide(
-                            style: BorderStyle.solid,
-                            width: 5,
-                            color:
-                                customerInfoController
-                                        .custmerinfolist[index]
-                                        .visited ==
-                                    1
-                                ? SolidColors.pointVisitColor
-                                : customerInfoController
-                                          .custmerinfolist[index]
-                                          .visited ==
-                                      2
-                                ? SolidColors.pointNoSendEndJab
-                                : SolidColors.pointNoVisitColor,
+        child: BlocBuilder<CustomerInfoBloc, CustomerInfoState>(
+          builder: (context, state) {
+            if (state is CustomerInfoLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is CustomerInfoError) {
+              return Center(child: Text(state.message));
+            } else if (state is CustomerInfoLoaded) {
+              return ListView.builder(
+                physics: const AlwaysScrollableScrollPhysics(),
+                itemCount: state.customers.length,
+                itemBuilder: (context, index) {
+                  final customer = state.customers[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CustomerPage(index: index)),
+                        );
+                      },
+                      child: Container(
+                        height: 80,
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          color: SolidColors.listCustomerColor,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border(
+                            right: BorderSide(
+                              style: BorderStyle.solid,
+                              width: 5,
+                              color: customer.visited == 1
+                                  ? SolidColors.pointVisitColor
+                                  : customer.visited == 2
+                                      ? SolidColors.pointNoSendEndJab
+                                      : SolidColors.pointNoVisitColor,
+                            ),
                           ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black87,
+                              spreadRadius: 1,
+                              blurRadius: 6,
+                              offset: const Offset(2, 3),
+                            ),
+                          ],
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black87, // رنگ سایه
-                            spreadRadius: 1, // پخش‌شدگی
-                            blurRadius: 6, // محوی
-                            offset: const Offset(2, 3), // جابجایی سایه (x,y)
-                          ), // جابجایی سایه (x,y)
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: EdgeInsetsGeometry.all(8),
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    customerInfoController
-                                        .custmerinfolist[index]
-                                        .customerBoard
-                                        .toString(),
-                                    style: textTheme.bodyLarge,
-                                  ),
-                                  Text(
-                                    customerInfoController
-                                        .custmerinfolist[index]
-                                        .customerCode
-                                        .toString(),
-                                    style: textTheme.bodyLarge,
-                                  ),
-                                  Text(
-                                    customerInfoController
-                                        .custmerinfolist[index]
-                                        .address
-                                        .toString(),
-                                    style: textTheme.bodySmall,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      customer.customerBoard.toString(),
+                                      style: textTheme.bodyLarge,
+                                    ),
+                                    Text(
+                                      customer.customerCode.toString(),
+                                      style: textTheme.bodyLarge,
+                                    ),
+                                    Text(
+                                      customer.address.toString(),
+                                      style: textTheme.bodySmall,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          Obx(
-                            () => Text(
-                              controllerLoc.getDistanceInKm(
-                                customerInfoController
-                                    .custmerinfolist[index]
-                                    .latitude,
-                                customerInfoController
-                                    .custmerinfolist[index]
-                                    .longitude,
-                              ),
-                              style: TextStyle(color: Colors.yellow),
+                            BlocBuilder<LocationSyncBloc, LocationSyncState>(
+                              builder: (context, locState) {
+                                return Text(
+                                  context
+                                      .read<LocationSyncBloc>()
+                                      .getDistanceInKm(
+                                        customer.latitude,
+                                        customer.longitude,
+                                      ),
+                                  style: const TextStyle(color: Colors.yellow),
+                                );
+                              },
                             ),
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios_sharp,
-                            color: Colors.white,
-                          ),
-                        ],
+                            const Icon(
+                              Icons.arrow_forward_ios_sharp,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
+                  );
+                },
+              );
+            }
+            return const Center(child: Text('Unknown state'));
+          },
         ),
       ),
     );

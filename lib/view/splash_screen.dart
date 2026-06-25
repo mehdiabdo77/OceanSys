@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
-import 'package:ocean_sys/controller/register_controller.dart';
-import 'package:ocean_sys/route_manager/names.dart';
+import 'package:ocean_sys/cubit/login/login_cubit.dart';
+import 'package:ocean_sys/cubit/login/login_state.dart';
+import 'package:ocean_sys/view/auth/login_page.dart';
+import 'package:ocean_sys/view/main/menu_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,81 +19,88 @@ class SplashScreen extends StatefulWidget {
 final storage = GetStorage();
 
 class _SplashScreenState extends State<SplashScreen> {
-  RegisterController registerController = Get.put(RegisterController());
   bool _loading = true;
   bool _error = false;
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3)).then((value) async {
+    Future.delayed(const Duration(seconds: 3)).then((value) async {
       if (storage.read(StorageKey.username) == null) {
-        Get.offAndToNamed(NamedRoute.loginPage);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => BlocProvider.value(
+              value: context.read<LoginCubit>(),
+              child: const LoginPage(),
+            ),
+          ),
+        );
       } else {
-        bool ok = await registerController.veryfy();
-        if (ok) {
-          Get.offAllNamed(NamedRoute.menuPage);
-        } else {
-          setState(() {
-            _error = true;
-            _loading = false;
-          });
-        }
+        await context.read<LoginCubit>().login();
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: _loading
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "لطفا صبر کنید ...",
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  SizedBox(height: 20),
-                  loading(),
-                ],
-              )
-            : _error
-            ? Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'خطا در ارتباط با سرور',
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        _loading = true;
-                        _error = false;
-                      });
-                      registerController.veryfy().then((ok) {
-                        if (ok) {
-                          Get.offAllNamed(NamedRoute.menuPage);
-                        } else {
-                          setState(() {
-                            _loading = false;
-                            _error = true;
-                          });
-                        }
-                      });
-                    },
-                    child: Text('تلاش مجدد'),
-                  ),
-                ],
-              )
-            : SizedBox.shrink(),
+    return BlocListener<LoginCubit, LoginState>(
+      listener: (context, state) {
+        if (state is LoginSuccess) {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => MenuPage()),
+            (route) => false,
+          );
+        } else if (state is LoginError) {
+          setState(() {
+            _error = true;
+            _loading = false;
+          });
+        }
+      },
+      child: Scaffold(
+        body: Center(
+          child: _loading
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "لطفا صبر کنید ...",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 20),
+                    loading(),
+                  ],
+                )
+              : _error
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'خطا در ارتباط با سرور',
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () async {
+                        setState(() {
+                          _loading = true;
+                          _error = false;
+                        });
+                        await context.read<LoginCubit>().login();
+                      },
+                      child: const Text('تلاش مجدد'),
+                    ),
+                  ],
+                )
+              : const SizedBox.shrink(),
+        ),
       ),
     );
   }
 }
 
-loading() {
-  return Center(child: SpinKitRing(color: SolidColors.primaryColor));
+Widget loading() {
+  return const Center(child: SpinKitRing(color: SolidColors.primaryColor));
 }

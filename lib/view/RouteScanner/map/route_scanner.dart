@@ -1,50 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocean_sys/constans/my_color.dart';
-import 'package:ocean_sys/controller/RouteScannerController/customer_info_controller.dart';
-import 'package:ocean_sys/controller/RouteScannerController/customer_edit_controller.dart';
-import 'package:ocean_sys/controller/main_controler.dart';
+import 'package:ocean_sys/cubit/main/main_bloc.dart';
+import 'package:ocean_sys/cubit/main/main_state.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_list_page.dart';
 import 'package:ocean_sys/view/RouteScanner/map_page.dart';
 
 class MainScreen extends StatelessWidget {
-  CustomerInfoController customerInfoController = Get.put(
-    CustomerInfoController(),
-  );
-  CustomerEditController customerEditController = Get.put(
-    CustomerEditController(),
-  );
-  MainControler mainControler = Get.put(MainControler());
-  List pages = [CustomerListPage(), MapPage()];
+  const MainScreen({super.key});
 
-  MainScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Scaffold(
-        appBar: AppBar(
-          backgroundColor: SolidColors.appBorColor,
-          toolbarHeight: 40,
-        ),
-        body: pages[mainControler.currentIndex.value],
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: mainControler.currentIndex.value,
-          onTap: mainControler.changePage,
-          backgroundColor: SolidColors.bottomNav,
-
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.view_list_rounded),
-              label: "List Customer",
-              backgroundColor: Colors.amber,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.location_on_rounded),
-              label: "loction",
-            ),
-          ],
-        ),
-      ),
+    final List<Widget> pages = [const CustomerListPage(), const MapPage()];
+    return BlocBuilder<MainBloc, MainState>(
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: SolidColors.appBorColor,
+            toolbarHeight: 40,
+          ),
+          body: pages[state.currentIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: state.currentIndex,
+            onTap: (index) => context.read<MainBloc>().add(MainChangePage(index)),
+            backgroundColor: SolidColors.bottomNav,
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.view_list_rounded),
+                label: "List Customer",
+                backgroundColor: Colors.amber,
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.location_on_rounded),
+                label: "loction",
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

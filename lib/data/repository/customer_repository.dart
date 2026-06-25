@@ -1,0 +1,213 @@
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:ocean_sys/data/api_constant.dart';
+import 'package:ocean_sys/constans/storage_const.dart';
+import 'package:ocean_sys/data/database/local_db.dart';
+import 'package:ocean_sys/model/RouteScannerModel/CRM_customer_description.dart';
+import 'package:ocean_sys/model/RouteScannerModel/customer_edit_model.dart';
+import 'package:ocean_sys/model/RouteScannerModel/disactive_customer_request.dart';
+import 'package:ocean_sys/model/RouteScannerModel/product_category_customer.dart';
+import 'package:ocean_sys/model/RouteScannerModel/task_complete.dart';
+import 'package:ocean_sys/data/services/dio_service.dart';
+
+class CustomerRepository {
+  final storage = GetStorage();
+
+  Future<int?> sendDisActiveDescription(
+    dynamic customerCode,
+    String reason,
+    String description,
+  ) async {
+    final payload = DisactiveCustomerRequest(
+      customerCode: customerCode.toString(),
+      reason: reason,
+      description: description,
+    );
+    return _postWithAuth(ApiUrlConstant.disactiveCode, payload.toJson());
+  }
+
+  Future<int?> taskComplete(var customerCode) async {
+    final payload = TaskComplete(customerCode: customerCode.toString());
+    return _postWithAuth(ApiUrlConstant.taskComplete, payload.toJson());
+  }
+
+  Future<int?> sendCRMCustomerDescription(
+    var customerCode,
+    String description,
+    bool customerVisit,
+    bool ownerInShop,
+    bool cooperation,
+  ) async {
+    final payload = CRMCustomerDescriptionRequest(
+      customerCode: customerCode.toString(),
+      description: description,
+      customerVisit: customerVisit,
+      ownerInShop: ownerInShop,
+      cooperation: cooperation,
+    );
+    return _postWithAuth(
+      ApiUrlConstant.crmCustomerDescription,
+      payload.toJson(),
+    );
+  }
+
+  Future<int?> sendProductCategoryCustomer(
+    var customerCode,
+    List<String> selectedProducts,
+  ) async {
+    final payload = ProductCategoryCustomer(
+      customerCode: customerCode.toString(),
+      sku: selectedProducts,
+    );
+    return _postWithAuth(ApiUrlConstant.productCategory, payload.toJson());
+  }
+
+  Future<int?> sendEditCustomer({
+    required dynamic customerCode,
+    String? nationalCode,
+    int? roleCode,
+    String? postalCode,
+    String? customerBoard,
+    String? customerName,
+    String? address,
+    String? mobileNumber,
+    String? mobileNumber2,
+    String? phoneNumber,
+    required int storeArea,
+  }) async {
+    final payload = CustomerEditModel(
+      customerCode: customerCode,
+      nationalCode: nationalCode,
+      roleCode: roleCode,
+      postalCode: postalCode,
+      customerBoard: customerBoard,
+      customerName: customerName,
+      address: address,
+      mobileNumber: mobileNumber,
+      mobileNumber2: mobileNumber2,
+      phoneNumber: phoneNumber,
+      storeArea: storeArea,
+    );
+    return _postWithAuth(ApiUrlConstant.editCoustomerInfo, payload.toJson());
+  }
+
+  Future<int?> _postWithAuth(String url, Map<String, dynamic> map) async {
+    final token = storage.read(StorageKey.token);
+    try {
+      final response = await DioService().postJson(
+        map,
+        url,
+        options: Options(headers: {'Authorization': 'Bearer $token'}),
+      );
+      return _handleResponse(response, url, map);
+    } catch (e) {
+      await _saveForOfflineSending(url, map, e.toString());
+      return null;
+    }
+  }
+
+  Future<int?> _handleResponse(
+    var response,
+    String url,
+    Map<String, dynamic> map,
+  ) async {
+    if (response == null) {
+      Get.snackbar("خطا", "پاسخ سرور دریافت نشد (null)");
+      await _saveForOfflineSending(url, map, "Null response");
+      return null;
+    }
+    switch (response.statusCode) {
+      case 200:
+        Get.snackbar("موفقیت", "اطلاعات با موفقیت ارسال شد");
+        return response.statusCode;
+      case 400:
+        Get.snackbar("خطا", "مشتری قبلا غیر فعال شده است");
+        return response.statusCode;
+      case 0:
+      case 1:
+      case -1:
+        Get.snackbar("خطا", "اینترنت یا سرور قطع است بعد اطلاعات ذخیره میشود");
+        await _saveForOfflineSending(
+          url,
+          map,
+          "Network error: ${response.statusCode}",
+        );
+        return response.statusCode;
+      default:
+        Get.snackbar(
+          "خطا",
+          "${response.statusMessage}",
+          borderColor: Colors.red,
+          borderWidth: 3,
+        );
+        return response.statusCode;
+    }
+  }
+
+  Future<void> _saveForOfflineSending(
+    String url,
+    Map<String, dynamic> map,
+    String errorMessage,
+  ) async {
+    await LocalDb.insertRequest(url, jsonEncode(map));
+    Get.snackbar("ذخیره شد", "اطلاعات ذخیره شد و بعدا ارسال خواهد شد");
+  }
+
+  Future<void> sendOfflineRequest() async {
+    final token = storage.read(StorageKey.token);
+    if (token == null || token.isEmpty) {
+      Get.snackbar(
+        "خطا",
+        "توکن معتبر برای ارسال درخواست‌های آفلاین وجود ندارد",
+      );
+      return;
+    }
+    final requests = await LocalDb.getPendingRequests();
+    if (requests.isEmpty) {
+      Get.snackbar("اطلاع", "درخواست آفلاینی برای ارسال وجود ندارد");
+      return;
+    }
+    int successCount = 0;
+    int failCount = 0;
+    for (var req in requests) {
+      final url = req['url'];
+      final payload = jsonDecode(req['payload']);
+      final id = req['id'];
+      try {
+        final response = await DioService().postJson(
+          payload,
+          url,
+          options: Options(headers: {'Authorization': 'Bearer $token'}),
+        );
+        if (response?.statusCode == 200) {
+          await LocalDb.deletePendingRequest(id);
+          successCount++;
+        } else {
+          failCount++;
+        }
+      } catch (e) {
+        failCount++;
+      }
+    }
+    if (successCount > 0 && failCount == 0) {
+      Get.snackbar("موفقیت", "$successCount درخواست با موفقیت ارسال شد");
+    } else if (successCount > 0 && failCount > 0) {
+      Get.snackbar(
+        "ارسال ناقص",
+        "$successCount درخواست ارسال شد، $failCount درخواست ناموفق بود",
+        borderColor: Colors.orange,
+        borderWidth: 2,
+      );
+    } else {
+      Get.snackbar(
+        "خطا",
+        "ارسال درخواست‌های آفلاین ناموفق بود",
+        borderColor: Colors.red,
+        borderWidth: 3,
+      );
+    }
+  }
+}

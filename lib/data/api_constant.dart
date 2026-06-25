@@ -5,7 +5,7 @@ class ApiUrlConstant {
   final storage = GetStorage();
   ApiUrlConstant._();
   static String baseUrl =
-      GetStorage().read(StorageKey.serverAddress) ?? "http://192.168.1.2/";
+      GetStorage().read(StorageKey.serverAddress) ?? "http://192.168.1.2:8282/";
   static String login = "${baseUrl}token";
   static String userdata = "${baseUrl}getUserdata";
   static String coustmoerinfo = "${baseUrl}getCustomerData";
