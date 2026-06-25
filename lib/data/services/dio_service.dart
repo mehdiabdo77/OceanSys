@@ -58,6 +58,7 @@ class DioService {
     String url, {
     Options? options,
   }) async {
+    print(url);
     return await dio
         .post(
           url,

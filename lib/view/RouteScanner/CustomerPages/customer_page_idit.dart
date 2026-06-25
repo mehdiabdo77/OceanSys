@@ -20,9 +20,9 @@ class CustomerPageIdit extends StatefulWidget {
 class _CustomerPageIditState extends State<CustomerPageIdit> {
   final _formKey = GlobalKey<FormState>();
 
-  final RegExp _mobileReg = RegExp(r'^09\d{9}$'); // موبایل
-  final RegExp _phoneReg = RegExp(r'^(021|026)\d{8}$'); // تلفن ثابت
-  final RegExp _tenDigits = RegExp(r'^\d{10}$'); // عدد ها
+  final RegExp _mobileReg = RegExp(r'^09\d{9}$');
+  final RegExp _phoneReg = RegExp(r'^(021|026)\d{8}$');
+  final RegExp _tenDigits = RegExp(r'^\d{10}$');
 
   String? _validator(RegExp pattern, String label, String? v) {
     if (v == null || v.isEmpty) return null;
@@ -38,121 +38,156 @@ class _CustomerPageIditState extends State<CustomerPageIdit> {
     return Scaffold(
       backgroundColor: SolidColors.homepage,
       appBar: AppBar(
-        toolbarHeight: 45,
+        toolbarHeight: 60,
         title: Text("ویرایش اطلاعات مشتری", style: MyTextStyle.textBlack16),
         backgroundColor: SolidColors.appBorColor,
+        elevation: 0,
+        centerTitle: true,
       ),
       body: BlocBuilder<CustomerInfoBloc, CustomerInfoState>(
         builder: (context, state) {
           if (state is! CustomerInfoLoaded ||
               widget.index == null ||
               widget.index! >= state.customers.length) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: SolidColors.primaryColor),
+            );
           }
 
           final customer = state.customers[widget.index!];
-          return Padding(
-            padding: const EdgeInsets.all(10.0),
+          return SafeArea(
             child: SingleChildScrollView(
+              padding: const EdgeInsets.all(20),
               child: Form(
                 key: _formKey,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    myTextField(
-                      "کد ملی",
-                      context.read<CustomerEditBloc>().nationalCode,
-                      customer.nationalCode,
-                      validator: (v) => _validator(_tenDigits, "کد ملی", v),
-                      inputFormatter: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(10),
-                      ],
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: MyDecorations.cardDecoration,
+                      child: Column(
+                        children: [
+                          _buildTextField(
+                            "کد ملی",
+                            context.read<CustomerEditBloc>().nationalCode,
+                            customer.nationalCode,
+                            validator: (v) =>
+                                _validator(_tenDigits, "کد ملی", v),
+                            inputFormatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(10),
+                            ],
+                            icon: Icons.badge_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            "کد نقش",
+                            context.read<CustomerEditBloc>().roleCode,
+                            '',
+                            inputFormatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(13),
+                            ],
+                            icon: Icons.pin_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            "کد پستی",
+                            context.read<CustomerEditBloc>().postalCode,
+                            customer.postalCode,
+                            validator: (v) =>
+                                _validator(_tenDigits, "کد پستی", v),
+                            inputFormatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(10),
+                            ],
+                            icon: Icons.local_post_office_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            "نام مالک",
+                            context.read<CustomerEditBloc>().customername,
+                            customer.customerName,
+                            icon: Icons.person_outline,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            "نام تابلو مغازه",
+                            context.read<CustomerEditBloc>().customerboard,
+                            customer.customerBoard,
+                            icon: Icons.storefront_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            "آدرس مغازه",
+                            context.read<CustomerEditBloc>().address,
+                            customer.address,
+                            icon: Icons.location_city_outlined,
+                            maxLines: 3,
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "کد نقش",
-                      context.read<CustomerEditBloc>().roleCode,
-                      '',
-                      inputFormatter: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(13),
-                      ],
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: MyDecorations.cardDecoration,
+                      child: Column(
+                        children: [
+                          _buildTextField(
+                            "شماره همراه",
+                            context.read<CustomerEditBloc>().mobileNumber,
+                            customer.mobile,
+                            validator: (v) =>
+                                _validator(_mobileReg, "شماره همراه", v),
+                            inputFormatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(11),
+                            ],
+                            icon: Icons.phone_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            "شماره همراه 2",
+                            context.read<CustomerEditBloc>().mobileNumber2,
+                            '',
+                            validator: (v) =>
+                                _validator(_mobileReg, "شماره همراه", v),
+                            inputFormatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(11),
+                            ],
+                            icon: Icons.phone_android_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            "شماره ثابت",
+                            context.read<CustomerEditBloc>().phoneNumber,
+                            customer.phone,
+                            validator: (v) =>
+                                _validator(_phoneReg, "شماره ثابت", v),
+                            inputFormatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(11),
+                            ],
+                            icon: Icons.phone_in_talk_outlined,
+                          ),
+                          const SizedBox(height: 16),
+                          _buildTextField(
+                            "متراژ مغازه (متر)",
+                            context.read<CustomerEditBloc>().storeArea,
+                            '',
+                            inputFormatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                              LengthLimitingTextInputFormatter(5),
+                            ],
+                            icon: Icons.square_foot_outlined,
+                          ),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "کد پستی",
-                      context.read<CustomerEditBloc>().postalCode,
-                      customer.postalCode,
-                      validator: (v) => _validator(_tenDigits, "کد پستی", v),
-                      inputFormatter: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(10),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "نام مالک",
-                      context.read<CustomerEditBloc>().customername,
-                      customer.customerName,
-                    ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "نام تابلو مغازه",
-                      context.read<CustomerEditBloc>().customerboard,
-                      customer.customerBoard,
-                    ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "آدرس مغازه",
-                      context.read<CustomerEditBloc>().address,
-                      customer.address,
-                    ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "شماره همراه",
-                      context.read<CustomerEditBloc>().mobileNumber,
-                      customer.mobile,
-                      validator: (v) =>
-                          _validator(_mobileReg, "شماره همراه", v),
-                      inputFormatter: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(11),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "شماره همراه 2",
-                      context.read<CustomerEditBloc>().mobileNumber2,
-                      '',
-                      validator: (v) =>
-                          _validator(_mobileReg, "شماره همراه", v),
-                      inputFormatter: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(11),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "شماره ثابت",
-                      context.read<CustomerEditBloc>().phoneNumber,
-                      customer.phone,
-                      validator: (v) => _validator(_phoneReg, "شماره ثابت", v),
-                      inputFormatter: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(11),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    myTextField(
-                      "(متر بربع) متراژ مغازه",
-                      context.read<CustomerEditBloc>().storeArea,
-                      '',
-                      inputFormatter: [
-                        FilteringTextInputFormatter.digitsOnly,
-                        LengthLimitingTextInputFormatter(5),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     ElevatedButton(
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
@@ -205,14 +240,20 @@ class _CustomerPageIditState extends State<CustomerPageIdit> {
                             ),
                           );
                           if (context.mounted) {
+                            context.read<CustomerInfoBloc>().add(
+                              CustomerInfoFetchData(),
+                            );
                             Navigator.of(context).pop();
                           }
                         }
                       },
                       style: MyDecorations.mainButtom,
-                      child: Text(
-                        "ذخیره تغییرات",
-                        style: MyTextStyle.bottomstyle,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: Text(
+                          "ذخیره تغییرات",
+                          style: MyTextStyle.bottomstyle.copyWith(fontSize: 16),
+                        ),
                       ),
                     ),
                   ],
@@ -225,37 +266,46 @@ class _CustomerPageIditState extends State<CustomerPageIdit> {
     );
   }
 
-  Widget myTextField(
+  Widget _buildTextField(
     String labelText,
     TextEditingController controller,
-    String title, {
+    String? initialValue, {
     String? Function(String?)? validator,
     List<TextInputFormatter>? inputFormatter,
+    int maxLines = 1,
+    required IconData icon,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            Text("$labelText:"),
-            const SizedBox(width: 5),
-            Text(title, style: MyTextStyle.textSmall12),
-          ],
-        ),
-        const SizedBox(height: 8),
+        if (initialValue != null && initialValue.isNotEmpty) ...[
+          Row(
+            children: [
+              Text("$labelText فعلی:", style: MyTextStyle.caption),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  initialValue,
+                  style: MyTextStyle.textSmall12,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+        ],
         TextFormField(
           controller: controller,
           inputFormatters: inputFormatter,
           validator: validator,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          decoration: InputDecoration(
-            labelText: labelText,
-            labelStyle: MyTextStyle.textBlak12,
-            border: const OutlineInputBorder(),
-            focusColor: SolidColors.listCustomerColor,
-          ),
+          maxLines: maxLines,
           style: MyTextStyle.textBlak12,
-          maxLines: 1,
+          decoration: MyDecorations.inputDecoration.copyWith(
+            labelText: labelText,
+            prefixIcon: Icon(icon, color: SolidColors.primaryColor),
+          ),
         ),
       ],
     );

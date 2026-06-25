@@ -2,36 +2,38 @@ import 'package:flutter/material.dart';
 
 class SolidColors {
   SolidColors._();
-  static const Color homepage = Color(0xFFF1EDE3);
-  static const Color whitecolor = Color.fromARGB(255, 255, 255, 255);
+  static const Color homepage = Color(0xFFF8F9FA);
+  static const Color whitecolor = Colors.white;
   static const Color greycolor = Colors.grey;
-  static const Color posterTitel = Color.fromARGB(255, 255, 255, 255);
-  static const Color primaryColor = Color.fromARGB(255, 68, 4, 87);
-  static const Color bottomNav = Color.fromARGB(255, 255, 235, 206);
-  static const Color appBorColor = Color.fromARGB(255, 255, 235, 206);
-  static const Color listCustomerColor = Color(0xFF004D40);
-  static const Color bootomColor = Color(0xFF004D40);
-  static const Color iconmain = Color(0xFF004D40);
+  static const Color posterTitel = Colors.white;
+  static const Color primaryColor = Color(0xFF2563EB);
+  static const Color secondaryColor = Color(0xFF7C3AED);
+  static const Color accentColor = Color(0xFF10B981);
+  static const Color bottomNav = Colors.white;
+  static const Color appBorColor = Colors.white;
+  static const Color listCustomerColor = Colors.white;
+  static const Color bootomColor = Color(0xFF2563EB);
+  static const Color iconmain = Color(0xFF2563EB);
 
-  static const Color pointVisitColor = Color.fromARGB(255, 35, 164, 143);
-  static const Color listVisitColor = Color.fromARGB(255, 35, 164, 143);
+  static const Color pointVisitColor = Color(0xFF10B981);
+  static const Color listVisitColor = Color(0xFF10B981);
 
-  static const Color pointNoVisitColor = Color.fromARGB(255, 79, 38, 38);
-  static const Color listNoVisitColor = Color.fromARGB(255, 79, 38, 38);
+  static const Color pointNoVisitColor = Color(0xFFEF4444);
+  static const Color listNoVisitColor = Color(0xFFEF4444);
 
-  static const Color pointNoSendEndJab = Color.fromARGB(255, 174, 163, 14);
-  static const Color listNoSendEndJab = Color.fromARGB(255, 174, 163, 14);
+  static const Color pointNoSendEndJab = Color(0xFFF59E0B);
+  static const Color listNoSendEndJab = Color(0xFFF59E0B);
 }
 
 class GradientColors {
   static const List<Color> bottomNav = [
-    Color.fromARGB(255, 25, 0, 94),
-    Color.fromARGB(255, 68, 4, 87),
+    Color(0xFF2563EB),
+    Color(0xFF7C3AED),
   ];
 
   static const List<Color> singleAppbarGradiant = [
-    Color.fromARGB(49, 46, 3, 71),
-    Color.fromARGB(65, 249, 240, 240),
+    Color(0xFF2563EB),
+    Color(0xFF7C3AED),
   ];
 
   static const List<Color> blogPost = [

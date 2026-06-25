@@ -61,42 +61,67 @@ class _MapPageState extends State<MapPage> {
                           .read<CustomerInfoBloc>()
                           .getPoints(customerState.customers)
                           .map((point) {
+                            final markerColor = point['isvusit'] == 1
+                                ? SolidColors.pointVisitColor
+                                : point['isvusit'] == 2
+                                ? SolidColors.pointNoSendEndJab
+                                : SolidColors.pointNoVisitColor;
                             return Marker(
                               point: point['location'],
-                              width: 120,
-                              height: 50,
-                              alignment: Alignment.center,
+                              width: 140,
+                              height: 70,
+                              alignment: Alignment.topCenter,
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Icon(
-                                    Icons.location_on,
-                                    color: point['isvusit'] == 1
-                                        ? SolidColors.pointVisitColor
-                                        : point['isvusit'] == 2
-                                        ? SolidColors.pointNoSendEndJab
-                                        : SolidColors.pointNoVisitColor,
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.location_on,
+                                        color: markerColor,
+                                        size: 40,
+                                        shadows: [
+                                          Shadow(
+                                            color: Colors.black.withOpacity(
+                                              0.2,
+                                            ),
+                                            blurRadius: 6,
+                                            offset: const Offset(0, 3),
+                                          ),
+                                        ],
+                                      ),
+                                      Positioned(
+                                        top: 8,
+                                        child: Icon(
+                                          Icons.storefront,
+                                          color: Colors.white,
+                                          size: 16,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(height: 5),
+                                  const SizedBox(height: 4),
                                   Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 6,
-                                      vertical: 2,
+                                      horizontal: 10,
+                                      vertical: 6,
                                     ),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(6),
+                                      borderRadius: BorderRadius.circular(10),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black26,
-                                          blurRadius: 2,
-                                          offset: Offset(1, 1),
+                                          color: Colors.black.withOpacity(0.1),
+                                          blurRadius: 8,
+                                          offset: const Offset(0, 3),
                                         ),
                                       ],
                                     ),
                                     child: Text(
                                       point['name'],
                                       style: MyTextStyle.lebelMap,
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
                                 ],
@@ -114,16 +139,34 @@ class _MapPageState extends State<MapPage> {
                     markers.add(
                       Marker(
                         point: LatLng(locationState.lat, locationState.long),
-                        width: 20,
-                        height: 20,
+                        width: 60,
+                        height: 60,
                         alignment: Alignment.center,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
+                        child: Stack(
+                          alignment: Alignment.center,
                           children: [
-                            const Icon(
-                              Icons.circle,
-                              color: Colors.blueAccent,
-                              size: 20,
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: SolidColors.primaryColor.withOpacity(
+                                  0.2,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 24,
+                              height: 24,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: SolidColors.primaryColor,
+                              ),
+                              child: const Icon(
+                                Icons.person,
+                                color: Colors.white,
+                                size: 16,
+                              ),
                             ),
                           ],
                         ),

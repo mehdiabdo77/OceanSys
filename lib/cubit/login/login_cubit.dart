@@ -21,9 +21,19 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   Future<void> login() async {
+    // If controllers are empty, try to read from storage
     if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
-      emit(LoginError('لطفا نام کاربری و رمز عبور را وارد کنید'));
-      return;
+      final savedUsername = storage.read(StorageKey.username);
+      final savedPassword = storage.read(StorageKey.password);
+
+      if (savedUsername == null || savedPassword == null) {
+        emit(LoginError('لطفا نام کاربری و رمز عبور را وارد کنید'));
+        return;
+      }
+
+      // Use saved values
+      usernameController.text = savedUsername;
+      passwordController.text = savedPassword;
     }
 
     emit(LoginLoading());
@@ -35,6 +45,7 @@ class LoginCubit extends Cubit<LoginState> {
       };
 
       var response = await DioService().postMetode(map, ApiUrlConstant.login);
+      print(response);
 
       if (response.statusCode == 200) {
         String token = response.data["access_token"];

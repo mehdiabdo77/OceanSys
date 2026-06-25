@@ -32,7 +32,21 @@ class _MenuPageState extends State<MenuPage> {
           if (state is UserLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is UserError) {
-            return Center(child: Text(state.message));
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(state.message),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<UserBloc>().add(UserFetchData());
+                    },
+                    child: const Text("Retry"),
+                  ),
+                ],
+              ),
+            );
           } else if (state is UserLoaded) {
             final userBloc = context.read<UserBloc>();
             return GridView.count(

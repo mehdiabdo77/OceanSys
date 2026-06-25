@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/cubit/login/login_cubit.dart';
 import 'package:ocean_sys/cubit/user/user_bloc.dart';
@@ -51,7 +52,7 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(create: (context) => MainBloc()),
         ],
-        child: MaterialApp(
+        child: GetMaterialApp(
           locale: const Locale("fa"),
           debugShowCheckedModeBanner: false,
           home: const SplashScreen(),

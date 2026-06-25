@@ -152,8 +152,6 @@ class LocationSyncBloc extends Bloc<LocationSyncEvent, LocationSyncState> {
   }
 
   String getDistanceInKm(dynamic endLat, dynamic endLng) {
-    // TODO: _updateCurrentLocation without emitter?
-
     if (endLat == " " || endLng == " ") {
       return "فاقد لت و لانگ";
     }

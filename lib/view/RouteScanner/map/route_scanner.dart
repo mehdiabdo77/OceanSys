@@ -17,24 +17,60 @@ class MainScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             backgroundColor: SolidColors.appBorColor,
-            toolbarHeight: 40,
+            elevation: 0,
+            centerTitle: true,
+            title: Text(
+              state.currentIndex == 0 ? "لیست مشتریان" : "نقشه مسیر",
+              style: const TextStyle(
+                fontFamily: 'dona',
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF1F2937),
+              ),
+            ),
           ),
           body: pages[state.currentIndex],
-          bottomNavigationBar: BottomNavigationBar(
-            currentIndex: state.currentIndex,
-            onTap: (index) => context.read<MainBloc>().add(MainChangePage(index)),
-            backgroundColor: SolidColors.bottomNav,
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.view_list_rounded),
-                label: "List Customer",
-                backgroundColor: Colors.amber,
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  blurRadius: 10,
+                  offset: const Offset(0, -5),
+                ),
+              ],
+            ),
+            child: BottomNavigationBar(
+              currentIndex: state.currentIndex,
+              onTap: (index) =>
+                  context.read<MainBloc>().add(MainChangePage(index)),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              selectedItemColor: SolidColors.primaryColor,
+              unselectedItemColor: Colors.grey[400],
+              selectedLabelStyle: const TextStyle(
+                fontFamily: 'dona',
+                fontWeight: FontWeight.w600,
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.location_on_rounded),
-                label: "loction",
+              unselectedLabelStyle: const TextStyle(
+                fontFamily: 'dona',
+                fontWeight: FontWeight.w400,
               ),
-            ],
+              type: BottomNavigationBarType.fixed,
+              items: const [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.list_outlined),
+                  activeIcon: Icon(Icons.list_rounded),
+                  label: "لیست مشتریان",
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.map_outlined),
+                  activeIcon: Icon(Icons.map_rounded),
+                  label: "نقشه",
+                ),
+              ],
+            ),
           ),
         );
       },

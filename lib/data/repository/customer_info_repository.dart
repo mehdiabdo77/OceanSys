@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:ocean_sys/constans/storage_const.dart';
 import 'package:ocean_sys/data/api_constant.dart';
 import 'package:ocean_sys/data/services/dio_service.dart';
 import 'package:ocean_sys/model/RouteScannerModel/customer_info_model.dart';
@@ -11,7 +12,7 @@ class CustomerInfoRepository {
 
   Future<List<CustomerInfoModel>> getCustomerInfo() async {
     try {
-      final token = _storage.read("jwt_token");
+      final token = _storage.read(StorageKey.token);
       if (token == null) {
         print("Token not found");
         return [];
