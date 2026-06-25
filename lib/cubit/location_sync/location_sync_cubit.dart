@@ -22,11 +22,13 @@ class LocationSyncCubit extends Cubit<LocationSyncState> {
     });
   }
 
-  void startFastUpdates({
+  Future<void> startFastUpdates({
     Duration androidInterval = const Duration(seconds: 5),
     int distanceFilter = 0,
-  }) {
+  }) async {
     if (_positionSub != null) return;
+
+    if (!await _ensurePermission()) return;
 
     LocationSettings settings = const LocationSettings(
       accuracy: LocationAccuracy.best,
@@ -49,9 +51,14 @@ class LocationSyncCubit extends Cubit<LocationSyncState> {
     }
 
     _positionSub = Geolocator.getPositionStream(locationSettings: settings)
-        .listen((pos) {
-          emit(state.copyWith(lat: pos.latitude, long: pos.longitude));
-        });
+        .listen(
+          (pos) {
+            emit(state.copyWith(lat: pos.latitude, long: pos.longitude));
+          },
+          onError: (error) {
+            print('Location stream error: $error');
+          },
+        );
   }
 
   void stopFastUpdates() {

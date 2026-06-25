@@ -62,6 +62,8 @@ class LocationSyncBloc extends Bloc<LocationSyncEvent, LocationSyncState> {
   ) async {
     if (_positionSub != null) return;
 
+    if (!await _ensurePermission()) return;
+
     LocationSettings settings = const LocationSettings(
       accuracy: LocationAccuracy.best,
       distanceFilter: 0,
@@ -82,10 +84,19 @@ class LocationSyncBloc extends Bloc<LocationSyncEvent, LocationSyncState> {
       );
     }
 
-    _positionSub = Geolocator.getPositionStream(locationSettings: settings)
-        .listen((pos) {
-          emit(state.copyWith(lat: pos.latitude, long: pos.longitude));
+    final stream = Geolocator.getPositionStream(locationSettings: settings)
+        .handleError((error) {
+          print('Location stream error: $error');
         });
+
+    // Save subscription so we can cancel it later
+    _positionSub = stream.listen(null);
+
+    // Proper bloc way: use emit.forEach to handle stream emissions
+    await emit.forEach<Position>(
+      stream,
+      onData: (pos) => state.copyWith(lat: pos.latitude, long: pos.longitude),
+    );
   }
 
   void _onStopFastUpdates(

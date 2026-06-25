@@ -37,7 +37,14 @@ class CustomerInfoModel {
     postalCode = element["postal_code"];
     username = element["username"];
     datavisit = element["datavisit"];
-    visited = element["visited"];
+    final visitedValue = element["isvusit"];
+    if (visitedValue != null) {
+      if (visitedValue is int) {
+        visited = visitedValue;
+      } else if (visitedValue is String) {
+        visited = int.tryParse(visitedValue);
+      }
+    }
     edit = element["edit"];
   }
 
@@ -59,7 +66,7 @@ class CustomerInfoModel {
       'postal_code': postalCode,
       'username': username,
       'datavisit': datavisit,
-      'visited': visited,
+      'isvusit': visited,
       'edit': edit,
     };
   }
