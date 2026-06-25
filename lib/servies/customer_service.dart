@@ -4,15 +4,15 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:ocean_sys/constans/api_constant.dart';
+import 'package:ocean_sys/data/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
-import 'package:ocean_sys/database/local_db.dart';
+import 'package:ocean_sys/data/database/local_db.dart';
 import 'package:ocean_sys/model/RouteScannerModel/CRM_customer_description.dart';
 import 'package:ocean_sys/model/RouteScannerModel/customer_edit_model.dart';
 import 'package:ocean_sys/model/RouteScannerModel/disactive_customer_request.dart';
 import 'package:ocean_sys/model/RouteScannerModel/product_category_customer.dart';
 import 'package:ocean_sys/model/RouteScannerModel/task_complete.dart';
-import 'package:ocean_sys/servies/dio_service.dart';
+import 'package:ocean_sys/data/services/dio_service.dart';
 
 class CustomerService {
   final storage = GetStorage();
