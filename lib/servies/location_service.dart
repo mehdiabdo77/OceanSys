@@ -31,7 +31,7 @@ class LocationService {
       }
     } catch (e) {
       Get.snackbar("خطا", e.toString());
-      return null;
+      return;
     }
   }
 }

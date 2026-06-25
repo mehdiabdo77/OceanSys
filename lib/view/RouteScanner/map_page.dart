@@ -8,7 +8,7 @@ import 'package:ocean_sys/controller/RouteScannerController/customer_info_contro
 import 'package:ocean_sys/controller/location_sync_controller.dart';
 
 class MapPage extends StatefulWidget {
-  MapPage({super.key});
+  const MapPage({super.key});
 
   @override
   State<MapPage> createState() => _MapPageState();

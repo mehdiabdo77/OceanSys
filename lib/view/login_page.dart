@@ -9,6 +9,8 @@ import 'package:ocean_sys/route_manager/names.dart';
 
 class LoginPage extends StatelessWidget {
   var registerController = Get.put<RegisterController>(RegisterController());
+
+  LoginPage({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -4,7 +4,8 @@ import 'package:ocean_sys/constans/storage_const.dart';
 class ApiUrlConstant {
   final storage = GetStorage();
   ApiUrlConstant._();
-  static String baseUrl = GetStorage().read(StorageKey.serverAddress) ?? "";
+  static String baseUrl =
+      GetStorage().read(StorageKey.serverAddress) ?? "http://192.168.1.2/";
   static String login = "${baseUrl}token";
   static String userdata = "${baseUrl}getUserdata";
   static String coustmoerinfo = "${baseUrl}getCustomerData";

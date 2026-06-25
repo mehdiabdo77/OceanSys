@@ -78,7 +78,7 @@ class LocationSyncController extends GetxController {
 
   Future<void> _updateCurrentLocation() async {
     final position = await _getCurrentPosition();
-    print("postion ${position}");
+    print("postion $position");
     if (position != null) {
       _lat.value = position.latitude;
       _long.value = position.longitude;

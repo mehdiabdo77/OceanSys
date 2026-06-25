@@ -11,6 +11,8 @@ import 'package:ocean_sys/view/widgets/menuWidget.dart';
 class MenuPage extends StatelessWidget {
   var userController = Get.put<UserController>(UserController());
 
+  MenuPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

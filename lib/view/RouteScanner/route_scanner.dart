@@ -16,6 +16,8 @@ class MainScreen extends StatelessWidget {
   );
   MainControler mainControler = Get.put(MainControler());
   List pages = [CustomerListPage(), MapPage()];
+
+  MainScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Obx(

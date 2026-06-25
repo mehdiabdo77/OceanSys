@@ -228,7 +228,7 @@ class CustomerPage extends StatelessWidget {
       content: Column(
         children: [
           DropdownButtonFormField<String>(
-            value: selectedReason,
+            initialValue: selectedReason,
             hint: Text("یک دلیل را انتخاب کنید", style: MyTextStyle.textBlak12),
             items: reasons.map((reason) {
               return DropdownMenuItem(

@@ -32,7 +32,6 @@ class RegisterController extends GetxController {
     } else {
       storage.write(StorageKey.serverAddress, server);
     }
-    ;
   }
 
   Future<bool> veryfy() async {

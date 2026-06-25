@@ -23,10 +23,6 @@ class UserController extends GetxController {
     try {
       isLoading.value = true;
       String token = storage.read(StorageKey.token);
-      if (token == null) {
-        isLoading.value = false;
-        return;
-      }
 
       final options = Options(
         headers: {'Authorization': 'Bearer $token'},

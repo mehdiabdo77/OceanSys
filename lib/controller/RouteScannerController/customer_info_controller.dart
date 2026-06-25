@@ -53,9 +53,9 @@ class CustomerInfoController extends GetxController {
 
         final List<dynamic> data = response.data;
 
-        data.forEach((val) {
+        for (var val in data) {
           custmerinfolist.add(CustomerInfoModel.fromJson(val));
-        });
+        }
 
         debugPrint(" le ${custmerinfolist.length}");
         debugPrint(custmerinfolist.isEmpty.toString());
