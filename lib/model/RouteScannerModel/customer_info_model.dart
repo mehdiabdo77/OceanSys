@@ -14,7 +14,7 @@ class CustomerInfoModel {
   dynamic mobile; // str | None
   dynamic postalCode; // str | None
   dynamic username; // str
-  dynamic datavisit; // str
+  dynamic? datavisit; // str
   int? visited; // int
   dynamic edit; // int
 
@@ -37,7 +37,7 @@ class CustomerInfoModel {
     postalCode = element["postal_code"];
     username = element["username"];
     datavisit = element["datavisit"];
-    final visitedValue = element["isvusit"];
+    final visitedValue = element["visit_status"];
     if (visitedValue != null) {
       if (visitedValue is int) {
         visited = visitedValue;
