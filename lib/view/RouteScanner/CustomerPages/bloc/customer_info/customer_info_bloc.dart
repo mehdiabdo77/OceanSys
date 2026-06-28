@@ -1,12 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:ocean_sys/cubit/customer_info/customer_info_state.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_state.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_event.dart';
 import 'package:ocean_sys/data/repository/customer_info_repository.dart';
 import 'package:ocean_sys/model/RouteScannerModel/customer_info_model.dart';
-
-abstract class CustomerInfoEvent {}
-
-class CustomerInfoFetchData extends CustomerInfoEvent {}
 
 class CustomerInfoBloc extends Bloc<CustomerInfoEvent, CustomerInfoState> {
   final CustomerInfoRepository repository;

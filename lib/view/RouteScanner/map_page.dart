@@ -4,8 +4,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
-import 'package:ocean_sys/cubit/customer_info/customer_info_bloc.dart';
-import 'package:ocean_sys/cubit/customer_info/customer_info_state.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_bloc.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_state.dart';
 import 'package:ocean_sys/cubit/location_sync/location_sync_bloc.dart';
 import 'package:ocean_sys/cubit/location_sync/location_sync_state.dart';
 

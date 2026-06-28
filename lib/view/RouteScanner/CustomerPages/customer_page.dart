@@ -3,12 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
-import 'package:ocean_sys/cubit/customer_edit/customer_edit_bloc.dart';
-import 'package:ocean_sys/cubit/customer_edit/customer_edit_state.dart';
-import 'package:ocean_sys/cubit/customer_info/customer_info_bloc.dart';
-import 'package:ocean_sys/cubit/customer_info/customer_info_state.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_edit/customer_edit_bloc.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_edit/customer_edit_event.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_edit/customer_edit_state.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_bloc.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_event.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_state.dart';
 import 'package:ocean_sys/cubit/location_sync/location_sync_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page_idit.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/widget/action_button.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/widget/customer_info.dart';
 
 class CustomerPage extends StatefulWidget {
   final int? index;
@@ -124,51 +128,7 @@ class _CustomerPageState extends State<CustomerPage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: MyDecorations.cardDecoration,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow(
-                        Icons.phone_outlined,
-                        'شماره همراه',
-                        customer.mobile ?? '',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildInfoRow(
-                        Icons.phone_android_outlined,
-                        'شماره ثابت',
-                        customer.phone ?? '',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildInfoRow(
-                        Icons.badge_outlined,
-                        'کد ملی',
-                        customer.nationalCode ?? '',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildInfoRow(
-                        Icons.local_post_office_outlined,
-                        'کد پستی',
-                        customer.postalCode ?? '',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildInfoRow(
-                        Icons.pin_drop_outlined,
-                        'محدوده',
-                        customer.area ?? '',
-                      ),
-                      const SizedBox(height: 16),
-                      _buildInfoRow(
-                        Icons.location_city_outlined,
-                        'آدرس',
-                        customer.address ?? '',
-                        isMultiLine: true,
-                      ),
-                    ],
-                  ),
-                ),
+                CustomerInfo(customer: customer),
                 const SizedBox(height: 24),
                 GridView.count(
                   shrinkWrap: true,
@@ -177,7 +137,7 @@ class _CustomerPageState extends State<CustomerPage> {
                   crossAxisSpacing: 12,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    _buildActionButton(
+                    buildActionButton(
                       icon: Icons.toggle_off_outlined,
                       label: 'غیر فعال / فعال',
                       color: SolidColors.secondaryColor,
@@ -187,7 +147,7 @@ class _CustomerPageState extends State<CustomerPage> {
                         }
                       },
                     ),
-                    _buildActionButton(
+                    buildActionButton(
                       icon: Icons.edit_outlined,
                       label: 'اصلاح اطلاعات',
                       color: SolidColors.primaryColor,
@@ -208,7 +168,7 @@ class _CustomerPageState extends State<CustomerPage> {
                         }
                       },
                     ),
-                    _buildActionButton(
+                    buildActionButton(
                       icon: Icons.report_outlined,
                       label: 'شکایت مشتری',
                       color: Colors.orange,
@@ -218,7 +178,7 @@ class _CustomerPageState extends State<CustomerPage> {
                         }
                       },
                     ),
-                    _buildActionButton(
+                    buildActionButton(
                       icon: Icons.shopping_cart_outlined,
                       label: 'ماهیت خرید',
                       color: SolidColors.accentColor,
@@ -234,96 +194,6 @@ class _CustomerPageState extends State<CustomerPage> {
             ),
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(
-    IconData icon,
-    String label,
-    String value, {
-    bool isMultiLine = false,
-  }) {
-    return Row(
-      crossAxisAlignment: isMultiLine
-          ? CrossAxisAlignment.start
-          : CrossAxisAlignment.center,
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: SolidColors.primaryColor.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: SolidColors.primaryColor, size: 20),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(label, style: MyTextStyle.caption),
-              const SizedBox(height: 2),
-              Text(
-                value,
-                style: MyTextStyle.textBlak12,
-                maxLines: isMultiLine ? 3 : 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required VoidCallback onTap,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: color.withOpacity(0.15),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 48,
-              height: 48,
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                shape: BoxShape.circle,
-              ),
-              child: Icon(icon, color: color, size: 26),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              label,
-              style: TextStyle(
-                fontFamily: 'dona',
-                fontSize: 13,
-                fontWeight: FontWeight.w600,
-                color: Colors.grey[800],
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
       ),
     );
   }
