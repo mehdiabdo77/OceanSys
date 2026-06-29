@@ -61,7 +61,10 @@ class CustomerEditBloc extends Bloc<CustomerEditEvent, CustomerEditState> {
     emit(state.copyWith(selectedDisActive: event.value));
   }
 
-  void _onToggleProduct(ToggleProduct event, Emitter<CustomerEditState> emit) {
+  void _onToggleProduct(
+    ToggleProduct event,
+    Emitter<CustomerEditState> emit,
+  ) {
     final products = List<String>.from(state.selectedProducts);
     if (products.contains(event.product)) {
       products.remove(event.product);

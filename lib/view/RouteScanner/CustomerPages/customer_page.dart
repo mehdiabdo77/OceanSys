@@ -12,6 +12,8 @@ import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/cus
 import 'package:ocean_sys/cubit/location_sync/location_sync_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page_idit.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/widget/action_button.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/widget/app_bar.dart';
+import 'package:ocean_sys/view/RouteScanner/CustomerPages/widget/crmDialogDescription.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/widget/customer_info.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/widget/detect_product_category_intent.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/widget/send_disactive.dart';
@@ -30,56 +32,7 @@ class _CustomerPageState extends State<CustomerPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SolidColors.homepage,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: SolidColors.appBorColor,
-        actions: [
-          IconButton(
-            onPressed: () async {
-              final customerInfoBloc = context.read<CustomerInfoBloc>();
-              final customerEditBloc = context.read<CustomerEditBloc>();
-              if (customerInfoBloc.state is CustomerInfoLoaded &&
-                  widget.index != null &&
-                  widget.index! <
-                      (customerInfoBloc.state as CustomerInfoLoaded)
-                          .customers
-                          .length) {
-                final customer = (customerInfoBloc.state as CustomerInfoLoaded)
-                    .customers[widget.index!];
-                customerEditBloc.add(
-                  TaskComplete(customer.customerCode.toString()),
-                );
-                if (context.mounted) {
-                  customerInfoBloc.add(CustomerInfoFetchData());
-                }
-              }
-            },
-            icon: const Icon(Icons.check_circle_outline, size: 28),
-            color: SolidColors.accentColor,
-          ),
-          IconButton(
-            onPressed: () {
-              final customerInfoBloc = context.read<CustomerInfoBloc>();
-              final locationSyncBloc = context.read<LocationSyncBloc>();
-              if (customerInfoBloc.state is CustomerInfoLoaded &&
-                  widget.index != null &&
-                  widget.index! <
-                      (customerInfoBloc.state as CustomerInfoLoaded)
-                          .customers
-                          .length) {
-                final customer = (customerInfoBloc.state as CustomerInfoLoaded)
-                    .customers[widget.index!];
-                locationSyncBloc.add(
-                  ChangeLocation(customer.customerCode.toString()),
-                );
-              }
-            },
-            icon: const Icon(Icons.location_on_outlined, size: 28),
-            color: SolidColors.primaryColor,
-          ),
-          const SizedBox(width: 8),
-        ],
-      ),
+      appBar: customAppBar(context, widget.index),
       body: BlocBuilder<CustomerInfoBloc, CustomerInfoState>(
         builder: (context, state) {
           if (state is! CustomerInfoLoaded ||
@@ -197,118 +150,6 @@ class _CustomerPageState extends State<CustomerPage> {
           );
         },
       ),
-    );
-  }
-
-  void crmDialogDescription(BuildContext context, int index) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          title: Text("توضیحات مشتری", style: MyTextStyle.textBlack16),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: context
-                      .read<CustomerEditBloc>()
-                      .crmCustomerDescription,
-                  maxLines: 5,
-                  style: MyTextStyle.textBlak12,
-                  decoration: MyDecorations.inputDecoration.copyWith(
-                    labelText: "توضیحات",
-                  ),
-                ),
-                const SizedBox(height: 16),
-                BlocBuilder<CustomerEditBloc, CustomerEditState>(
-                  builder: (context, state) {
-                    return Column(
-                      children: [
-                        CheckboxListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            "آیا به مشتری سر زده میشود؟",
-                            style: MyTextStyle.checkboxFont,
-                          ),
-                          value: state.isCustomerVisit,
-                          activeColor: SolidColors.primaryColor,
-                          onChanged: (val) => context
-                              .read<CustomerEditBloc>()
-                              .add(ToggleCustomerVisit(val ?? false)),
-                        ),
-                        CheckboxListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            "آیا صاحب مغازه در مغازه هست؟",
-                            style: MyTextStyle.checkboxFont,
-                          ),
-                          value: state.isOwnerInShop,
-                          activeColor: SolidColors.primaryColor,
-                          onChanged: (val) => context
-                              .read<CustomerEditBloc>()
-                              .add(ToggleOwnerInShop(val ?? false)),
-                        ),
-                        CheckboxListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Text(
-                            "آیا مشتری همکاری میکند؟",
-                            style: MyTextStyle.checkboxFont,
-                          ),
-                          value: state.isCooperation,
-                          activeColor: SolidColors.primaryColor,
-                          onChanged: (val) => context
-                              .read<CustomerEditBloc>()
-                              .add(ToggleCooperation(val ?? false)),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-          actionsPadding: const EdgeInsets.all(16),
-          actions: [
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () async {
-                  Navigator.of(dialogContext).pop();
-                  final customerInfoBloc = context.read<CustomerInfoBloc>();
-                  if (customerInfoBloc.state is CustomerInfoLoaded) {
-                    final customer =
-                        (customerInfoBloc.state as CustomerInfoLoaded)
-                            .customers[index];
-                    context.read<CustomerEditBloc>().add(
-                      SendCRMCustomerDescription(
-                        customer.customerCode,
-                        context
-                            .read<CustomerEditBloc>()
-                            .crmCustomerDescription
-                            .text,
-                        context.read<CustomerEditBloc>().state.isCustomerVisit,
-                        context.read<CustomerEditBloc>().state.isOwnerInShop,
-                        context.read<CustomerEditBloc>().state.isCooperation,
-                      ),
-                    );
-                    if (context.mounted) {
-                      context.read<CustomerInfoBloc>().add(
-                        CustomerInfoFetchData(),
-                      );
-                    }
-                  }
-                },
-                style: MyDecorations.mainButtom,
-                child: Text("ذخیره", style: MyTextStyle.bottomstyle),
-              ),
-            ),
-          ],
-        );
-      },
     );
   }
 }
