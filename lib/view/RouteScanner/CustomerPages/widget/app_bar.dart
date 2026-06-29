@@ -19,12 +19,12 @@ AppBar customAppBar(BuildContext context, int? index) {
           final customerEditBloc = context.read<CustomerEditBloc>();
           if (customerInfoBloc.state is CustomerInfoLoaded &&
               index != null &&
-              index! <
+              index <
                   (customerInfoBloc.state as CustomerInfoLoaded)
                       .customers
                       .length) {
-            final customer = (customerInfoBloc.state as CustomerInfoLoaded)
-                .customers[index!];
+            final customer =
+                (customerInfoBloc.state as CustomerInfoLoaded).customers[index];
             customerEditBloc.add(
               TaskComplete(customer.customerCode.toString()),
             );
@@ -42,12 +42,12 @@ AppBar customAppBar(BuildContext context, int? index) {
           final locationSyncBloc = context.read<LocationSyncBloc>();
           if (customerInfoBloc.state is CustomerInfoLoaded &&
               index != null &&
-              index! <
+              index <
                   (customerInfoBloc.state as CustomerInfoLoaded)
                       .customers
                       .length) {
-            final customer = (customerInfoBloc.state as CustomerInfoLoaded)
-                .customers[index!];
+            final customer =
+                (customerInfoBloc.state as CustomerInfoLoaded).customers[index];
             locationSyncBloc.add(
               ChangeLocation(customer.customerCode.toString()),
             );
