@@ -1,33 +1,169 @@
 # ocean_sys
 
-A Flutter application for distribution sales management.
+اپلیکیشن فلاتر برای مدیریت فروش توزیع (Route-to-Market).
 
-## Project Overview
+## نمای کلی پروژه
 
-This app is designed for mobile devices to help manage and streamline distribution (route-to-market) sales processes.  
-Key features include:
+این اپلیکیشن برای دستگاه‌های موبایل طراحی شده تا به مدیریت و ساده‌سازی فرآیندهای فروش توزیع کمک کند.  
+ویژگی‌های کلیدی:
 
-- Customer information management
-- Displaying customer and sales agent locations on the map
-- Order management and visit tracking
-- Sales reporting and analytics
-- Simple and user-friendly interface
+- مدیریت اطلاعات مشتریان
+- نمایش مکان مشتریان و نماینده فروش روی نقشه
+- مدیریت سفارش و ردیابی بازدیدها
+- گزارش و تحلیل فروش
+- رابط کاربری ساده و کاربرپسند
 
-## Getting Started
+## شروع کار
 
-To run the project, make sure you have Flutter installed and then use:
+برای اجرای پروژه، مطمئن شوید که Flutter نصب دارید و سپس از این دستورات استفاده کنید:
 
 ```bash
 flutter pub get
 flutter run
 ```
 
-## Resources
+## منابع
 
-- [Flutter Documentation](https://docs.flutter.dev/)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [مستندات Flutter](https://docs.flutter.dev/)
+- [نوشتن اولین اپ Flutter](https://docs.flutter.dev/get-started/codelab)
 - [Flutter Cookbook](https://docs.flutter.dev/cookbook)
 
 ---
 
-**This project is under development and has not been officially released
+## راهنمای ساخت اپلیکیشن
+
+این راهنما به شما کمک می‌کند تا اپلیکیشن OceanSys را برای پلتفرم‌های **اندروید** و **وب** بسازید.
+
+---
+
+### پیش‌نیازها
+- نصب Flutter SDK (نسخه 3.8.1 یا بالاتر)
+- نصب Android Studio برای ساخت نسخه اندروید
+- مرورگر مدرن (Chrome, Edge, Firefox) برای تست وب
+- دسترسی به اینترنت برای دانلود وابستگی‌ها
+
+---
+
+### چک کردن نصب Flutter
+
+برای اطمینان از نصب صحیح Flutter، دستور زیر را در ترمینال اجرا کنید:
+
+```bash
+flutter doctor
+```
+
+اگر چیزی خرد بود، آن را طبق راهنمای Flutter برطرف کنید.
+
+---
+
+### ساخت برای پلتفرم اندروید
+
+#### ۱. نصب وابستگی‌ها
+ابتدا مطمئن شوید که تمام وابستگی‌های پروژه نصب شده‌اند:
+
+```bash
+flutter pub get
+```
+
+#### ۲. ساخت نسخه Debug (برای تست)
+برای ساخت نسخه قابل تست (Debug) از اپلیکیشن:
+
+```bash
+flutter build apk --debug
+```
+خروجی در مسیر `build/app/outputs/flutter-apk/app-debug.apk` ذخیره می‌شود.
+
+#### ۳. ساخت نسخه Release (برای انتشار)
+برای ساخت نسخه نهایی و بهینه شده (Release):
+
+##### ۳.۱. ساخت یک APK تک‌ساختار (App Bundle توصیه می‌شود):
+```bash
+flutter build apk --release
+```
+خروجی در مسیر `build/app/outputs/flutter-apk/app-release.apk` ذخیره می‌شود.
+
+##### ۳.۲. ساخت App Bundle (برای گوگل پلی استور - توصیه می‌شود):
+App Bundle حجم کمتری دارد و گوگل پلی استور برای هر دستگاه فقط بخش‌های مورد نیاز را ارائه می‌دهد:
+```bash
+flutter build appbundle --release
+```
+خروجی در مسیر `build/app/outputs/bundle/release/app-release.aab` ذخیره می‌شود.
+
+##### ۳.۳. ساخت APK برای معماری‌های مختلف (اختیاری):
+اگر می‌خواهید APK جداگانه برای هر معماری بسازید:
+```bash
+flutter build apk --split-per-abi --release
+```
+این دستور سه فایل APK تولید می‌کند:
+- `app-armeabi-v7a-release.apk` (برای دستگاه‌های قدیمی‌تر)
+- `app-arm64-v8a-release.apk` (برای دستگاه‌های جدید 64 بیتی)
+- `app-x86_64-release.apk` (برای شبیه‌ساز‌ها)
+
+---
+
+### ساخت برای پلتفرم وب
+
+#### ۱. نصب وابستگی‌ها
+ابتدا مطمئن شوید که تمام وابستگی‌های پروژه نصب شده‌اند:
+
+```bash
+flutter pub get
+```
+
+#### ۲. فعال کردن پلتفرم وب
+اگر وب فعال نیست، آن را فعال کنید:
+```bash
+flutter channel stable
+flutter upgrade
+flutter config --enable-web
+```
+
+#### ۳. ساخت نسخه وب برای تست (Debug)
+برای تست کردن نسخه وب در مرورگر:
+```bash
+flutter run -d chrome
+```
+یا برای ساخت نسخه Debug:
+```bash
+flutter build web --debug
+```
+
+#### ۴. ساخت نسخه وب برای انتشار (Release)
+برای ساخت نسخه نهایی و بهینه شده برای وب:
+```bash
+flutter build web --release
+```
+خروجی در مسیر `build/web/` ذخیره می‌شود. می‌توانید محتوای این پوشه را روی هر سرور وب (مانند Apache, Nginx, یا سرویس‌هایی مثل Firebase Hosting, Vercel, Netlify) آپلود کنید.
+
+##### ۴.۱. ساخت نسخه وب با پشتیبانی از مرورگر‌های قدیمی‌تر (اختیاری):
+اگر می‌خواهید از مرورگر‌های قدیمی‌تر هم پشتیبانی کنید:
+```bash
+flutter build web --release --web-renderer html
+```
+(به طور پیش‌فرض `canvaskit` استفاده می‌شود که برای گرافیک‌های پیچیده بهتر است)
+
+---
+
+### نکات مهم
+- برای ساخت نسخه اندروید برای انتشار در گوگل پلی استور، حتماً باید **Keystore** خود را بسازید و فایل `android/key.properties` را پیکربندی کنید.
+- برای وب، مطمئن شوید که مسیر `base href` در فایل `web/index.html` صحیح است (اگر اپلیکیشن در ریشه دامنه نباشد).
+- پس از هر تغییر مهم در کد، حتماً `flutter clean` و سپس `flutter pub get` را اجرا کنید تا کش‌های قدیمی پاک شوند:
+  ```bash
+  flutter clean
+  flutter pub get
+  ```
+
+---
+
+### تست خروجی‌ها
+- **اندروید**: فایل APK را روی دستگاه خود نصب کنید یا از شبیه‌ساز استفاده کنید.
+- **وب**: برای تست نسخه وب محلی، می‌توانید از یک سرور ساده استفاده کنید:
+  ```bash
+  cd build/web
+  python -m http.server 8000
+  ```
+  سپس در مرورگر خود به `http://localhost:8000` مراجعه کنید.
+
+---
+
+**این پروژه در حال توسعه است و به طور رسمی منتشر نشده است**
