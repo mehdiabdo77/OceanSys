@@ -251,13 +251,13 @@ class _CustomerPageIditState extends State<CustomerPageIdit> {
                       },
                       style: MyDecorations.mainButtom.copyWith(
                         minimumSize: WidgetStatePropertyAll(Size(70, 35)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        child: Text(
-                          "ذخیره تغییرات",
-                          style: MyTextStyle.bottomstyle.copyWith(fontSize: 12),
+                        padding: WidgetStatePropertyAll(
+                          EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                         ),
+                      ),
+                      child: Text(
+                        "ذخیره تغییرات",
+                        style: MyTextStyle.bottomstyle.copyWith(fontSize: 12),
                       ),
                     ),
                   ],
