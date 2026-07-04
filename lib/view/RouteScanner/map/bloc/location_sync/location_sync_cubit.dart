@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:ocean_sys/cubit/location_sync/location_sync_state.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_state.dart';
 import 'package:ocean_sys/data/repository/location_repository.dart';
 import 'package:ocean_sys/model/point_model.dart';
 

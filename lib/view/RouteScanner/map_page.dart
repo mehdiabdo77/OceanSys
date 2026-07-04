@@ -6,8 +6,8 @@ import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_state.dart';
-import 'package:ocean_sys/cubit/location_sync/location_sync_bloc.dart';
-import 'package:ocean_sys/cubit/location_sync/location_sync_state.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_bloc.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_state.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -17,10 +17,13 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  late final LocationSyncBloc _locationSyncBloc;
+
   @override
   void initState() {
     super.initState();
-    context.read<LocationSyncBloc>().add(
+    _locationSyncBloc = context.read<LocationSyncBloc>();
+    _locationSyncBloc.add(
       StartFastUpdates(
         androidInterval: const Duration(seconds: 5),
         distanceFilter: 0,
@@ -30,7 +33,7 @@ class _MapPageState extends State<MapPage> {
 
   @override
   void dispose() {
-    context.read<LocationSyncBloc>().add(StopFastUpdates());
+    _locationSyncBloc.add(StopFastUpdates());
     super.dispose();
   }
 
@@ -56,85 +59,86 @@ class _MapPageState extends State<MapPage> {
 
                   // Customer markers
                   if (customerState is CustomerInfoLoaded) {
+                    final customerPoints = context
+                        .read<CustomerInfoBloc>()
+                        .getPoints(customerState.customers);
+
+                    // Debug print customer points
+                    print(
+                      "=== Customer Markers (${customerPoints.length}) ===",
+                    );
+                    for (var point in customerPoints) {
+                      print("- ${point['name']}: ${point['location']}");
+                    }
+
                     markers.addAll(
-                      context
-                          .read<CustomerInfoBloc>()
-                          .getPoints(customerState.customers)
-                          .map((point) {
-                            final markerColor = point['isvusit'] == 1
-                                ? SolidColors.pointVisitColor
-                                : point['isvusit'] == 2
-                                ? SolidColors.pointNoSendEndJab
-                                : SolidColors.pointNoVisitColor;
-                            return Marker(
-                              point: point['location'],
-                              width: 140,
-                              height: 70,
-                              alignment: Alignment.topCenter,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
+                      customerPoints.map((point) {
+                        final markerColor = point['isvusit'] == 1
+                            ? SolidColors.pointVisitColor
+                            : point['isvusit'] == 2
+                            ? SolidColors.pointNoSendEndJab
+                            : SolidColors.pointNoVisitColor;
+                        return Marker(
+                          point: point['location'],
+                          width: 50,
+                          height: 70,
+                          alignment: Alignment.topCenter,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Stack(
+                                alignment: Alignment.center,
                                 children: [
-                                  Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        color: markerColor,
-                                        size: 40,
-                                        shadows: [
-                                          Shadow(
-                                            color: Colors.black.withOpacity(
-                                              0.2,
-                                            ),
-                                            blurRadius: 6,
-                                            offset: const Offset(0, 3),
-                                          ),
-                                        ],
-                                      ),
-                                      Positioned(
-                                        top: 8,
-                                        child: Icon(
-                                          Icons.storefront,
-                                          color: Colors.white,
-                                          size: 16,
-                                        ),
-                                      ),
-                                    ],
+                                  Icon(
+                                    Icons.location_on,
+                                    color: markerColor,
+                                    size: 40,
+                                    shadows: const [],
                                   ),
-                                  const SizedBox(height: 4),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                      vertical: 6,
-                                    ),
-                                    decoration: BoxDecoration(
+                                  Positioned(
+                                    top: 8,
+                                    child: Icon(
+                                      Icons.storefront,
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.1),
-                                          blurRadius: 8,
-                                          offset: const Offset(0, 3),
-                                        ),
-                                      ],
-                                    ),
-                                    child: Text(
-                                      point['name'],
-                                      style: MyTextStyle.lebelMap,
-                                      textAlign: TextAlign.center,
+                                      size: 16,
                                     ),
                                   ),
                                 ],
                               ),
-                            );
-                          })
-                          .toList(),
+                              const SizedBox(height: 4),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Text(
+                                  point['name'],
+                                  style: MyTextStyle.lebelMap,
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
                     );
                   }
 
                   // User marker
                   final hasUser =
                       locationState.lat != 0.0 && locationState.long != 0.0;
+
+                  // Debug print user marker
+                  print("=== User Marker ===");
+                  print("- hasUser: $hasUser");
+                  print(
+                    "- location: (${locationState.lat}, ${locationState.long})",
+                  );
+
                   if (hasUser) {
                     markers.add(
                       Marker(
@@ -172,6 +176,12 @@ class _MapPageState extends State<MapPage> {
                         ),
                       ),
                     );
+                  }
+
+                  // Debug print all markers
+                  print("=== Total Markers: ${markers.length} ===");
+                  for (var i = 0; i < markers.length; i++) {
+                    print("- Marker $i: ${markers[i].point}");
                   }
 
                   return MarkerLayer(markers: markers);

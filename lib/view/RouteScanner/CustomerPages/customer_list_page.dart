@@ -6,8 +6,8 @@ import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_event.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_state.dart';
-import 'package:ocean_sys/cubit/location_sync/location_sync_bloc.dart';
-import 'package:ocean_sys/cubit/location_sync/location_sync_state.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_bloc.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_state.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page.dart';
 
 class CustomerListPage extends StatefulWidget {

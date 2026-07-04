@@ -31,14 +31,17 @@ class CustomerInfoBloc extends Bloc<CustomerInfoEvent, CustomerInfoState> {
       if (customer.latitude != null &&
           customer.longitude != null &&
           customer.address != null) {
-        customerPoints.add({
-          'name': customer.customerBoard,
-          'isvusit': customer.visited,
-          'location': LatLng(
-            double.tryParse(customer.latitude.toString()) ?? 0.0,
-            double.tryParse(customer.longitude.toString()) ?? 0.0,
-          ),
-        });
+        final lat = double.tryParse(customer.latitude.toString());
+        final lng = double.tryParse(customer.longitude.toString());
+
+        // Only add if both lat and lng are valid (not 0,0)
+        if (lat != null && lng != null && lat != 0.0 && lng != 0.0) {
+          customerPoints.add({
+            'name': customer.customerBoard,
+            'isvusit': customer.visited,
+            'location': LatLng(lat, lng),
+          });
+        }
       }
     }
     return customerPoints;
