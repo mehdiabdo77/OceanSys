@@ -4,8 +4,9 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
-import 'package:ocean_sys/cubit/login/login_cubit.dart';
-import 'package:ocean_sys/cubit/login/login_state.dart';
+import 'package:ocean_sys/view/auth/cubit/login_cubit.dart';
+import 'package:ocean_sys/view/auth/cubit/login_state.dart';
+
 import 'package:ocean_sys/view/auth/login_page.dart';
 import 'package:ocean_sys/view/main/menu_page.dart';
 

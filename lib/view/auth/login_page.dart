@@ -4,8 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
-import 'package:ocean_sys/cubit/login/login_cubit.dart';
-import 'package:ocean_sys/cubit/login/login_state.dart';
+import 'package:ocean_sys/view/auth/cubit/login_cubit.dart';
+import 'package:ocean_sys/view/auth/cubit/login_state.dart';
 import 'package:ocean_sys/view/main/menu_page.dart';
 
 class LoginPage extends StatefulWidget {

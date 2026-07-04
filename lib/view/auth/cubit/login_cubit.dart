@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/data/api_constant.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
-import 'package:ocean_sys/cubit/login/login_state.dart';
 import 'package:ocean_sys/data/services/dio_service.dart';
+import 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
