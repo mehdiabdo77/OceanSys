@@ -28,19 +28,15 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Future.delayed(const Duration(seconds: 3)).then((value) async {
       if (!mounted) return;
-      if (storage.read(StorageKey.username) == null) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => BlocProvider.value(
-              value: context.read<LoginCubit>(),
-              child: const LoginPage(),
-            ),
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+            value: context.read<LoginCubit>(),
+            child: const LoginPage(),
           ),
-        );
-      } else {
-        await context.read<LoginCubit>().login();
-      }
+        ),
+      );
     });
   }
 

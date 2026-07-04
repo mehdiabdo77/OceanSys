@@ -39,6 +39,10 @@ android {
     }
 }
 
+dependencies {
+    implementation("androidx.fragment:fragment:1.8.2")
+}
+
 flutter {
     source = "../.."
 }
