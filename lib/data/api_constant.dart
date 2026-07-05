@@ -8,6 +8,11 @@ class ApiUrlConstant {
       GetStorage().read(StorageKey.serverAddress) ?? "http://192.168.1.2:8282/";
   static String login = "${baseUrl}token";
   static String userdata = "${baseUrl}getUserdata";
+  static String getAllUserdata = "${baseUrl}getAllUserdata";
+  static String getRoleList = "${baseUrl}get_role_list";
+  static String getPermissionList = "${baseUrl}get_permission_list";
+  static String editPermissionUser = "${baseUrl}edit_permission_user";
+  static String editPermissionRole = "${baseUrl}edit_permission_role";
   static String coustmoerinfo = "${baseUrl}getCustomerData";
   static String disactiveCode = "${baseUrl}disActiveCustomer";
   static String productCategory = "${baseUrl}ProductCategory";

@@ -1,6 +1,7 @@
 import 'package:ocean_sys/model/UserModel/Permission_model.dart';
 
 class UserModel {
+  int? id;
   String? user;
   String? firstName;
   String? lastName;
@@ -10,6 +11,7 @@ class UserModel {
   UserModel();
 
   UserModel.fromjeson(Map<String, dynamic> element) {
+    id = element['id'];
     user = element['username'];
     firstName = element['first_name'];
     lastName = element['last_name'];

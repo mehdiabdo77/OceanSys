@@ -114,6 +114,37 @@ class DioService {
           );
         });
   }
+
+  /// ارسال PUT به صورت JSON
+  Future<dynamic> putJson(
+    List<dynamic> data,
+    String url, {
+    Options? options,
+  }) async {
+    return await dio
+        .put(
+          url,
+          options:
+              options ??
+              Options(responseType: ResponseType.json, method: "PUT"),
+          data: data,
+        )
+        .then((value) {
+          debugPrint(value.toString());
+          return value;
+        })
+        .catchError((err) {
+          if (err is DioError) {
+            return _handleError(err);
+          }
+          // خطای که ناشناخته است و تو لیستم نیست
+          return Response(
+            requestOptions: RequestOptions(path: url),
+            statusCode: -1,
+            statusMessage: 'خطای غیرمنتظره: ${err.toString()}',
+          );
+        });
+  }
 }
 
 String _getErrorMessage(int? statusCode) {

@@ -8,6 +8,8 @@ import 'package:ocean_sys/gen/assets.gen.dart';
 import 'package:ocean_sys/data/repository/customer_repository.dart';
 import 'package:ocean_sys/view/widgets/menuWidget.dart';
 import 'package:ocean_sys/view/RouteScanner/map/route_scanner.dart';
+import 'package:ocean_sys/view/permissions/permissions_page.dart';
+import 'package:ocean_sys/view/permissions/cubit/permission_cubit.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -107,9 +109,29 @@ class _MenuPageState extends State<MenuPage> {
                 ))
                   MenuItem(
                     svgPath: Assets.icons.competitorPrices.path,
-                    title: "Competitor Prices",
-                    subtitle: "استعلام قیمت رقبا",
+                    title: 'Competitor Prices',
+                    subtitle: 'استعلام قیمت رقبا',
                     onTap: () {},
+                  ),
+                if (userBloc.checkPermission(
+                  PermissionConstans.userManage,
+                  state.user,
+                ))
+                  MenuItem(
+                    svgPath: Assets.icons.userManager.path,
+                    title: 'User Permissions',
+                    subtitle: 'مدیریت دسترسی‌ها',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BlocProvider(
+                            create: (context) => PermissionCubit()..loadData(),
+                            child: const PermissionsPage(),
+                          ),
+                        ),
+                      );
+                    },
                   ),
               ],
             );
