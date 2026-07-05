@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ocean_sys/cubit/main/main_state.dart';
+import 'package:ocean_sys/view/main/bloc/main_state.dart';
 
 abstract class MainEvent {}
 
@@ -13,10 +13,7 @@ class MainBloc extends Bloc<MainEvent, MainState> {
     on<MainChangePage>(_onChangePage);
   }
 
-  void _onChangePage(
-    MainChangePage event,
-    Emitter<MainState> emit,
-  ) {
+  void _onChangePage(MainChangePage event, Emitter<MainState> emit) {
     emit(state.copyWith(currentIndex: event.index));
   }
 }

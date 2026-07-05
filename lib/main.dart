@@ -8,7 +8,7 @@ import 'package:ocean_sys/cubit/user/user_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_edit/customer_edit_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_bloc.dart';
-import 'package:ocean_sys/cubit/main/main_bloc.dart';
+import 'package:ocean_sys/view/main/bloc/main_bloc.dart';
 import 'package:ocean_sys/data/repository/customer_repository.dart';
 import 'package:ocean_sys/data/repository/user_repository.dart';
 import 'package:ocean_sys/data/repository/customer_info_repository.dart';
