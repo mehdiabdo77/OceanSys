@@ -124,24 +124,31 @@ class PermissionRepository {
         method: 'PUT',
       );
       final data = [
-        {
-          "permissions": permissions,
-          "identifier": userId,
-        }
+        {"permissions": permissions, "identifier": userId},
       ];
+      print(
+        "Sending editUserPermissions request to: ${ApiUrlConstant.editPermissionUser}",
+      );
+      print("Request data: $data");
       final response = await _dioService.putJson(
         data,
         ApiUrlConstant.editPermissionUser,
         options: options,
       );
+      print("Response status code: ${response.statusCode}");
+      print("Response data: ${response.data}");
       if (response.statusCode == 200) {
         Get.snackbar('موفق', 'دسترسی‌ها با موفقیت ویرایش شد');
         return true;
       } else {
-        Get.snackbar('خطا', 'خطا در ویرایش دسترسی‌ها');
+        Get.snackbar(
+          'خطا',
+          'خطا در ویرایش دسترسی‌ها (کد: ${response.statusCode})',
+        );
         return false;
       }
     } catch (e) {
+      print("Error in editUserPermissions: $e");
       Get.snackbar('خطا', 'خطا در برقراری ارتباط با سرور: $e');
       return false;
     }
@@ -163,24 +170,31 @@ class PermissionRepository {
         method: 'PUT',
       );
       final data = [
-        {
-          "permissions": permissions,
-          "identifier": roleName,
-        }
+        {"permissions": permissions, "identifier": roleName},
       ];
+      print(
+        "Sending editRolePermissions request to: ${ApiUrlConstant.editPermissionRole}",
+      );
+      print("Request data: $data");
       final response = await _dioService.putJson(
         data,
         ApiUrlConstant.editPermissionRole,
         options: options,
       );
+      print("Response status code: ${response.statusCode}");
+      print("Response data: ${response.data}");
       if (response.statusCode == 200) {
         Get.snackbar('موفق', 'دسترسی‌های نقش با موفقیت ویرایش شد');
         return true;
       } else {
-        Get.snackbar('خطا', 'خطا در ویرایش دسترسی‌های نقش');
+        Get.snackbar(
+          'خطا',
+          'خطا در ویرایش دسترسی‌های نقش (کد: ${response.statusCode})',
+        );
         return false;
       }
     } catch (e) {
+      print("Error in editRolePermissions: $e");
       Get.snackbar('خطا', 'خطا در برقراری ارتباط با سرور: $e');
       return false;
     }

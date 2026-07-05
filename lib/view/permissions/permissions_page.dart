@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:ocean_sys/constans/my_color.dart';
-import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/model/UserModel/Permission_model.dart';
 import 'package:ocean_sys/model/UserModel/user_model.dart';
 import 'package:ocean_sys/model/permission_list_model.dart';
@@ -47,7 +45,7 @@ class _PermissionsPageState extends State<PermissionsPage>
       ),
       body: BlocBuilder<PermissionCubit, PermissionState>(
         builder: (context, state) {
-          if (state is PermissionLoading) {
+          if (state is PermissionLoading || state is PermissionUpdating) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is PermissionError) {
             return Center(
@@ -63,14 +61,23 @@ class _PermissionsPageState extends State<PermissionsPage>
                 ],
               ),
             );
-          } else if (state is PermissionLoaded) {
-            return TabBarView(
-              controller: _tabController,
-              children: [
-                UsersTab(users: state.users, permissions: state.permissions),
-                RolesTab(roles: state.roles, permissions: state.permissions),
-              ],
-            );
+          } else if (state is PermissionLoaded || state is PermissionUpdated) {
+            if (state is PermissionLoaded) {
+              return TabBarView(
+                controller: _tabController,
+                children: [
+                  UsersTab(users: state.users, permissions: state.permissions),
+                  RolesTab(roles: state.roles, permissions: state.permissions),
+                ],
+              );
+            } else {
+              // PermissionUpdated state, but we should be loading new data soon
+              return const Center(child: CircularProgressIndicator());
+            }
+          } else if (state is PermissionInitial) {
+            // Load initial data
+            context.read<PermissionCubit>().loadData();
+            return const Center(child: CircularProgressIndicator());
           }
           return const SizedBox();
         },
@@ -140,7 +147,7 @@ class UsersTab extends StatelessWidget {
           (p) => p.name == code,
           orElse: () => PermissionItemModel(hasAccess: 0, name: ''),
         )
-        ?.hasAccess;
+        .hasAccess;
     return perm == 1;
   }
 
@@ -193,7 +200,7 @@ class UsersTab extends StatelessWidget {
                     return const CircularProgressIndicator();
                   }
                   return ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       final List<Map<String, dynamic>> permList = [];
                       tempPermissions.forEach((code, hasAccess) {
                         permList.add({
@@ -202,11 +209,13 @@ class UsersTab extends StatelessWidget {
                         });
                       });
                       if (user.id != null) {
-                        cubit.updateUserPermissions(
+                        await cubit.updateUserPermissions(
                           userId: user.id!,
                           permissions: permList,
                         );
-                        Navigator.pop(dialogContext);
+                        if (dialogContext.mounted) {
+                          Navigator.pop(dialogContext);
+                        }
                       }
                     },
                     child: const Text('ذخیره'),
@@ -238,19 +247,50 @@ class RolesTab extends StatelessWidget {
           builder: (ctx) {
             return Card(
               margin: const EdgeInsets.only(bottom: 12),
-              child: ListTile(
+              child: ExpansionTile(
                 title: Text(role.name ?? ''),
                 subtitle: Text(role.description ?? ''),
-                trailing: IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: () => _showEditDialog(ctx, role, permissions),
-                ),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var perm in permissions)
+                          CheckboxListTile(
+                            title: Text(perm.name ?? ''),
+                            subtitle: Text(perm.description ?? ''),
+                            value: _hasPermission(role, perm.code ?? ''),
+                            onChanged: (value) {
+                              _showEditDialog(ctx, role, permissions);
+                            },
+                          ),
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () =>
+                              _showEditDialog(ctx, role, permissions),
+                          child: const Text('ویرایش دسترسی‌ها'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             );
           },
         );
       },
     );
+  }
+
+  bool _hasPermission(RoleModel role, String code) {
+    final perm = role.permission?.data
+        ?.firstWhere(
+          (p) => p.name == code,
+          orElse: () => PermissionItemModel(hasAccess: 0, name: ''),
+        )
+        .hasAccess;
+    return perm == 1;
   }
 
   void _showEditDialog(
@@ -262,7 +302,7 @@ class RolesTab extends StatelessWidget {
     final Map<String, bool> tempPermissions = {};
 
     for (var perm in allPermissions) {
-      tempPermissions[perm.code!] = false; // Default to false for roles
+      tempPermissions[perm.code!] = _hasPermission(role, perm.code!);
     }
 
     showDialog(
@@ -302,7 +342,7 @@ class RolesTab extends StatelessWidget {
                     return const CircularProgressIndicator();
                   }
                   return ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       final List<Map<String, dynamic>> permList = [];
                       tempPermissions.forEach((code, hasAccess) {
                         permList.add({
@@ -310,11 +350,13 @@ class RolesTab extends StatelessWidget {
                           'permission': code,
                         });
                       });
-                      cubit.updateRolePermissions(
+                      await cubit.updateRolePermissions(
                         roleName: role.name!,
                         permissions: permList,
                       );
-                      Navigator.pop(dialogContext);
+                      if (dialogContext.mounted) {
+                        Navigator.pop(dialogContext);
+                      }
                     },
                     child: const Text('ذخیره'),
                   );

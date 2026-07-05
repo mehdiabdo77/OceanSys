@@ -1,8 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocean_sys/data/repository/permission_repository.dart';
-import 'package:ocean_sys/model/UserModel/user_model.dart';
-import 'package:ocean_sys/model/permission_list_model.dart';
-import 'package:ocean_sys/model/role_model.dart';
 import 'permission_state.dart';
 
 class PermissionCubit extends Cubit<PermissionState> {
@@ -18,11 +15,13 @@ class PermissionCubit extends Cubit<PermissionState> {
       final permissions = await repository.getPermissions();
 
       if (users != null && roles != null && permissions != null) {
-        emit(PermissionLoaded(
-          users: users,
-          roles: roles,
-          permissions: permissions,
-        ));
+        emit(
+          PermissionLoaded(
+            users: users,
+            roles: roles,
+            permissions: permissions,
+          ),
+        );
       } else {
         emit(PermissionError("خطا در بارگذاری داده‌ها"));
       }
