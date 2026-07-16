@@ -7,4 +7,5 @@ class NamedRoute {
   static String homepage = "/homePage";
   static String mapPage = "/mapPage";
   static String customerPageIdit = "/customerPageIdit";
+  static String addUserPage = "/addUserPage";
 }

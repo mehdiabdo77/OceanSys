@@ -11,6 +11,7 @@ class ApiUrlConstant {
   static String getAllUserdata = "${baseUrl}getAllUserdata";
   static String getRoleList = "${baseUrl}get_role_list";
   static String getPermissionList = "${baseUrl}get_permission_list";
+  static String register = "${baseUrl}register";
   static String editPermissionUser = "${baseUrl}edit_permission_user";
   static String editPermissionRole = "${baseUrl}edit_permission_role";
   static String coustmoerinfo = "${baseUrl}getCustomerData";

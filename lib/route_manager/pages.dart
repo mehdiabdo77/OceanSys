@@ -7,6 +7,7 @@ import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page_idit.dart';
 import 'package:ocean_sys/view/RouteScanner/map/route_scanner.dart';
 import 'package:ocean_sys/view/RouteScanner/map_page.dart';
+import 'package:ocean_sys/view/add_user/add_user_page.dart';
 
 class Pages {
   Pages._();
@@ -19,5 +20,6 @@ class Pages {
     GetPage(name: NamedRoute.customerPage, page: () => CustomerPage()),
     GetPage(name: NamedRoute.customerPageIdit, page: () => CustomerPageIdit()),
     GetPage(name: NamedRoute.menuPage, page: () => MenuPage()),
+    GetPage(name: NamedRoute.addUserPage, page: () => AddUserPage()),
   ];
 }

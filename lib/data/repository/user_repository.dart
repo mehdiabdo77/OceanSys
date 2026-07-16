@@ -37,4 +37,66 @@ class UserRepository {
       return null;
     }
   }
+
+  Future<Map<String, dynamic>?> registerUser({
+    required String username,
+    required String firstName,
+    required String lastName,
+    required String password,
+    required bool isActive,
+    required String role,
+  }) async {
+    try {
+      final token = _storage.read(StorageKey.token);
+      if (token == null) {
+        print("Token not found");
+        return null;
+      }
+      final options = Options(
+        headers: {'Authorization': 'Bearer $token'},
+        responseType: ResponseType.json,
+        method: 'POST',
+      );
+      final data = {
+        "username": username,
+        "first_name": firstName,
+        "last_name": lastName,
+        "password": password,
+        "isactive": isActive,
+        "role": role,
+      };
+
+      final response = await _dioService.postJson(
+        data,
+        ApiUrlConstant.register,
+        options: options,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return {
+          "success": true,
+          "message": response.data['message'] ?? "کاربر با موفقیت ایجاد شد",
+        };
+      } else if (response.statusCode == 400 || response.statusCode == 422) {
+        // برای استخراج پیام ارور ۴۲۲
+        String errorMessage = "خطا در ثبت کاربر";
+        if (response.data != null && response.data['detail'] != null) {
+          if (response.data['detail'] is List) {
+            errorMessage = response.data['detail'][0]['msg'] ?? errorMessage;
+          } else {
+            errorMessage = response.data['detail'].toString();
+          }
+        }
+
+        return {"success": false, "message": errorMessage};
+      } else {
+        return {
+          "success": false,
+          "message": response.statusMessage ?? "خطای سرور",
+        };
+      }
+    } catch (e) {
+      return {"success": false, "message": 'خطا در برقراری ارتباط با سرور: $e'};
+    }
+  }
 }

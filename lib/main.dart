@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/view/auth/cubit/login_cubit.dart';
-
 import 'package:ocean_sys/cubit/user/user_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_edit/customer_edit_bloc.dart';
@@ -14,6 +13,7 @@ import 'package:ocean_sys/data/repository/user_repository.dart';
 import 'package:ocean_sys/data/repository/customer_info_repository.dart';
 import 'package:ocean_sys/data/repository/location_repository.dart';
 import 'package:ocean_sys/view/splash_screen.dart';
+import 'package:ocean_sys/route_manager/pages.dart';
 
 void main() async {
   await GetStorage.init();
@@ -56,6 +56,7 @@ class MyApp extends StatelessWidget {
         child: GetMaterialApp(
           locale: const Locale("fa"),
           debugShowCheckedModeBanner: false,
+          getPages: Pages.pages,
           home: const SplashScreen(),
           theme: ThemeData(
             fontFamily: "dona",

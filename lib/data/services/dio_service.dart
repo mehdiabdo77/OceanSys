@@ -22,6 +22,7 @@ class DioService {
     return Response(
       requestOptions: err.requestOptions,
       statusCode: err.response?.statusCode ?? -1,
+      data: err.response?.data,
       statusMessage: err.response == null
           ? "سرور در دسترس نیست"
           : _getErrorMessage(err.response?.statusCode),
