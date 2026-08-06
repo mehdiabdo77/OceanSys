@@ -1,3 +1,5 @@
+// dart format width=80
+
 /// GENERATED CODE - DO NOT MODIFY BY HAND
 /// *****************************************************
 ///  FlutterGen
@@ -5,7 +7,7 @@
 
 // coverage:ignore-file
 // ignore_for_file: type=lint
-// ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
+// ignore_for_file: deprecated_member_use,directives_ordering,implicit_dynamic_list_literal,unnecessary_import
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -27,6 +29,9 @@ class $AssetIconsGen {
   SvgGenImage get customerScan2 =>
       const SvgGenImage('asset/icons/customer_scan2.svg');
 
+  /// File path: asset/icons/route.svg
+  SvgGenImage get route => const SvgGenImage('asset/icons/route.svg');
+
   /// File path: asset/icons/store-add.svg
   SvgGenImage get storeAdd => const SvgGenImage('asset/icons/store-add.svg');
 
@@ -45,6 +50,7 @@ class $AssetIconsGen {
     competitorPrices,
     customerScan,
     customerScan2,
+    route,
     storeAdd,
     store,
     upload,
@@ -52,9 +58,7 @@ class $AssetIconsGen {
   ];
 }
 
-class Assets {
-  const Assets._();
-
+abstract final class Assets {
   static const $AssetIconsGen icons = $AssetIconsGen();
 }
 
@@ -84,6 +88,7 @@ class SvgGenImage {
     String? semanticsLabel,
     bool excludeFromSemantics = false,
     _svg.SvgTheme? theme,
+    _svg.ColorMapper? colorMapper,
     ColorFilter? colorFilter,
     Clip clipBehavior = Clip.hardEdge,
     @deprecated Color? color,
@@ -103,6 +108,7 @@ class SvgGenImage {
         assetBundle: bundle,
         packageName: package,
         theme: theme,
+        colorMapper: colorMapper,
       );
     }
     return _svg.SvgPicture(

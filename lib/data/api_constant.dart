@@ -21,4 +21,6 @@ class ApiUrlConstant {
   static String editCoustomerInfo = "${baseUrl}editcoustomerinfo";
   static String latAndLong = "${baseUrl}point";
   static String taskComplete = "${baseUrl}task_complete";
+  static String setRoute = "${baseUrl}set_rout";
+  static String deleteRoute = "${baseUrl}del_rout";
 }

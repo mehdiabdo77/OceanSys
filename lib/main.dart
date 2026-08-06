@@ -12,6 +12,8 @@ import 'package:ocean_sys/data/repository/customer_repository.dart';
 import 'package:ocean_sys/data/repository/user_repository.dart';
 import 'package:ocean_sys/data/repository/customer_info_repository.dart';
 import 'package:ocean_sys/data/repository/location_repository.dart';
+import 'package:ocean_sys/data/repository/route_repository.dart';
+import 'package:ocean_sys/view/route_manager/bloc/route_bloc.dart';
 import 'package:ocean_sys/view/splash_screen.dart';
 import 'package:ocean_sys/route_manager/pages.dart';
 
@@ -32,6 +34,7 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: (context) => UserRepository()),
         RepositoryProvider(create: (context) => CustomerInfoRepository()),
         RepositoryProvider(create: (context) => LocationRepository()),
+        RepositoryProvider(create: (context) => RouteRepository()),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -50,6 +53,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 LocationSyncBloc(context.read<LocationRepository>()),
+          ),
+          BlocProvider(
+            create: (context) => RouteBloc(context.read<RouteRepository>()),
           ),
           BlocProvider(create: (context) => MainBloc()),
         ],

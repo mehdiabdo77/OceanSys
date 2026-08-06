@@ -8,6 +8,7 @@ import 'package:ocean_sys/cubit/user/user_state.dart';
 import 'package:ocean_sys/gen/assets.gen.dart';
 import 'package:ocean_sys/data/repository/customer_repository.dart';
 import 'package:ocean_sys/route_manager/names.dart';
+import 'package:ocean_sys/view/route_manager/route_manager.dart';
 import 'package:ocean_sys/view/widgets/menuWidget.dart';
 import 'package:ocean_sys/view/RouteScanner/map/route_scanner.dart';
 import 'package:ocean_sys/view/permissions/permissions_page.dart';
@@ -57,6 +58,23 @@ class _MenuPageState extends State<MenuPage> {
             return GridView.count(
               crossAxisCount: 2,
               children: [
+                if (userBloc.checkPermission(
+                  PermissionConstans.customerScan,
+                  state.user,
+                ))
+                  MenuItem(
+                    svgPath: Assets.icons.route.path,
+                    title: "Route Manager",
+                    subtitle: " اضافه کردن بازرسی مسیر ",
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const RouteManager(),
+                        ),
+                      );
+                    },
+                  ),
                 if (userBloc.checkPermission(
                   PermissionConstans.customerScan,
                   state.user,

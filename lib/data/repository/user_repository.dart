@@ -99,4 +99,31 @@ class UserRepository {
       return {"success": false, "message": 'خطا در برقراری ارتباط با سرور: $e'};
     }
   }
+
+  Future<List<UserModel>> getAllUsers() async {
+    try {
+      final token = _storage.read(StorageKey.token);
+      if (token == null) return [];
+
+      final options = Options(
+        headers: {'Authorization': 'Bearer $token'},
+        responseType: ResponseType.json,
+        method: 'GET',
+      );
+
+      final response = await _dioService.getMetode(
+        ApiUrlConstant.getAllUserdata,
+        options: options,
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = response.data;
+        return data.map((e) => UserModel.fromjeson(e)).toList();
+      }
+      return [];
+    } catch (e) {
+      print("Error fetching users: $e");
+      return [];
+    }
+  }
 }
