@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/my_color.dart';
-import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/model/RouteScannerModel/customer_info_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/storage_const.dart';
 import 'package:ocean_sys/data/api_constant.dart';
+import 'package:ocean_sys/data/repository/user_repository.dart';
 import 'package:ocean_sys/data/services/dio_service.dart';
 import 'package:ocean_sys/model/UserModel/user_model.dart';
 import 'package:ocean_sys/model/permission_list_model.dart';
@@ -11,6 +12,7 @@ import 'package:ocean_sys/model/role_model.dart';
 class PermissionRepository {
   final DioService _dioService = DioService();
   final GetStorage _storage = GetStorage();
+  final UserRepository _userRepository = UserRepository();
 
   Future<List<UserModel>?> getAllUsers() async {
     try {
@@ -198,5 +200,15 @@ class PermissionRepository {
       Get.snackbar('خطا', 'خطا در برقراری ارتباط با سرور: $e');
       return false;
     }
+  }
+
+  Future<Map<String, dynamic>?> updateUserStatus({
+    required String username,
+    required bool isActive,
+  }) async {
+    return await _userRepository.updateUserStatus(
+      username: username,
+      isActive: isActive,
+    );
   }
 }

@@ -126,4 +126,61 @@ class UserRepository {
       return [];
     }
   }
+
+  Future<Map<String, dynamic>?> updateUserStatus({
+    required String username,
+    required bool isActive,
+  }) async {
+    try {
+      final token = _storage.read(StorageKey.token);
+      if (token == null) {
+        return {
+          "success": false,
+          "message": "توکن یافت نشد",
+        };
+      }
+      final options = Options(
+        headers: {'Authorization': 'Bearer $token'},
+        responseType: ResponseType.json,
+        method: 'PATCH',
+      );
+
+      final url = ApiUrlConstant.updateUserStatus(username);
+      final response = await _dioService.patchJson(
+        url,
+        queryParameters: {'is_active': isActive},
+        options: options,
+      );
+
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        return {
+          "success": true,
+          "message": response.data?['message'] ??
+              (isActive ? "کاربر با موفقیت فعال شد" : "کاربر با موفقیت غیرفعال شد"),
+        };
+      } else if (response.statusCode == 400 || response.statusCode == 422) {
+        String errorMessage = "خطا در تغییر وضعیت کاربر";
+        if (response.data != null && response.data['detail'] != null) {
+          if (response.data['detail'] is List) {
+            errorMessage = response.data['detail'][0]['msg'] ?? errorMessage;
+          } else {
+            errorMessage = response.data['detail'].toString();
+          }
+        }
+        return {"success": false, "message": errorMessage};
+      } else {
+        return {
+          "success": false,
+          "message": response.statusMessage ?? "خطای سرور",
+        };
+      }
+    } catch (e) {
+      return {
+        "success": false,
+        "message": 'خطا در برقراری ارتباط با سرور: $e'
+      };
+    }
+  }
 }

@@ -135,16 +135,47 @@ class DioService {
           return value;
         })
         .catchError((err) {
-          if (err is DioError) {
-            return _handleError(err);
-          }
-          // خطای که ناشناخته است و تو لیستم نیست
-          return Response(
-            requestOptions: RequestOptions(path: url),
-            statusCode: -1,
-            statusMessage: 'خطای غیرمنتظره: ${err.toString()}',
-          );
-        });
+      if (err is DioError) {
+        return _handleError(err);
+      }
+      // خطای که ناشناخته است و تو لیستم نیست
+      return Response(
+        requestOptions: RequestOptions(path: url),
+        statusCode: -1,
+        statusMessage: 'خطای غیرمنتظره: ${err.toString()}',
+      );
+    });
+  }
+
+  /// ارسال PATCH به صورت JSON
+  Future<dynamic> patchJson(
+    String url, {
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+  }) async {
+    return await dio
+        .patch(
+          url,
+          options:
+              options ??
+              Options(responseType: ResponseType.json, method: "PATCH"),
+          queryParameters: queryParameters,
+        )
+        .then((value) {
+          debugPrint(value.toString());
+          return value;
+        })
+        .catchError((err) {
+      if (err is DioError) {
+        return _handleError(err);
+      }
+      // خطای که ناشناخته است و تو لیستم نیست
+      return Response(
+        requestOptions: RequestOptions(path: url),
+        statusCode: -1,
+        statusMessage: 'خطای غیرمنتظره: ${err.toString()}',
+      );
+    });
   }
 }
 

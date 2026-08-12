@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
 import 'package:ocean_sys/constans/permission_constans.dart';
 import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/cubit/user/user_bloc.dart';
 import 'package:ocean_sys/cubit/user/user_state.dart';
 import 'package:ocean_sys/gen/assets.gen.dart';
 import 'package:ocean_sys/data/repository/customer_repository.dart';
-import 'package:ocean_sys/route_manager/names.dart';
+import 'package:ocean_sys/view/manage%20_user/user_manager.dart';
 import 'package:ocean_sys/view/route_manager/route_manager.dart';
 import 'package:ocean_sys/view/widgets/menuWidget.dart';
 import 'package:ocean_sys/view/RouteScanner/map/route_scanner.dart';
 import 'package:ocean_sys/view/permissions/permissions_page.dart';
 import 'package:ocean_sys/view/permissions/cubit/permission_cubit.dart';
-import 'package:ocean_sys/view/add_user/add_user_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -116,7 +114,7 @@ class _MenuPageState extends State<MenuPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const AddUserPage(),
+                          builder: (context) => const UserManager(),
                         ),
                       );
                     },

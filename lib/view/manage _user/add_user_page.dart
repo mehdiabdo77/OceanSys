@@ -6,7 +6,7 @@ import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/data/repository/permission_repository.dart';
 import 'package:ocean_sys/data/repository/user_repository.dart';
-import 'package:ocean_sys/view/add_user/bloc/add_user_bloc.dart';
+import 'package:ocean_sys/view/manage%20_user/bloc/add_user_bloc.dart';
 
 class AddUserPage extends StatelessWidget {
   const AddUserPage({Key? key}) : super(key: key);

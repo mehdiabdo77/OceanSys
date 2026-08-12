@@ -23,4 +23,7 @@ class ApiUrlConstant {
   static String taskComplete = "${baseUrl}task_complete";
   static String setRoute = "${baseUrl}set_rout";
   static String deleteRoute = "${baseUrl}del_rout";
+
+  static String updateUserStatus(String username) =>
+      "${baseUrl}${username}/status";
 }

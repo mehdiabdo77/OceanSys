@@ -29,3 +29,8 @@ class PermissionError extends PermissionState {
 class PermissionUpdating extends PermissionState {}
 
 class PermissionUpdated extends PermissionState {}
+
+class UserStatusUpdated extends PermissionState {
+  final String message;
+  UserStatusUpdated(this.message);
+}
