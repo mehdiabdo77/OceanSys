@@ -13,16 +13,17 @@ class _DialogPersianCalendarState extends State<DialogPersianCalendar> {
   late int _selectedJalaliYear;
   late int _selectedJalaliMonth;
   late int _selectedJalaliDay;
-  late DateTime _gregorianDate; // ذخیره تاریخ میلادی انتخاب شده
+  late DateTime _selectedGregorianDate;
 
   @override
   void initState() {
     super.initState();
-    var nowJalali = _toJalali(widget.initialDate ?? DateTime.now());
-    _selectedJalaliYear = nowJalali[0];
-    _selectedJalaliMonth = nowJalali[1];
-    _selectedJalaliDay = nowJalali[2];
-    _gregorianDate = widget.initialDate ?? DateTime.now();
+    DateTime initialDateTime = widget.initialDate ?? DateTime.now();
+    var jalaliDate = _toJalali(initialDateTime);
+    _selectedJalaliYear = jalaliDate[0];
+    _selectedJalaliMonth = jalaliDate[1];
+    _selectedJalaliDay = jalaliDate[2];
+    _selectedGregorianDate = initialDateTime;
   }
 
   List<int> _toJalali(DateTime dt) {
@@ -182,7 +183,7 @@ class _DialogPersianCalendarState extends State<DialogPersianCalendar> {
                 }
 
                 // بروزرسانی تاریخ میلادی متناسب با تاریخ شمسی جدید
-                _gregorianDate = _toGregorian(
+                _selectedGregorianDate = _toGregorian(
                   _selectedJalaliYear,
                   _selectedJalaliMonth,
                   _selectedJalaliDay,
@@ -216,7 +217,7 @@ class _DialogPersianCalendarState extends State<DialogPersianCalendar> {
                 }
 
                 // بروزرسانی تاریخ میلادی متناسب با تاریخ شمسی جدید
-                _gregorianDate = _toGregorian(
+                _selectedGregorianDate = _toGregorian(
                   _selectedJalaliYear,
                   _selectedJalaliMonth,
                   _selectedJalaliDay,
@@ -265,7 +266,7 @@ class _DialogPersianCalendarState extends State<DialogPersianCalendar> {
                     setState(() {
                       _selectedJalaliDay = day;
                       // بروزرسانی تاریخ میلادی متناسب با روز شمسی انتخاب شده
-                      _gregorianDate = _toGregorian(
+                      _selectedGregorianDate = _toGregorian(
                         _selectedJalaliYear,
                         _selectedJalaliMonth,
                         _selectedJalaliDay,
@@ -302,15 +303,23 @@ class _DialogPersianCalendarState extends State<DialogPersianCalendar> {
         ),
         ElevatedButton(
           onPressed: () {
-            // خروجی میلادی با فرمت YYYY-MM-DD
-            String formattedMonth = _gregorianDate.month.toString().padLeft(
+            String formattedMonth = _selectedGregorianDate.month
+                .toString()
+                .padLeft(2, '0');
+            String formattedDay = _selectedGregorianDate.day.toString().padLeft(
               2,
               '0',
             );
-            String formattedDay = _gregorianDate.day.toString().padLeft(2, '0');
-            String dateStr =
-                '${_gregorianDate.year}-$formattedMonth-$formattedDay';
-            Navigator.of(context).pop(dateStr);
+            String gregorianStr =
+                '${_selectedGregorianDate.year}-$formattedMonth-$formattedDay';
+
+            String jMonth = _selectedJalaliMonth.toString().padLeft(2, '0');
+            String jDay = _selectedJalaliDay.toString().padLeft(2, '0');
+            String jalaliStr = '$_selectedJalaliYear/$jMonth/$jDay';
+
+            Navigator.of(
+              context,
+            ).pop({'jalali': jalaliStr, 'gregorian': gregorianStr});
           },
           child: const Text('انتخاب'),
         ),

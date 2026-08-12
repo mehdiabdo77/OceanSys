@@ -24,6 +24,7 @@ class _RouteAddPageState extends State<RouteAddPage> {
   final _regionController = TextEditingController();
   final _dateController = TextEditingController();
   final _userIdController = TextEditingController();
+  String _visitDateGregorian = '';
 
   @override
   void dispose() {
@@ -89,14 +90,18 @@ class _RouteAddPageState extends State<RouteAddPage> {
                 controller: _dateController,
                 readOnly: true,
                 onTap: () async {
-                  final pickedDate = await showDialog<String>(
+                  final result = await showDialog<Map<String, String>>(
                     context: context,
                     builder: (context) => const DialogPersianCalendar(),
                   );
-                  if (pickedDate != null) {
-                    _dateController.text = pickedDate;
+                  if (result != null) {
+                    _dateController.text =
+                        result['jalali']!; // نمایش شمسی به کاربر
+                    _visitDateGregorian =
+                        result['gregorian']!; // برای ارسال به API
                   }
                 },
+
                 style: MyTextStyle.textBlack16,
                 decoration: MyDecorations.inputDecoration.copyWith(
                   labelText: 'تاریخ بازدید (YYYY-MM-DD)',
@@ -154,7 +159,7 @@ class _RouteAddPageState extends State<RouteAddPage> {
                           route: _routeController.text,
                           area: _areaController.text,
                           region: _regionController.text,
-                          visitDate: _dateController.text,
+                          visitDate: _visitDateGregorian,
                           userId: int.tryParse(_userIdController.text) ?? 0,
                         );
                         context.read<RouteBloc>().add(RouteAddSubmitted(route));
