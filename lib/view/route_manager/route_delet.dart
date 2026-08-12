@@ -133,7 +133,7 @@ class _RouteDeletePageState extends State<RouteDeletePage> {
                           area: _areaController.text,
                           region: _regionController.text,
                           visitDate: _dateController.text,
-                          userId: int.parse(_userIdController.text),
+                          userId: int.tryParse(_userIdController.text) ?? 0,
                         );
                         context.read<RouteBloc>().add(
                           RouteDeleteSubmitted(route),

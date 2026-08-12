@@ -8,6 +8,7 @@ import 'package:ocean_sys/view/route_manager/bloc/route_bloc.dart';
 import 'package:ocean_sys/view/route_manager/bloc/route_event.dart';
 import 'package:ocean_sys/view/route_manager/bloc/route_state.dart';
 import 'package:ocean_sys/view/route_manager/widget/dialog_search_user.dart';
+import 'package:ocean_sys/view/route_manager/widget/dialog_persian_calendar.dart';
 
 class RouteAddPage extends StatefulWidget {
   const RouteAddPage({super.key});
@@ -48,10 +49,13 @@ class _RouteAddPageState extends State<RouteAddPage> {
               const SizedBox(height: 20),
               TextFormField(
                 controller: _routeController,
+
                 decoration: MyDecorations.inputDecoration.copyWith(
                   labelText: 'نام مسیر',
                   prefixIcon: const Icon(Icons.route),
                 ),
+                style: MyTextStyle.textBlack16,
+
                 validator: (value) => value == null || value.isEmpty
                     ? 'نام مسیر الزامی است'
                     : null,
@@ -60,9 +64,11 @@ class _RouteAddPageState extends State<RouteAddPage> {
               TextFormField(
                 controller: _areaController,
                 decoration: MyDecorations.inputDecoration.copyWith(
-                  labelText: 'محدوده',
+                  labelText: 'ناحیه',
                   prefixIcon: const Icon(Icons.map),
                 ),
+                style: MyTextStyle.textBlack16,
+
                 validator: (value) =>
                     value == null || value.isEmpty ? 'محدوده الزامی است' : null,
               ),
@@ -70,18 +76,32 @@ class _RouteAddPageState extends State<RouteAddPage> {
               TextFormField(
                 controller: _regionController,
                 decoration: MyDecorations.inputDecoration.copyWith(
-                  labelText: 'منطقه',
+                  labelText: 'محدوده',
                   prefixIcon: const Icon(Icons.location_on),
                 ),
+                style: MyTextStyle.textBlack16,
+
                 validator: (value) =>
                     value == null || value.isEmpty ? 'منطقه الزامی است' : null,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _dateController,
+                readOnly: true,
+                onTap: () async {
+                  final pickedDate = await showDialog<String>(
+                    context: context,
+                    builder: (context) => const DialogPersianCalendar(),
+                  );
+                  if (pickedDate != null) {
+                    _dateController.text = pickedDate;
+                  }
+                },
+                style: MyTextStyle.textBlack16,
                 decoration: MyDecorations.inputDecoration.copyWith(
                   labelText: 'تاریخ بازدید (YYYY-MM-DD)',
                   prefixIcon: const Icon(Icons.calendar_today),
+                  hintStyle: MyTextStyle.textBlack16,
                 ),
                 validator: (value) =>
                     value == null || value.isEmpty ? 'تاریخ الزامی است' : null,
@@ -99,9 +119,11 @@ class _RouteAddPageState extends State<RouteAddPage> {
                     _userIdController.text = user.id.toString();
                   }
                 },
+                style: MyTextStyle.textBlack16,
                 decoration: MyDecorations.inputDecoration.copyWith(
                   labelText: 'انتخاب کاربر (شناسه)',
                   prefixIcon: const Icon(Icons.person_search),
+                  hintStyle: MyTextStyle.textBlack16,
                 ),
                 validator: (value) => value == null || value.isEmpty
                     ? 'لطفا یک کاربر انتخاب کنید'
@@ -133,7 +155,7 @@ class _RouteAddPageState extends State<RouteAddPage> {
                           area: _areaController.text,
                           region: _regionController.text,
                           visitDate: _dateController.text,
-                          userId: int.parse(_userIdController.text),
+                          userId: int.tryParse(_userIdController.text) ?? 0,
                         );
                         context.read<RouteBloc>().add(RouteAddSubmitted(route));
                       }

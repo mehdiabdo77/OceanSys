@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:ocean_sys/constans/decrations.dart';
 import 'package:ocean_sys/constans/text_style.dart';
 import 'package:ocean_sys/data/repository/user_repository.dart';
@@ -86,14 +88,20 @@ class _DialogSearchUserState extends State<DialogSearchUser> {
                         ),
                       ),
                       subtitle: Text(
-                        "نام کاربری: ${user.user ?? ''}",
+                        "نام کاربری: ${user.user ?? ''} - شناسه: ${user.id ?? 'ندارد'}",
                         style: MyTextStyle.caption,
                       ),
                       trailing: Text(
-                        "ID: ${user.id}",
+                        "ID: ${user.id ?? 0}",
                         style: MyTextStyle.caption,
                       ),
-                      onTap: () => Navigator.pop(context, user),
+                      onTap: () {
+                        if (user.id != null) {
+                          Navigator.pop(context, user);
+                        } else {
+                          Get.snackbar("خطا", "این کاربر شناسه عددی ندارد");
+                        }
+                      },
                     );
                   },
                 ),
