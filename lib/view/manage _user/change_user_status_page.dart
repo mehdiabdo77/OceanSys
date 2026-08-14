@@ -42,13 +42,6 @@ class _ChangeUserStatusViewState extends State<ChangeUserStatusView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SolidColors.homepage,
-      appBar: AppBar(
-        title: Text('تغییر وضعیت کاربر', style: MyTextStyle.appBarStyle),
-        backgroundColor: SolidColors.appBorColor,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: SolidColors.iconmain),
-      ),
       body: BlocConsumer<PermissionCubit, PermissionState>(
         listener: (context, state) {
           if (state is UserStatusUpdated) {

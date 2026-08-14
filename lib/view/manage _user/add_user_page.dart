@@ -91,13 +91,6 @@ class _AddUserViewState extends State<AddUserView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: SolidColors.homepage,
-      appBar: AppBar(
-        title: Text('ایجاد کاربر جدید', style: MyTextStyle.appBarStyle),
-        backgroundColor: SolidColors.appBorColor,
-        elevation: 0,
-        centerTitle: true,
-        iconTheme: const IconThemeData(color: SolidColors.iconmain),
-      ),
       body: BlocConsumer<AddUserBloc, AddUserState>(
         listener: (context, state) {
           if (state is AddUserSuccess) {
