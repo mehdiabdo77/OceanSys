@@ -34,3 +34,8 @@ class UserStatusUpdated extends PermissionState {
   final String message;
   UserStatusUpdated(this.message);
 }
+
+class UserRoleUpdated extends PermissionState {
+  final String message;
+  UserRoleUpdated(this.message);
+}

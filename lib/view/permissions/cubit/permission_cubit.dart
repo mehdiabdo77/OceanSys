@@ -92,4 +92,25 @@ class PermissionCubit extends Cubit<PermissionState> {
       emit(PermissionError("خطا در تغییر وضعیت کاربر: $e"));
     }
   }
+
+  Future<void> updateUserRole({
+    required String username,
+    required String roleName,
+  }) async {
+    emit(PermissionUpdating());
+    try {
+      final result = await repository.updateUserRole(
+        username: username,
+        roleName: roleName,
+      );
+      if (result != null && result['success'] == true) {
+        emit(UserRoleUpdated(result['message']));
+        await loadData();
+      } else {
+        emit(PermissionError(result?['message'] ?? "خطا در تغییر نقش کاربر"));
+      }
+    } catch (e) {
+      emit(PermissionError("خطا در تغییر نقش کاربر: $e"));
+    }
+  }
 }

@@ -211,4 +211,62 @@ class PermissionRepository {
       isActive: isActive,
     );
   }
+
+  Future<Map<String, dynamic>?> updateUserRole({
+    required String username,
+    required String roleName,
+  }) async {
+    try {
+      final token = _storage.read(StorageKey.token);
+      if (token == null) {
+        return {
+          "success": false,
+          "message": "توکن یافت نشد",
+        };
+      }
+      final options = Options(
+        headers: {'Authorization': 'Bearer $token'},
+        responseType: ResponseType.json,
+        method: 'PATCH',
+      );
+
+      final response = await _dioService.patchJson(
+        ApiUrlConstant.changeUserRole,
+        queryParameters: {
+          'username': username,
+          'role_name': roleName,
+        },
+        options: options,
+      );
+
+      if (response.statusCode == 200 ||
+          response.statusCode == 201 ||
+          response.statusCode == 204) {
+        return {
+          "success": true,
+          "message": response.data?['message'] ?? "نقش کاربر با موفقیت تغییر کرد",
+        };
+      } else if (response.statusCode == 400 || response.statusCode == 422) {
+        String errorMessage = "خطا در تغییر نقش کاربر";
+        if (response.data != null && response.data['detail'] != null) {
+          if (response.data['detail'] is List) {
+            errorMessage = response.data['detail'][0]['msg'] ?? errorMessage;
+          } else {
+            errorMessage = response.data['detail'].toString();
+          }
+        }
+        return {"success": false, "message": errorMessage};
+      } else {
+        return {
+          "success": false,
+          "message": response.statusMessage ?? "خطای سرور",
+        };
+      }
+    } catch (e) {
+      return {
+        "success": false,
+        "message": 'خطا در برقراری ارتباط با سرور: $e',
+      };
+    }
+  }
 }
