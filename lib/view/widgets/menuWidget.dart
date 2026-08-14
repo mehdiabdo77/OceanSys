@@ -7,6 +7,7 @@ class MenuItem extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
+  final bool isComingSoon;
 
   const MenuItem({
     super.key,
@@ -14,6 +15,7 @@ class MenuItem extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.isComingSoon = false,
   });
 
   @override
@@ -49,6 +51,17 @@ class MenuItem extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: Colors.grey[600]),
             ),
+            if (isComingSoon) ...[
+              const SizedBox(height: 4),
+              const Text(
+                "Coming Soon",
+                style: TextStyle(
+                  fontSize: 11,
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ],
         ),
       ),

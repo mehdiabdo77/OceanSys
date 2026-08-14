@@ -14,7 +14,7 @@ class CustomerInfoModel {
   dynamic mobile; // str | None
   dynamic postalCode; // str | None
   dynamic username; // str
-  dynamic? datavisit; // str
+  dynamic datavisit; // str
   int? visited; // int
   dynamic edit; // int
 
