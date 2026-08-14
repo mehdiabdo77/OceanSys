@@ -19,6 +19,7 @@ class PermissionsPage extends StatefulWidget {
 class _PermissionsPageState extends State<PermissionsPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  String _userFilterStatus = 'all'; // 'all', 'active', 'inactive'
 
   @override
   void initState() {
@@ -32,11 +33,67 @@ class _PermissionsPageState extends State<PermissionsPage>
     super.dispose();
   }
 
+  void _showFilterDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return AlertDialog(
+          title: const Text('فیلتر کاربران'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              RadioListTile<String>(
+                title: const Text('همه کاربران'),
+                value: 'all',
+                groupValue: _userFilterStatus,
+                onChanged: (val) {
+                  setState(() {
+                    _userFilterStatus = val!;
+                  });
+                  Navigator.pop(ctx);
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('فقط کاربران فعال'),
+                value: 'active',
+                groupValue: _userFilterStatus,
+                onChanged: (val) {
+                  setState(() {
+                    _userFilterStatus = val!;
+                  });
+                  Navigator.pop(ctx);
+                },
+              ),
+              RadioListTile<String>(
+                title: const Text('فقط کاربران غیرفعال'),
+                value: 'inactive',
+                groupValue: _userFilterStatus,
+                onChanged: (val) {
+                  setState(() {
+                    _userFilterStatus = val!;
+                  });
+                  Navigator.pop(ctx);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('مدیریت دسترسی‌ها'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: () => _showFilterDialog(context),
+            tooltip: 'فیلتر کاربران',
+          ),
+        ],
         bottom: TabBar(
           controller: _tabController,
           tabs: const [
@@ -103,7 +160,12 @@ class _PermissionsPageState extends State<PermissionsPage>
             return TabBarView(
               controller: _tabController,
               children: [
-                UsersTab(users: users, permissions: permissions, roles: roles),
+                UsersTab(
+                  users: users,
+                  permissions: permissions,
+                  roles: roles,
+                  filterStatus: _userFilterStatus,
+                ),
                 RolesTab(roles: roles, permissions: permissions),
               ],
             );
