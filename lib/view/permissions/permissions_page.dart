@@ -47,10 +47,12 @@ class _PermissionsPageState extends State<PermissionsPage>
       ),
       body: BlocConsumer<PermissionCubit, PermissionState>(
         listener: (context, state) {
-          if (state is UserStatusUpdated) {
+          if (state is UserStatusUpdated || state is UserRoleUpdated) {
             Get.snackbar(
               'موفق',
-              state.message,
+              state is UserStatusUpdated
+                  ? (state as UserStatusUpdated).message
+                  : (state as UserRoleUpdated).message,
               backgroundColor: Colors.green.withOpacity(0.8),
               colorText: Colors.white,
             );
@@ -82,7 +84,8 @@ class _PermissionsPageState extends State<PermissionsPage>
             );
           } else if (state is PermissionLoaded ||
               state is PermissionUpdated ||
-              state is UserStatusUpdated) {
+              state is UserStatusUpdated ||
+              state is UserRoleUpdated) {
             late final List<UserModel> users;
             late final List<RoleModel> roles;
             late final List<PermissionListModel> permissions;
@@ -90,7 +93,9 @@ class _PermissionsPageState extends State<PermissionsPage>
               users = state.users;
               roles = state.roles;
               permissions = state.permissions;
-            } else if (state is PermissionUpdated) {
+            } else if (state is PermissionUpdated ||
+                state is UserStatusUpdated ||
+                state is UserRoleUpdated) {
               return const Center(child: CircularProgressIndicator());
             } else {
               return const Center(child: CircularProgressIndicator());
@@ -98,7 +103,7 @@ class _PermissionsPageState extends State<PermissionsPage>
             return TabBarView(
               controller: _tabController,
               children: [
-                UsersTab(users: users, permissions: permissions),
+                UsersTab(users: users, permissions: permissions, roles: roles),
                 RolesTab(roles: roles, permissions: permissions),
               ],
             );
