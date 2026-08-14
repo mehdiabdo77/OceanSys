@@ -9,7 +9,7 @@ import 'package:ocean_sys/data/repository/customer_repository.dart';
 import 'package:ocean_sys/view/manage%20_user/user_manager.dart';
 import 'package:ocean_sys/view/route_manager/route_manager.dart';
 import 'package:ocean_sys/view/widgets/menuWidget.dart';
-import 'package:ocean_sys/view/RouteScanner/map/route_scanner.dart';
+import 'package:ocean_sys/view/RouteScanner/route_scanner.dart';
 import 'package:ocean_sys/view/permissions/permissions_page.dart';
 import 'package:ocean_sys/view/permissions/cubit/permission_cubit.dart';
 
@@ -53,113 +53,122 @@ class _MenuPageState extends State<MenuPage> {
             );
           } else if (state is UserLoaded) {
             final userBloc = context.read<UserBloc>();
-            return GridView.count(
-              crossAxisCount: 2,
-              children: [
-                if (userBloc.checkPermission(
-                  PermissionConstans.customerScan,
-                  state.user,
-                ))
-                  MenuItem(
-                    svgPath: Assets.icons.route.path,
-                    title: "Route Manager",
-                    subtitle: " اضافه کردن بازرسی مسیر ",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RouteManager(),
-                        ),
-                      );
-                    },
-                  ),
-                if (userBloc.checkPermission(
-                  PermissionConstans.customerScan,
-                  state.user,
-                ))
-                  MenuItem(
-                    svgPath: Assets.icons.customerScan.path,
-                    title: "scan customer",
-                    subtitle: "بازرسی مشتریان مسیر",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MainScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                if (userBloc.checkPermission(
-                  PermissionConstans.uploadData,
-                  state.user,
-                ))
-                  MenuItem(
-                    svgPath: Assets.icons.upload.path,
-                    title: "upload data",
-                    subtitle: "ارسال اطلاعات ارسال نشده",
-                    onTap: () {
-                      context.read<CustomerRepository>().sendOfflineRequest();
-                    },
-                  ),
-                if (userBloc.checkPermission(
-                  PermissionConstans.userManage,
-                  state.user,
-                ))
-                  MenuItem(
-                    svgPath: Assets.icons.userManager.path,
-                    title: "USER",
-                    subtitle: "مدیریت کاربران (افزودن کاربر)",
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UserManager(),
-                        ),
-                      );
-                    },
-                  ),
-                if (userBloc.checkPermission(
-                  PermissionConstans.newCustomer,
-                  state.user,
-                ))
-                  MenuItem(
-                    svgPath: Assets.icons.storeAdd.path,
-                    title: "New Customer",
-                    subtitle: "اضافه کردن کاربران جدید",
-                    onTap: () {},
-                  ),
-                if (userBloc.checkPermission(
-                  PermissionConstans.competitorPrices,
-                  state.user,
-                ))
-                  MenuItem(
-                    svgPath: Assets.icons.competitorPrices.path,
-                    title: 'Competitor Prices',
-                    subtitle: 'استعلام قیمت رقبا',
-                    onTap: () {},
-                  ),
-                if (userBloc.checkPermission(
-                  PermissionConstans.userManage,
-                  state.user,
-                ))
-                  MenuItem(
-                    svgPath: Assets.icons.userManager.path,
-                    title: 'User Permissions',
-                    subtitle: 'مدیریت دسترسی‌ها',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => BlocProvider(
-                            create: (context) => PermissionCubit()..loadData(),
-                            child: const PermissionsPage(),
+            return RefreshIndicator(
+              onRefresh: () async {
+                userBloc.add(UserFetchData());
+              },
+              child: GridView.count(
+                crossAxisCount: 2,
+                physics: const AlwaysScrollableScrollPhysics(),
+                children: [
+                  if (userBloc.checkPermission(
+                    PermissionConstans.customerScan,
+                    state.user,
+                  ))
+                    MenuItem(
+                      svgPath: Assets.icons.route.path,
+                      title: "Route Manager",
+                      subtitle: " اضافه کردن بازرسی مسیر ",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RouteManager(),
                           ),
-                        ),
-                      );
-                    },
-                  ),
-              ],
+                        );
+                      },
+                    ),
+                  if (userBloc.checkPermission(
+                    PermissionConstans.customerScan,
+                    state.user,
+                  ))
+                    MenuItem(
+                      svgPath: Assets.icons.customerScan.path,
+                      title: "scan customer",
+                      subtitle: "بازرسی مشتریان مسیر",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  if (userBloc.checkPermission(
+                    PermissionConstans.uploadData,
+                    state.user,
+                  ))
+                    MenuItem(
+                      svgPath: Assets.icons.upload.path,
+                      title: "upload data",
+                      subtitle: "ارسال اطلاعات ارسال نشده",
+                      onTap: () {
+                        context.read<CustomerRepository>().sendOfflineRequest();
+                      },
+                    ),
+                  if (userBloc.checkPermission(
+                    PermissionConstans.userManage,
+                    state.user,
+                  ))
+                    MenuItem(
+                      svgPath: Assets.icons.userManager.path,
+                      title: "USER",
+                      subtitle: "مدیریت کاربران (افزودن کاربر)",
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const UserManager(),
+                          ),
+                        );
+                      },
+                    ),
+                  if (userBloc.checkPermission(
+                    PermissionConstans.newCustomer,
+                    state.user,
+                  ))
+                    MenuItem(
+                      svgPath: Assets.icons.storeAdd.path,
+                      title: "New Customer",
+                      subtitle: "اضافه کردن کاربران جدید",
+                      isComingSoon: true,
+                      onTap: () {},
+                    ),
+                  if (userBloc.checkPermission(
+                    PermissionConstans.competitorPrices,
+                    state.user,
+                  ))
+                    MenuItem(
+                      svgPath: Assets.icons.competitorPrices.path,
+                      title: 'Competitor Prices',
+                      subtitle: 'استعلام قیمت رقبا',
+                      isComingSoon: true,
+                      onTap: () {},
+                    ),
+                  if (userBloc.checkPermission(
+                    PermissionConstans.userManage,
+                    state.user,
+                  ))
+                    MenuItem(
+                      svgPath: Assets.icons.userManager.path,
+                      title: 'User Permissions',
+                      subtitle: 'مدیریت دسترسی‌ها',
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BlocProvider(
+                              create: (context) =>
+                                  PermissionCubit()..loadData(),
+                              child: const PermissionsPage(),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                ],
+              ),
             );
           }
           return const Center(child: Text('Unknown state'));

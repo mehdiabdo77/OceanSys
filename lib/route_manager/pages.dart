@@ -5,8 +5,8 @@ import 'package:ocean_sys/view/main/menu_page.dart';
 import 'package:ocean_sys/view/splash_screen.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page_idit.dart';
-import 'package:ocean_sys/view/RouteScanner/map/route_scanner.dart';
-import 'package:ocean_sys/view/RouteScanner/map_page.dart';
+import 'package:ocean_sys/view/RouteScanner/route_scanner.dart';
+import 'package:ocean_sys/view/RouteScanner/map/map_page.dart';
 import 'package:ocean_sys/view/manage%20_user/widgets/add_user_page.dart';
 
 class Pages {
