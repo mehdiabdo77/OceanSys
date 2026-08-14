@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/constans/text_style.dart';
-import 'package:ocean_sys/view/manage%20_user/add_user_page.dart';
-import 'package:ocean_sys/view/manage%20_user/change_user_status_page.dart';
+import 'package:ocean_sys/view/manage%20_user/widgets/add_user_page.dart';
+import 'package:ocean_sys/view/manage%20_user/widgets/change_user_status_page.dart';
 
 class UserManager extends StatelessWidget {
   const UserManager({super.key});
