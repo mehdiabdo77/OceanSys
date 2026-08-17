@@ -27,7 +27,8 @@ class CustomerInfoBloc extends Bloc<CustomerInfoEvent, CustomerInfoState> {
 
   List<Map<String, dynamic>> getPoints(List<CustomerInfoModel> customers) {
     List<Map<String, dynamic>> customerPoints = [];
-    for (var customer in customers) {
+    for (var i = 0; i < customers.length; i++) {
+      final customer = customers[i];
       if (customer.latitude != null &&
           customer.longitude != null &&
           customer.address != null) {
@@ -37,6 +38,7 @@ class CustomerInfoBloc extends Bloc<CustomerInfoEvent, CustomerInfoState> {
         // Only add if both lat and lng are valid (not 0,0)
         if (lat != null && lng != null && lat != 0.0 && lng != 0.0) {
           customerPoints.add({
+            'index': i,
             'name': customer.customerBoard,
             'isvusit': customer.visited,
             'location': LatLng(lat, lng),

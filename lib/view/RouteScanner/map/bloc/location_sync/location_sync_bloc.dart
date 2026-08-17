@@ -50,8 +50,11 @@ class LocationSyncBloc extends Bloc<LocationSyncEvent, LocationSyncState> {
     Emitter<LocationSyncState> emit,
   ) async {
     _syncTimer?.cancel();
-    _syncTimer = Timer.periodic(const Duration(minutes: 10), (_) async {
-      await _updateCurrentLocation(emit);
+    _syncTimer = Timer.periodic(const Duration(seconds: 20), (_) async {
+      final position = await _getCurrentPosition();
+      if (position != null && !emit.isDone) {
+        emit(state.copyWith(lat: position.latitude, long: position.longitude));
+      }
       await _sendUserLocation(emit, null);
     });
   }
