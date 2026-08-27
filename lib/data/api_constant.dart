@@ -25,6 +25,7 @@ class ApiUrlConstant {
   static String deleteRoute = "${baseUrl}del_rout";
 
   static String changeUserRole = "${baseUrl}change_user_role";
+  static String getAllRolesPermissions = "${baseUrl}get_all_roles_permissions";
 
   static String updateUserStatus(String username) =>
       "${baseUrl}${username}/status";

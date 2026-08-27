@@ -63,6 +63,12 @@ class _UsersTabState extends State<UsersTab> {
   }
 
   @override
+  void didUpdateWidget(covariant UsersTab oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _tempPermissionsMap.clear();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final filteredUsers = widget.users.where((user) {
       if (widget.filterStatus == 'active' && user.isActive != true) {
@@ -222,14 +228,17 @@ class _UsersTabState extends State<UsersTab> {
                                         value:
                                             _selectedRolesMap[user.id] ??
                                             (widget.roles.isNotEmpty
-                                                ? widget.roles.first.name
+                                                ? widget
+                                                      .roles
+                                                      .first
+                                                      .roleNameValue
                                                 : null),
                                         decoration:
                                             MyDecorations.inputDecoration,
                                         items: widget.roles.map((role) {
                                           return DropdownMenuItem<String>(
-                                            value: role.name,
-                                            child: Text(role.name ?? ''),
+                                            value: role.roleNameValue,
+                                            child: Text(role.roleNameValue),
                                           );
                                         }).toList(),
                                         onChanged: (val) {
@@ -246,7 +255,10 @@ class _UsersTabState extends State<UsersTab> {
                                               final roleToAssign =
                                                   _selectedRolesMap[user.id] ??
                                                   (widget.roles.isNotEmpty
-                                                      ? widget.roles.first.name
+                                                      ? widget
+                                                            .roles
+                                                            .first
+                                                            .roleNameValue
                                                       : null);
                                               if (roleToAssign != null) {
                                                 context

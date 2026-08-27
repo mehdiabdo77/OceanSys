@@ -1,6 +1,6 @@
 class PermissionItemModel {
   String? name;
-  int? hasAccess;
+  dynamic hasAccess;
 
   PermissionItemModel({this.name, this.hasAccess});
 

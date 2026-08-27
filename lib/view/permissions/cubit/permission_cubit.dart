@@ -11,7 +11,7 @@ class PermissionCubit extends Cubit<PermissionState> {
     emit(PermissionLoading());
     try {
       final users = await repository.getAllUsers();
-      final roles = await repository.getRoles();
+      final roles = await repository.getAllRolesPermissions();
       final permissions = await repository.getPermissions();
 
       if (users != null && roles != null && permissions != null) {

@@ -227,9 +227,9 @@ class _AddUserViewState extends State<AddUserView> {
                               // چک می‌کنیم اگر نام رول معتبر هست اون رو توی لیست نشون بدیم
                               // اگر لیست نقش‌ها نام‌های متفاوتی دارن می‌تونیم همینجا تغییر بدیم.
                               return DropdownMenuItem<String>(
-                                value: role.name,
+                                value: role.roleNameValue,
                                 child: Text(
-                                  role.name ?? 'نامشخص',
+                                  role.roleNameValue.isEmpty ? 'نامشخص' : role.roleNameValue,
                                   style: MyTextStyle.textBlak12,
                                 ),
                               );

@@ -78,6 +78,38 @@ class PermissionRepository {
     }
   }
 
+  Future<List<RoleModel>?> getAllRolesPermissions() async {
+    try {
+      final token = _storage.read(StorageKey.token);
+      if (token == null) {
+        print("Token not found");
+        return null;
+      }
+      final options = Options(
+        headers: {'Authorization': 'Bearer $token'},
+        responseType: ResponseType.json,
+        method: 'GET',
+      );
+      final response = await _dioService.getMetode(
+        ApiUrlConstant.getAllRolesPermissions,
+        options: options,
+      );
+      if (response.statusCode == 200) {
+        List<RoleModel> roles = [];
+        for (var item in response.data) {
+          roles.add(RoleModel.fromJson(item));
+        }
+        return roles;
+      } else {
+        print("Error getAllRolesPermissions: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      Get.snackbar('خطا', 'خطا در برقراری ارتباط با سرور: $e');
+      return null;
+    }
+  }
+
   Future<List<PermissionListModel>?> getPermissions() async {
     try {
       final token = _storage.read(StorageKey.token);
@@ -219,10 +251,7 @@ class PermissionRepository {
     try {
       final token = _storage.read(StorageKey.token);
       if (token == null) {
-        return {
-          "success": false,
-          "message": "توکن یافت نشد",
-        };
+        return {"success": false, "message": "توکن یافت نشد"};
       }
       final options = Options(
         headers: {'Authorization': 'Bearer $token'},
@@ -232,10 +261,7 @@ class PermissionRepository {
 
       final response = await _dioService.patchJson(
         ApiUrlConstant.changeUserRole,
-        queryParameters: {
-          'username': username,
-          'role_name': roleName,
-        },
+        queryParameters: {'username': username, 'role_name': roleName},
         options: options,
       );
 
@@ -244,7 +270,8 @@ class PermissionRepository {
           response.statusCode == 204) {
         return {
           "success": true,
-          "message": response.data?['message'] ?? "نقش کاربر با موفقیت تغییر کرد",
+          "message":
+              response.data?['message'] ?? "نقش کاربر با موفقیت تغییر کرد",
         };
       } else if (response.statusCode == 400 || response.statusCode == 422) {
         String errorMessage = "خطا در تغییر نقش کاربر";
@@ -263,10 +290,7 @@ class PermissionRepository {
         };
       }
     } catch (e) {
-      return {
-        "success": false,
-        "message": 'خطا در برقراری ارتباط با سرور: $e',
-      };
+      return {"success": false, "message": 'خطا در برقراری ارتباط با سرور: $e'};
     }
   }
 }
