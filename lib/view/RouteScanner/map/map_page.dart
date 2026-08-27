@@ -97,8 +97,8 @@ class _MapPageState extends State<MapPage> {
                         return Marker(
                           point: point['location'],
                           width: 80,
-                          height: 70,
-                          alignment: Alignment.topCenter,
+                          height: 80,
+                          alignment: Alignment.center,
                           child: GestureDetector(
                             onTap: () async {
                               final customerIndex = point['index'] as int?;
@@ -117,47 +117,57 @@ class _MapPageState extends State<MapPage> {
                                 }
                               }
                             },
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Stack(
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    Icon(
+                            child: SizedBox(
+                              width: 80,
+                              height: 80,
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Positioned(
+                                    top: 20,
+                                    left: 30,
+                                    width: 20,
+                                    height: 20,
+                                    child: Icon(
                                       Icons.location_on,
                                       color: markerColor,
-                                      size: 40,
+                                      size: 20,
                                       shadows: const [],
                                     ),
-                                    Positioned(
-                                      top: 8,
-                                      child: Icon(
-                                        Icons.storefront,
+                                  ),
+                                  Positioned(
+                                    top: 42,
+                                    left: 0,
+                                    right: 0,
+                                    child: Container(
+                                      decoration: BoxDecoration(
                                         color: Colors.white,
-                                        size: 16,
+                                        borderRadius: BorderRadius.circular(10),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black.withValues(
+                                              alpha: 0.1,
+                                            ),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 1),
+                                          ),
+                                        ],
+                                      ),
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 3,
+                                      ),
+                                      child: Text(
+                                        point['name'],
+                                        style: MyTextStyle.lebelMap,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 2),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 6,
-                                    vertical: 2,
                                   ),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Text(
-                                    point['name'],
-                                    style: MyTextStyle.lebelMap,
-                                    textAlign: TextAlign.center,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -168,14 +178,6 @@ class _MapPageState extends State<MapPage> {
                   // User marker
                   final hasUser =
                       locationState.lat != 0.0 && locationState.long != 0.0;
-
-                  // Debug print user marker
-                  print("=== User Marker ===");
-                  print("- hasUser: $hasUser");
-                  print(
-                    "- location: (${locationState.lat}, ${locationState.long})",
-                  );
-
                   if (hasUser) {
                     markers.add(
                       Marker(
@@ -191,8 +193,8 @@ class _MapPageState extends State<MapPage> {
                               height: 50,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: SolidColors.primaryColor.withOpacity(
-                                  0.2,
+                                color: SolidColors.primaryColor.withValues(
+                                  alpha: 0.2,
                                 ),
                               ),
                             ),
@@ -214,13 +216,6 @@ class _MapPageState extends State<MapPage> {
                       ),
                     );
                   }
-
-                  // Debug print all markers
-                  print("=== Total Markers: ${markers.length} ===");
-                  for (var i = 0; i < markers.length; i++) {
-                    print("- Marker $i: ${markers[i].point}");
-                  }
-
                   return MarkerLayer(markers: markers);
                 },
               ),
