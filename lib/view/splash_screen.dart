@@ -5,9 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:ocean_sys/constans/my_color.dart';
 import 'package:ocean_sys/view/auth/cubit/login_cubit.dart';
 import 'package:ocean_sys/view/auth/cubit/login_state.dart';
-
 import 'package:ocean_sys/view/auth/login_page.dart';
-import 'package:ocean_sys/view/main/menu_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -43,13 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
-        if (state is LoginSuccess) {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(builder: (context) => MenuPage()),
-            (route) => false,
-          );
-        } else if (state is LoginError) {
+        if (state is LoginError) {
           setState(() {
             _error = true;
             _loading = false;

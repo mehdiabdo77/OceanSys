@@ -296,63 +296,6 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 ],
                               ),
                               const SizedBox(height: 20),
-                              // Fingerprint auth kept commented out
-                              // if (_hasSavedCredentials)
-                              //   Column(
-                              //     children: [
-                              //       const Divider(),
-                              //       const SizedBox(height: 20),
-                              //       const Text(
-                              //         "یا با اثر انگشت وارد شوید",
-                              //         style: TextStyle(
-                              //           color: Color(0xFF0B3D91),
-                              //           fontSize: 16,
-                              //         ),
-                              //       ),
-                              //       const SizedBox(height: 16),
-                              //       BlocBuilder<LoginCubit, LoginState>(
-                              //         builder: (context, state) {
-                              //           if (state is LoginLoading) {
-                              //             return const CircularProgressIndicator(
-                              //               valueColor:
-                              //                   AlwaysStoppedAnimation<Color>(
-                              //                 Color(0xFF0B3D91),
-                              //               ),
-                              //             );
-                              //           }
-                              //           return ElevatedButton.icon(
-                              //             onPressed: () {},
-                              //             style: ElevatedButton.styleFrom(
-                              //               backgroundColor: const Color(
-                              //                 0xFF0B3D91,
-                              //               ),
-                              //               padding: const EdgeInsets.symmetric(
-                              //                 horizontal: 32,
-                              //                 vertical: 12,
-                              //               ),
-                              //               shape: RoundedRectangleBorder(
-                              //                 borderRadius:
-                              //                     BorderRadius.circular(15),
-                              //               ),
-                              //             ),
-                              //             icon: const Icon(
-                              //               Icons.fingerprint,
-                              //               size: 32,
-                              //               color: Colors.white,
-                              //             ),
-                              //             label: const Text(
-                              //               "ورود با اثر انگشت",
-                              //               style: TextStyle(
-                              //                 color: Colors.white,
-                              //                 fontSize: 16,
-                              //               ),
-                              //             ),
-                              //           );
-                              //         },
-                              //       ),
-                              //       const SizedBox(height: 20),
-                              //     ],
-                              //   ),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
