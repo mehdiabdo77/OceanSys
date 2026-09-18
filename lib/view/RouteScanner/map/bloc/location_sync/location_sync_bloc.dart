@@ -2,34 +2,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_event.dart';
 import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_state.dart';
 import 'package:ocean_sys/data/repository/location_repository.dart';
 import 'package:ocean_sys/model/point_model.dart';
 
-abstract class LocationSyncEvent {}
 
-class StartLocationSync extends LocationSyncEvent {}
-
-class StartFastUpdates extends LocationSyncEvent {
-  final Duration androidInterval;
-  final int distanceFilter;
-  StartFastUpdates({
-    this.androidInterval = const Duration(seconds: 5),
-    this.distanceFilter = 0,
-  });
-}
-
-class StopFastUpdates extends LocationSyncEvent {}
-
-class ChangeLocation extends LocationSyncEvent {
-  final String customerCode;
-  ChangeLocation(this.customerCode);
-}
-
-class SendUserLocation extends LocationSyncEvent {
-  final String? customerCode;
-  SendUserLocation([this.customerCode]);
-}
 
 class LocationSyncBloc extends Bloc<LocationSyncEvent, LocationSyncState> {
   final LocationRepository repository;
