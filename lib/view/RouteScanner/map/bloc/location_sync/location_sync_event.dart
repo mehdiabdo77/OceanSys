@@ -1,6 +1,10 @@
 abstract class LocationSyncEvent {}
 
-class StartLocationSync extends LocationSyncEvent {}
+class StartLocationSync extends LocationSyncEvent {
+  final bool enabled;
+
+  StartLocationSync({required this.enabled});
+}
 
 class StartFastUpdates extends LocationSyncEvent {
   final Duration androidInterval;

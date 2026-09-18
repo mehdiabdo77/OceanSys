@@ -28,6 +28,11 @@ class LocationSyncBloc extends Bloc<LocationSyncEvent, LocationSyncState> {
     Emitter<LocationSyncState> emit,
   ) async {
     _syncTimer?.cancel();
+    if (!event.enabled) {
+      print("Location sync disabled");
+      return;
+    };
+
     _syncTimer = Timer.periodic(const Duration(seconds: 20), (_) async {
       final position = await _getCurrentPosition();
       if (position != null && !emit.isDone) {

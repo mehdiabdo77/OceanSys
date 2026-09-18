@@ -52,8 +52,7 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
-                LocationSyncBloc(context.read<LocationRepository>())
-                  ..add(StartLocationSync()),
+                LocationSyncBloc(context.read<LocationRepository>()),
           ),
           BlocProvider(
             create: (context) => RouteBloc(context.read<RouteRepository>()),

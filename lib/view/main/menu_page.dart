@@ -10,6 +10,8 @@ import 'package:ocean_sys/view/manage%20_user/user_manager.dart';
 import 'package:ocean_sys/view/route_manager/route_manager.dart';
 import 'package:ocean_sys/view/widgets/menuWidget.dart';
 import 'package:ocean_sys/view/RouteScanner/route_scanner.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_event.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_bloc.dart';
 import 'package:ocean_sys/view/permissions/permissions_page.dart';
 import 'package:ocean_sys/view/permissions/cubit/permission_cubit.dart';
 
@@ -31,7 +33,26 @@ class _MenuPageState extends State<MenuPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Menu", style: MyTextStyle.appBarStyle)),
-      body: BlocBuilder<UserBloc, UserState>(
+      body: BlocListener<UserBloc, UserState>(
+        listener: (context, state) {
+          if (state is UserLoaded) {
+            final userBloc = context.read<UserBloc>();
+            final canSyncLocation =
+                userBloc.checkPermission(
+                  PermissionConstans.customerScan,
+                  state.user,
+                ) ||
+                userBloc.checkPermission(
+                  PermissionConstans.newCustomer,
+                  state.user,
+                );
+
+            context.read<LocationSyncBloc>().add(
+              StartLocationSync(enabled: canSyncLocation),
+            );
+          }
+        },
+        child: BlocBuilder<UserBloc, UserState>(
         builder: (context, state) {
           if (state is UserLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -173,6 +194,7 @@ class _MenuPageState extends State<MenuPage> {
           }
           return const Center(child: Text('Unknown state'));
         },
+        ),
       ),
     );
   }

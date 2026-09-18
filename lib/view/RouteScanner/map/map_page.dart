@@ -9,6 +9,7 @@ import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/cus
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_state.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_page.dart';
 import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_bloc.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_event.dart';
 import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_state.dart';
 
 class MapPage extends StatefulWidget {
