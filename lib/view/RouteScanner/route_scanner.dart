@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ocean_sys/constans/my_color.dart';
-import 'package:ocean_sys/view/main/bloc/main_bloc.dart';
-import 'package:ocean_sys/view/main/bloc/main_state.dart';
+import 'package:ocean_sys/view/RouteScanner/bloc/main_bloc.dart';
+import 'package:ocean_sys/view/RouteScanner/bloc/main_event.dart';
+import 'package:ocean_sys/view/RouteScanner/bloc/main_state.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/customer_list_page.dart';
 import 'package:ocean_sys/view/RouteScanner/map/map_page.dart';
 

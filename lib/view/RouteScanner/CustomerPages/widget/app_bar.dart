@@ -7,6 +7,7 @@ import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_edit/cus
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_bloc.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_event.dart';
 import 'package:ocean_sys/view/RouteScanner/CustomerPages/bloc/customer_info/customer_info_state.dart';
+import 'package:ocean_sys/view/RouteScanner/map/bloc/location_sync/location_sync_event.dart';
 
 AppBar customAppBar(BuildContext context, int? index) {
   return AppBar(
